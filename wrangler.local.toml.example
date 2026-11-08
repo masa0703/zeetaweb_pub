@@ -1,0 +1,20 @@
+# このファイルを wrangler.local.toml にコピーし、全プレースホルダを自分の Cloudflare リソース名・IDに置換してください（未置換のままでは Wrangler は失敗します）。
+# Copy this file to wrangler.local.toml and replace every placeholder with your Cloudflare resource names and IDs; Wrangler will fail while placeholders remain.
+
+name = "<your-pages-project>"
+compatibility_date = "2025-12-07"
+pages_build_output_dir = "./dist"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "<your-d1-database-name>"
+database_id = "<your-d1-database-id>"
+
+[[r2_buckets]]
+binding = "NODE_IMAGES"
+bucket_name = "<your-r2-bucket>"
+preview_bucket_name = "<your-r2-preview-bucket>"
+
+# AI / VECTORIZE はローカルエミュレーターなし → graceful fallback で動作
+# 本番は wrangler.toml を参照

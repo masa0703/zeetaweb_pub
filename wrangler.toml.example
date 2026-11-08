@@ -1,0 +1,77 @@
+# このファイルを wrangler.toml にコピーし、全プレースホルダを自分の Cloudflare リソース名・IDに置換してください（未置換のままでは Wrangler は失敗します）。
+# Copy this file to wrangler.toml and replace every placeholder with your Cloudflare resource names and IDs; Wrangler will fail while placeholders remain.
+
+name = "<your-pages-project>"
+compatibility_date = "2025-12-07"
+pages_build_output_dir = "./dist"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "<your-d1-database-name>"
+database_id = "<your-d1-database-id>"
+
+[[r2_buckets]]
+binding = "NODE_IMAGES"
+bucket_name = "<your-r2-bucket>"
+preview_bucket_name = "<your-r2-preview-bucket>"
+
+# AI / VECTORIZE はローカルエミュレーターなし → local dev には含めない（graceful fallback で動作）
+# 本番デプロイ時は [env.production] セクションが適用される
+
+# 2026-07-21: リージョン不一致（旧DBはENAM/米国東部）による遅延を解消するため
+# APACリージョンの新DBに切替。旧DB（<your-d1-database-name>, ENAM）はロールバック用に
+# しばらく保持する（削除しない）。
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "<your-production-d1-database-name>"
+database_id = "<your-production-d1-database-id>"
+
+[[env.production.r2_buckets]]
+binding = "NODE_IMAGES"
+bucket_name = "<your-r2-bucket>"
+preview_bucket_name = "<your-r2-preview-bucket>"
+
+[env.production.ai]
+binding = "AI"
+
+[[env.production.vectorize]]
+binding = "VECTORIZE"
+index_name = "<your-vectorize-index>"
+
+# Preview 環境（main 以外のブランチの Pages デプロイに適用される）
+# ベクトル検索の破壊的変更（例: P2 チャンク化）を本番 index を触らず開発用 index で検証するためのステージング。
+# D1 は本番から完全に分離した専用DB（<your-staging-d1-database-name>）。staging 上での編集操作が
+# 本番データに影響しないようにするため（2026-07-20、本番データのコピーで初期化済み）。
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "<your-staging-d1-database-name>"
+database_id = "<your-staging-d1-database-id>"
+
+[[env.preview.r2_buckets]]
+binding = "NODE_IMAGES"
+bucket_name = "<your-r2-bucket>"
+preview_bucket_name = "<your-r2-preview-bucket>"
+
+[env.preview.ai]
+binding = "AI"
+
+[[env.preview.vectorize]]
+binding = "VECTORIZE"
+index_name = "<your-vectorize-dev-index>"
+
+# Environment variables
+# For local development: use .dev.vars file
+# For production: use Cloudflare Dashboard > Settings > Environment variables
+#
+# Required secrets for production:
+# - APP_URL (e.g., https://your-domain.example)
+# - GOOGLE_CLIENT_ID
+# - GOOGLE_CLIENT_SECRET
+# - JWT_SECRET (use a strong random string)
+# - MAILGUN_API_KEY
+# - MAILGUN_DOMAIN
+#
+# DO NOT set ENABLE_TEST_ENDPOINTS in production. It only enables
+# /auth/test-login and /api/test/clear when combined with localhost APP_URL
+# and a localhost request Host (i.e., development only).

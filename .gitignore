@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Compiled binary addons
+build
+dist
+
+# D1 local database
+.wrangler/
+
+# dotenv environment variables file
+.env
+.dev.vars
+wrangler.toml
+wrangler.local.toml
+
+# PM2
+.pm2/
+pids/
+logs/
+*.log
+
+# Backup files
+*.backup
+*.bak
+bak.*
+backup/
+*.tar.gz
+*.zip
+*.dump
+*.sqlite
+*.sqlite3
+.obsidian/workspace.json
+/.obsidian
+.obsidian/workspace.json
+
+# Playwright artifacts
+tests/playwright-report/
+tests/test-results/
+.playwright-mcp/
+.env.local
+
+# MCP config (contains API keys)
+.mcp.json
+.claude/settings.local.json
+.DS_Store
+
+# Author-only local files (never committed to zeetaweb_pub)
+AGENTS.md
+CLAUDE.md
+.claude/
+.codex/
+.vscode/
+docs/

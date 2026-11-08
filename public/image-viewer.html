@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title data-i18n="imageViewer.title">画像 - Zeeta Web</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+  <script>(function(){try{var t=localStorage.getItem('zeeta-theme')||'system';if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('theme-dark')}catch(e){}})()</script>
+  <link rel="stylesheet" href="/static/dark.css">
+  <script src="/static/theme.js" defer></script>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { background: #f8fafc; color: #0f172a; }
+    #viewer-toolbar {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+      position: relative;
+      z-index: 2;
+    }
+    #viewer-toolbar button {
+      min-width: 34px;
+      height: 32px;
+      padding: 0 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #fff;
+      color: #334155;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    #viewer-toolbar button:hover { background: #f1f5f9; border-color: #94a3b8; }
+    #viewer-toolbar button:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+    #zoom-level { min-width: 58px; text-align: center; font-variant-numeric: tabular-nums; }
+    #viewer-help { margin-left: auto; color: #64748b; font-size: 12px; white-space: nowrap; }
+    #image-viewport {
+      width: 100%;
+      height: calc(100% - 48px);
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+    }
+    #image-viewport.is-dragging { cursor: grabbing; }
+    #image-canvas { width: 100%; height: 100%; }
+    #image-canvas > img {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      max-width: none;
+      transform-origin: 0 0;
+      -webkit-user-drag: none;
+    }
+    #viewer-status {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-size: 14px;
+      pointer-events: none;
+    }
+    #viewer-status[hidden] { display: none; }
+    @media (max-width: 640px) {
+      #viewer-toolbar { gap: 5px; padding-inline: 8px; }
+      #viewer-toolbar button { padding-inline: 8px; }
+      #viewer-help { display: none; }
+    }
+    /* Dark theme（<html class="theme-dark">時に有効。判定は /static/theme.js） */
+    html.theme-dark {
+      color-scheme: dark;
+    }
+    html.theme-dark body {
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+    html.theme-dark #viewer-toolbar {
+      background: #1f2937;
+      border-bottom-color: #374151;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+    html.theme-dark #viewer-toolbar button {
+      border-color: #4b5563;
+      background: #374151;
+      color: #e5e7eb;
+    }
+    html.theme-dark #viewer-toolbar button:hover {
+      background: #4b5563;
+      border-color: #6b7280;
+    }
+    html.theme-dark #viewer-help {
+      color: #94a3b8;
+    }
+    html.theme-dark #image-viewport {
+      background: #111827;
+    }
+    html.theme-dark #viewer-status {
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <header id="viewer-toolbar" data-i18n-attr="aria-label:imageViewer.toolbarLabel" aria-label="画像の表示操作">
+    <button id="fit-view" type="button" data-i18n="imageViewer.fitView">全体表示</button>
+    <button id="zoom-out" type="button" data-i18n-attr="aria-label:imageViewer.zoomOut" aria-label="縮小">−</button>
+    <span id="zoom-level" aria-live="polite">100%</span>
+    <button id="zoom-in" type="button" data-i18n-attr="aria-label:imageViewer.zoomIn" aria-label="拡大">＋</button>
+    <span id="viewer-help" data-i18n="imageViewer.help">ホイールで拡大縮小・ドラッグで移動</span>
+  </header>
+  <main id="image-viewport" tabindex="0" data-i18n-attr="aria-label:imageViewer.viewportLabel" aria-label="画像ビューアー">
+    <div id="image-canvas"><img id="image-element" alt=""></div>
+    <div id="viewer-status">画像を読み込んでいます…</div>
+  </main>
+
+  <script>
+    (() => {
+      const READY_MESSAGE = 'zeeta:image-viewer-ready'
+      const LOAD_MESSAGE = 'zeeta:image-viewer-load'
+      const channel = new URLSearchParams(window.location.search).get('channel')
+      const trustedOrigin = window.location.origin
+      const sourceWindow = window.opener
+      const viewport = document.getElementById('image-viewport')
+      const canvas = document.getElementById('image-canvas')
+      const status = document.getElementById('viewer-status')
+      const zoomLevel = document.getElementById('zoom-level')
+      const img = document.getElementById('image-element')
+      status.textContent = t('imageViewer.loading')
+      const MIN_ZOOM = 0.25
+      const MAX_ZOOM = 16
+
+      let loaded = false
+      let natural = null   // { width, height } 画像の自然サイズ
+      let scale = 1
+      let tx = 0
+      let ty = 0
+      let dragStart = null
+
+      function showError(message) {
+        status.hidden = false
+        status.textContent = message
+        viewport.style.cursor = 'default'
+      }
+
+      function applyTransform() {
+        img.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`
+        zoomLevel.textContent = `${Math.round(scale * 100)}%`
+      }
+
+      // 画像全体がビューポートに収まるスケール。巨大画像では 0.25 を下回るため、
+      // ズーム下限は min(MIN_ZOOM, フィット倍率) とする（全体表示＝最小ズーム）
+      function fitScale() {
+        return Math.min(viewport.clientWidth / natural.width, viewport.clientHeight / natural.height)
+      }
+
+      function fitView() {
+        if (!natural) return
+        const cw = viewport.clientWidth
+        const ch = viewport.clientHeight
+        scale = Math.min(MAX_ZOOM, fitScale())
+        tx = (cw - natural.width * scale) / 2
+        ty = (ch - natural.height * scale) / 2
+        applyTransform()
+      }
+
+      // 指定座標（ビューポート基準）を拡大縮小のアンカーとしてズームする
+      function setZoom(nextZoom, clientX = null, clientY = null) {
+        if (!natural) return
+        const boundedZoom = Math.min(MAX_ZOOM, Math.max(Math.min(MIN_ZOOM, fitScale()), nextZoom))
+        if (boundedZoom === scale) return
+
+        const rect = viewport.getBoundingClientRect()
+        const px = clientX === null || clientY === null ? rect.width / 2 : clientX - rect.left
+        const py = clientX === null || clientY === null ? rect.height / 2 : clientY - rect.top
+        const ix = (px - tx) / scale
+        const iy = (py - ty) / scale
+        tx = px - ix * boundedZoom
+        ty = py - iy * boundedZoom
+        scale = boundedZoom
+        applyTransform()
+      }
+
+      function loadImage(payload) {
+        if (!payload || !payload.url) throw new Error('Missing image URL')
+        img.alt = payload.alt || ''
+        img.src = payload.url
+        natural = null
+        loaded = true
+
+        img.addEventListener('load', () => {
+          const width = img.naturalWidth
+          const height = img.naturalHeight
+          if (!width || !height) {
+            showError(t('imageViewer.displayError'))
+            return
+          }
+          natural = { width, height }
+          status.hidden = true
+          document.title = payload.title
+            ? t('imageViewer.titleWithName', { name: payload.title })
+            : t('imageViewer.title')
+          fitView()
+          try { window.opener = null } catch (_) {}
+        }, { once: true })
+
+        img.addEventListener('error', () => {
+          showError(t('imageViewer.displayError'))
+        }, { once: true })
+      }
+
+      function handleLoadMessage(event) {
+        if (event.origin !== trustedOrigin || event.source !== sourceWindow) return
+        if (!event.data || event.data.type !== LOAD_MESSAGE || event.data.channel !== channel) return
+        window.removeEventListener('message', handleLoadMessage)
+        try {
+          loadImage(event.data)
+        } catch (error) {
+          console.error('[image-viewer]', error)
+          showError(t('imageViewer.displayError'))
+        }
+      }
+      window.addEventListener('message', handleLoadMessage)
+
+      document.getElementById('fit-view').addEventListener('click', fitView)
+      document.getElementById('zoom-in').addEventListener('click', () => setZoom(scale * 1.25))
+      document.getElementById('zoom-out').addEventListener('click', () => setZoom(scale / 1.25))
+
+      viewport.addEventListener('wheel', event => {
+        if (!natural) return
+        event.preventDefault()
+        setZoom(event.deltaY < 0 ? scale * 1.15 : scale / 1.15, event.clientX, event.clientY)
+      }, { passive: false })
+
+      viewport.addEventListener('pointerdown', event => {
+        if (!natural || event.button !== 0) return
+        dragStart = { clientX: event.clientX, clientY: event.clientY, tx, ty }
+        viewport.classList.add('is-dragging')
+        viewport.setPointerCapture(event.pointerId)
+      })
+      viewport.addEventListener('pointermove', event => {
+        if (!dragStart || !natural) return
+        tx = dragStart.tx + (event.clientX - dragStart.clientX)
+        ty = dragStart.ty + (event.clientY - dragStart.clientY)
+        applyTransform()
+      })
+      const stopDragging = () => {
+        dragStart = null
+        viewport.classList.remove('is-dragging')
+      }
+      viewport.addEventListener('pointerup', stopDragging)
+      viewport.addEventListener('pointercancel', stopDragging)
+
+      viewport.addEventListener('keydown', event => {
+        if (!natural) return
+        if (event.key === '+' || event.key === '=') setZoom(scale * 1.25)
+        else if (event.key === '-') setZoom(scale / 1.25)
+        else if (event.key === '0') fitView()
+        else return
+        event.preventDefault()
+      })
+
+      if (!channel || !sourceWindow) {
+        showError(t('imageViewer.openFromPreview'))
+        return
+      }
+      sourceWindow.postMessage({ type: READY_MESSAGE, channel }, trustedOrigin)
+      window.setTimeout(() => {
+        if (!loaded) showError(t('imageViewer.loadTimeout'))
+      }, 10000)
+    })()
+  </script>
+</body>
+</html>

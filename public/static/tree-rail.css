@@ -1,0 +1,891 @@
+/*
+ * 左バー（ツリー切替・管理）と、ヘッダーのアカウント操作。
+ * 旧マイページの機能を編集画面へ集約したもの。
+ * 閉じた状態は幅 56px のアイコン列、開いた状態はペインの上に重ねるドロワー。
+ */
+/*
+ * ツリー切替（ページ移動）をアニメーションでつなぐ。対応ブラウザでは画面のフラッシュが消え、
+ * 左バーのアイコン（view-transition-name: tree-chip-<id>）が新しい並びの位置へ滑って移動する。
+ * 非対応ブラウザでは従来どおり切り替わるだけ
+ */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-group(*) {
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
+:root {
+  --rail-width: 56px;
+  --drawer-width: 264px;
+  --rail-surface: #ffffff;
+  --rail-line: #e5e7eb;
+  --rail-fg: #1f2937;
+  --rail-muted: #6b7280;
+  --rail-faint: #9ca3af;
+  --rail-accent: #667eea;
+  --rail-accent-soft: #eef0fd;
+  --rail-hover: #f3f4f6;
+  --rail-danger: #dc2626;
+  --rail-shadow: 0 10px 30px rgba(17, 24, 39, 0.18);
+  --rail-scrim: rgba(17, 24, 39, 0.18);
+  --rail-tip-bg: #111827;
+  --rail-duration: 220ms;
+  --rail-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+html.theme-dark {
+  --rail-surface: #1f2937;
+  --rail-line: #374151;
+  --rail-fg: #e5e7eb;
+  --rail-muted: #9ca3af;
+  --rail-faint: #6b7280;
+  --rail-accent: #8b9cf6;
+  --rail-accent-soft: rgba(99, 102, 241, 0.22);
+  --rail-hover: #111827;
+  --rail-danger: #f87171;
+  --rail-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  --rail-scrim: rgba(0, 0, 0, 0.4);
+  --rail-tip-bg: #030712;
+}
+
+/* ---------- 閉じた状態（アイコン列） ---------- */
+.tree-rail {
+  width: var(--rail-width);
+  flex-shrink: 0;
+  background: var(--rail-surface);
+  border-right: 1px solid var(--rail-line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-top: 10px;
+  min-height: 0;
+}
+
+.tree-rail-create {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--rail-accent);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+  transition: filter var(--rail-duration);
+}
+
+.tree-rail-create:hover {
+  filter: brightness(1.08);
+}
+
+.tree-rail-sep {
+  width: 24px;
+  height: 1px;
+  flex-shrink: 0;
+  background: var(--rail-line);
+  margin: 4px 0;
+}
+
+/* ＋ボタンは固定。この一覧だけを上下スクロールさせる */
+.tree-rail-list {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0 10px;
+}
+
+.tree-rail-chip-wrap {
+  position: relative;
+  padding: 3px;
+  border-radius: 50%;
+}
+
+.tree-chip {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  flex-shrink: 0;
+  user-select: none;
+  transition: border-radius 150ms ease;
+}
+
+.tree-chip.is-white {
+  color: #374151;
+}
+
+/* 絵文字アイコン。文字より一回り大きくし、色の丸の上に載せる */
+.tree-chip.has-icon {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.tree-rail-chip:hover,
+.tree-rail-chip:focus-visible {
+  border-radius: 30%;
+}
+
+.tree-rail-chip.current {
+  box-shadow: 0 0 0 2px var(--rail-surface), 0 0 0 4px var(--rail-accent);
+}
+
+.tree-rail-chip-wrap:has(.current)::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 9px;
+  width: 4px;
+  height: 22px;
+  border-radius: 0 3px 3px 0;
+  background: var(--rail-accent);
+}
+
+.tree-rail-tip {
+  position: fixed;
+  z-index: 10050;
+  background: var(--rail-tip-bg);
+  color: #fff;
+  font-size: 12px;
+  padding: 5px 9px;
+  border-radius: 6px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ---------- 開いた状態（重ねて表示するドロワー） ---------- */
+.tree-drawer-scrim {
+  position: fixed;
+  inset: var(--tree-header-height, 48px) 0 0 0;
+  background: var(--rail-scrim);
+  z-index: 900;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--rail-duration);
+}
+
+.tree-drawer {
+  position: fixed;
+  top: var(--tree-header-height, 48px);
+  bottom: 0;
+  left: 0;
+  width: var(--drawer-width);
+  z-index: 901;
+  background: var(--rail-surface);
+  color: var(--rail-fg);
+  box-shadow: var(--rail-shadow);
+  transform: translateX(-105%);
+  transition: transform var(--rail-duration) var(--rail-ease);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 8px 10px 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+/* 右端のつまみ（幅の変更）。見た目は細い線、つかめる範囲は 8px */
+.tree-drawer-resize {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 6;
+  touch-action: none;
+}
+
+.tree-drawer-resize::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 3px;
+  background: var(--rail-accent);
+  opacity: 0;
+  transition: opacity var(--rail-duration);
+}
+
+.tree-drawer-resize:hover::after,
+.tree-drawer-resize:focus-visible::after,
+.tree-drawer-resize.dragging::after {
+  opacity: 1;
+}
+
+.tree-drawer-resize:focus-visible {
+  outline: none;
+}
+
+.tree-drawer.open {
+  transform: none;
+  visibility: visible;
+}
+
+.tree-drawer.open + .tree-drawer-scrim,
+.tree-drawer-scrim.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.tree-drawer-create {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 14px;
+  background: var(--rail-accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  align-self: flex-start;
+  flex-shrink: 0;
+  margin: 0 0 6px 12px;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+  transition: filter var(--rail-duration);
+}
+
+.tree-drawer-create:hover {
+  filter: brightness(1.08);
+}
+
+.tree-drawer-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  /* 一番下の行で ⋯ メニューを開いても切れないよう余白を取る */
+  padding: 0 0 120px 8px;
+}
+
+.tree-drawer-none {
+  font-size: 12px;
+  color: var(--rail-faint);
+  padding: 4px 12px;
+}
+
+.tree-drawer-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: -8px;
+  padding: 4px 6px 4px 16px;
+  border-radius: 0 20px 20px 0;
+}
+
+.tree-drawer-row:hover {
+  background: var(--rail-hover);
+}
+
+.tree-drawer-row.current {
+  background: var(--rail-accent-soft);
+}
+
+.tree-drawer-open {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  padding: 2px 0;
+  color: var(--rail-fg);
+}
+
+.tree-drawer-open .tree-chip {
+  width: 28px;
+  height: 28px;
+  font-size: 12px;
+}
+
+.tree-drawer-open .tree-chip.has-icon {
+  font-size: 16px;
+}
+
+.tree-drawer-name {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-drawer-row.current .tree-drawer-name {
+  font-weight: 700;
+  color: var(--rail-accent);
+}
+
+.tree-drawer-meta {
+  font-size: 11px;
+  color: var(--rail-faint);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.tree-role-mini {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 9999px;
+  border: 1px solid currentColor;
+  flex-shrink: 0;
+}
+
+.tree-role-mini.editor { color: #15803d; }
+.tree-role-mini.viewer { color: var(--rail-muted); }
+html.theme-dark .tree-role-mini.editor { color: #4ade80; }
+
+.tree-drawer-more {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--rail-muted);
+  opacity: 0;
+}
+
+.tree-drawer-row:hover .tree-drawer-more,
+.tree-drawer-row:focus-within .tree-drawer-more,
+.tree-drawer-more[aria-expanded="true"] {
+  opacity: 1;
+}
+
+.tree-drawer-more:hover {
+  background: var(--rail-line);
+}
+
+@media (hover: none) {
+  .tree-drawer-more { opacity: 1; }
+}
+
+.tree-drawer-menu,
+.tree-header-pop {
+  background: var(--rail-surface);
+  color: var(--rail-fg);
+  border: 1px solid var(--rail-line);
+  border-radius: 10px;
+  box-shadow: var(--rail-shadow);
+  padding: 6px;
+}
+
+.tree-drawer-menu {
+  position: absolute;
+  right: 4px;
+  top: 36px;
+  width: 210px;
+  z-index: 5;
+}
+
+.tree-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--rail-fg);
+}
+
+.tree-menu-item i {
+  width: 14px;
+  color: var(--rail-muted);
+}
+
+button.tree-menu-item:hover {
+  background: var(--rail-hover);
+}
+
+.tree-menu-item.danger,
+.tree-menu-item.danger i {
+  color: var(--rail-danger);
+}
+
+.tree-menu-note {
+  color: var(--rail-muted);
+  cursor: default;
+}
+
+.tree-menu-sep {
+  height: 1px;
+  background: var(--rail-line);
+  margin: 4px 0;
+}
+
+/* ---------- ツリー0件の空画面 ---------- */
+.tree-empty-state {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 24px;
+  color: var(--rail-fg);
+}
+
+.tree-empty-state[hidden] {
+  display: none;
+}
+
+.tree-empty-icon {
+  font-size: 40px;
+  color: var(--rail-faint);
+}
+
+.tree-empty-state h2 {
+  margin: 12px 0 6px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.tree-empty-state p {
+  color: var(--rail-muted);
+  margin: 0 0 18px;
+}
+
+.tree-empty-state .tree-drawer-create {
+  margin: 0 auto;
+  align-self: auto;
+}
+
+/* ---------- ヘッダー: ☰ とアカウント操作 ---------- */
+.app-menu-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--rail-muted);
+  font-size: 18px;
+}
+
+.app-menu-btn:hover,
+.app-menu-btn[aria-expanded="true"] {
+  background: var(--rail-hover);
+  color: var(--rail-fg);
+}
+
+.header-account {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.header-account-sep {
+  width: 1px;
+  height: 22px;
+  background: var(--rail-line);
+  margin: 0 6px;
+}
+
+.header-icon-btn {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--rail-muted);
+  font-size: 16px;
+}
+
+.header-icon-btn:hover,
+.header-icon-btn[aria-expanded="true"] {
+  background: var(--rail-hover);
+  color: var(--rail-accent);
+}
+
+.header-pop-anchor {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 2px;
+  right: 1px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 380px;
+  max-width: calc(100vw - 16px);
+  max-height: 480px;
+  overflow-y: auto;
+  background: var(--rail-surface);
+  color: var(--rail-fg);
+  border: 1px solid var(--rail-line);
+  border-radius: 10px;
+  box-shadow: var(--rail-shadow);
+  z-index: 1000;
+  text-align: left;
+}
+
+.notification-dropdown.active {
+  display: block;
+}
+
+.notification-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--rail-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notification-header h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.notification-header button {
+  font-size: 12px;
+  color: var(--rail-accent);
+}
+
+.notification-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--rail-line);
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  background: var(--rail-hover);
+}
+
+.notification-item.unread {
+  background: var(--rail-accent-soft);
+}
+
+.notification-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+  font-size: 13px;
+}
+
+.notification-message {
+  font-size: 13px;
+  color: var(--rail-muted);
+  margin-bottom: 4px;
+}
+
+.notification-time {
+  font-size: 11px;
+  color: var(--rail-faint);
+}
+
+.tree-header-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 240px;
+  z-index: 1000;
+  text-align: left;
+}
+
+.tree-header-pop[hidden] {
+  display: none;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.settings-row select {
+  font-size: 12px;
+  padding: 3px 4px;
+  border: 1px solid var(--rail-line);
+  border-radius: 6px;
+  background: var(--rail-surface);
+  color: var(--rail-fg);
+}
+
+.settings-version {
+  padding: 6px 10px 4px;
+  font-size: 11px;
+  color: var(--rail-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.header-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--rail-muted);
+  padding: 6px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.header-logout:hover {
+  background: var(--rail-hover);
+  color: var(--rail-fg);
+}
+
+/* ---------- ツリー管理モーダル（旧マイページから移設） ---------- */
+.tree-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+
+.tree-modal.active {
+  display: flex;
+}
+
+.tree-modal-content {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+html.theme-dark .tree-modal-content {
+  background: #1f2937;
+}
+
+.tree-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 0.6rem 1.4rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+
+.tree-btn-primary:hover {
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+}
+
+/* ツリー編集モーダルのアイコン欄 */
+.tree-icon-field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tree-icon-btn {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--rail-line);
+  border-radius: 0.5rem;
+  color: var(--rail-fg);
+  font-size: 0.875rem;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.tree-icon-btn:hover {
+  background: var(--rail-hover);
+}
+
+.tree-icon-btn:focus-visible {
+  outline: 2px solid var(--rail-accent);
+  outline-offset: 2px;
+}
+
+.tree-icon-btn[aria-expanded="true"] {
+  border-color: var(--rail-accent);
+  background: var(--rail-accent-soft);
+}
+
+.tree-icon-btn-quiet {
+  border-color: transparent;
+  color: var(--rail-muted);
+}
+
+.tree-icon-picker {
+  margin-top: 0.75rem;
+}
+
+.tree-color-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tree-color-option {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.tree-color-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tree-color-swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.tree-color-swatch.is-white {
+  border: 1px solid #d1d5db;
+}
+
+.tree-color-auto .tree-color-swatch {
+  width: auto;
+  padding: 0 0.6rem;
+  border-radius: 9999px;
+  border: 1px dashed var(--rail-faint);
+  color: var(--rail-muted);
+  font-size: 0.75rem;
+  line-height: 24px;
+}
+
+.tree-color-option:hover .tree-color-swatch {
+  transform: scale(1.1);
+}
+
+.tree-color-option input:checked + .tree-color-swatch {
+  box-shadow: 0 0 0 2px var(--rail-surface), 0 0 0 4px var(--rail-accent);
+}
+
+.tree-color-auto input:checked + .tree-color-swatch {
+  border-style: solid;
+  border-color: var(--rail-accent);
+  color: var(--rail-fg);
+  box-shadow: none;
+}
+
+.tree-color-option input:focus-visible + .tree-color-swatch {
+  outline: 2px solid var(--rail-accent);
+  outline-offset: 4px;
+}
+
+.tree-icon-picker emoji-picker {
+  width: 100%;
+  height: 320px;
+  --border-radius: 0.5rem;
+}
+
+.role-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.role-badge.role-owner { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.role-badge.role-editor { background: #48bb78; }
+.role-badge.role-viewer { background: #4299e1; }
+
+.mcp-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.85rem;
+  background: #111827;
+  color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  word-break: break-all;
+}
+
+/* ---------- 狭い画面 ---------- */
+@media (max-width: 767px) {
+  .tree-rail { display: none; }
+  .tree-drawer-resize { display: none; }
+  /* スマホ幅のヘッダーは横スクロールするため、ポップアップは画面に固定して切れないようにする */
+  .notification-dropdown,
+  .tree-header-pop {
+    position: fixed;
+    top: calc(var(--tree-header-height, 48px) + 4px);
+    right: 8px;
+  }
+  .tree-drawer { width: min(300px, 85vw); }
+  .header-logout span { display: none; }
+  .header-account-sep { display: none; }
+  /* ツリー名が長くても通知・設定・ログアウトを押し出さないよう、左側（ツリー名）だけを縮める */
+  #tree-header > div:first-child {
+    flex-shrink: 1 !important;
+    min-width: 0;
+    overflow: hidden;
+  }
+  /* 右側も詰める: markdown preview はチェックボックスだけ残す（説明は title に出る） */
+  #md-preview-toggle + span {
+    display: none;
+  }
+  #tree-header-title {
+    min-width: 3em !important;
+    font-size: 1rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tree-drawer,
+  .tree-drawer-scrim,
+  .tree-chip,
+  .tree-rail-create,
+  .tree-drawer-create {
+    transition: none;
+  }
+}
+
+/* ツリー0件のときは編集用のペインを隠す（Tailwind の .flex より優先させる） */
+#tree-pane[hidden],
+#resize-handle[hidden],
+#editor-pane[hidden] {
+  display: none !important;
+}

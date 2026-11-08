@@ -1,0 +1,1 @@
+ALTER TABLE trees ADD COLUMN icon TEXT;

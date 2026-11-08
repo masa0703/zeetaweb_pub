@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>Help - Zeeta Web</title>
+  <script>(function(){try{var t=localStorage.getItem('zeeta-theme')||'system';if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('theme-dark')}catch(e){}})()</script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/static/dark.css">
+  <script src="/static/theme.js" defer></script>
+  <style>
+    body {
+      background: #f5f7fb;
+      min-height: 100vh;
+      color: #1f2937;
+    }
+
+    .doc-header {
+      border-bottom: 2px solid #dbe4f0;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid #d1d5db;
+      padding-bottom: 8px;
+    }
+
+    .tab-btn {
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: #fff;
+      color: #4b5563;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: #dbeafe;
+      border-color: #93c5fd;
+      color: #1d4ed8;
+    }
+
+    .help-panel {
+      display: none;
+    }
+
+    .help-panel.active {
+      display: block;
+    }
+
+    .guide-section {
+      border-left: 4px solid #c7d2fe;
+      padding-left: 14px;
+      margin-bottom: 1.4rem;
+    }
+
+    .help-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin-top: 8px;
+    }
+
+    .help-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 12px;
+    }
+
+    .help-card h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 0 0 6px;
+    }
+
+    .help-card p {
+      font-size: 13px;
+      line-height: 1.55;
+      color: #4b5563;
+      margin: 0;
+    }
+
+    .flow-list {
+      margin: 0;
+      padding-left: 1.1rem;
+      color: #374151;
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    .flow-list li {
+      margin-bottom: 4px;
+    }
+
+    .flow-list a, .shot-legend a { color: #1d4ed8; text-decoration: underline; text-underline-offset: 3px; }
+    .screen-guide { margin: 1rem 0 1.5rem; scroll-margin-top: 20px; }
+    .screen-guide figcaption { font-weight: 600; margin-bottom: 10px; }
+    .shot-scroll { overflow-x: auto; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; }
+    .shot-scroll:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+    .shot-canvas { position: relative; min-width: 760px; }
+    .shot-canvas img { display: block; width: 100%; height: auto; }
+    .shot-marker { position: absolute; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; width: 27px; height: 27px; border-radius: 50%; background: #1d4ed8; color: white; border: 2px solid white; box-shadow: 0 1px 5px #17255466; font-size: 18px; font-weight: bold; line-height: 1; pointer-events: none; }
+    .shot-legend { display: flex; flex-wrap: wrap; gap: 6px 20px; padding-top: 10px; font-size: 13px; color: #334155; }
+    .screen-guide--search { max-width: 600px; }
+    .screen-guide--search .shot-canvas { min-width: 500px; }
+    .screen-guide--detail .shot-canvas { min-width: 760px; }
+
+    .plain-item-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .plain-item-list li {
+      padding: 9px 0;
+      border-bottom: 1px solid #e5e7eb;
+      line-height: 1.6;
+    }
+
+    .plain-item-list li:last-child {
+      border-bottom: none;
+    }
+
+    .kbd-chip {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #f9fafb;
+      color: #374151;
+      margin-right: 4px;
+      margin-top: 4px;
+    }
+
+    .role-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      margin-top: 8px;
+    }
+
+    .role-table th {
+      background: #f3f4f6;
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+      border: 1px solid #e5e7eb;
+    }
+
+    .role-table td {
+      padding: 8px 12px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .role-table td.ok {
+      color: #16a34a;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .role-table td.ng {
+      color: #dc2626;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .mcp-code {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-radius: 8px;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin-top: 8px;
+      white-space: pre;
+    }
+
+    .badge {
+      display: inline-block;
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge-get { background: #dbeafe; color: #1d4ed8; }
+    .badge-post { background: #dcfce7; color: #15803d; }
+    .badge-note { background: #fef9c3; color: #854d0e; }
+
+    /* Dark theme（<html class="theme-dark">時に有効。判定は /static/theme.js） */
+    html.theme-dark body {
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
+    html.theme-dark .doc-header {
+      border-bottom-color: #374151;
+    }
+
+    html.theme-dark .tab-bar {
+      border-bottom-color: #374151;
+    }
+
+    html.theme-dark .tab-btn {
+      border-color: #374151;
+      background: #1f2937;
+      color: #d1d5db;
+    }
+
+    html.theme-dark .tab-btn.active {
+      background: rgba(59, 130, 246, 0.16);
+      border-color: rgba(96, 165, 250, 0.45);
+      color: #93c5fd;
+    }
+
+    html.theme-dark .guide-section {
+      border-left-color: rgba(165, 180, 252, 0.45);
+    }
+
+    html.theme-dark .help-card {
+      border-color: #374151;
+      background: #1f2937;
+    }
+
+    html.theme-dark .help-card h3 {
+      color: #f3f4f6;
+    }
+
+    html.theme-dark .help-card p {
+      color: #9ca3af;
+    }
+
+    html.theme-dark .flow-list {
+      color: #d1d5db;
+    }
+
+    html.theme-dark .flow-list a,
+    html.theme-dark .shot-legend a {
+      color: #93c5fd;
+    }
+
+    html.theme-dark .shot-scroll {
+      border-color: #374151;
+      background: #111827;
+    }
+
+    html.theme-dark .shot-legend {
+      color: #9ca3af;
+    }
+
+    html.theme-dark .plain-item-list li {
+      border-bottom-color: #374151;
+    }
+
+    html.theme-dark .kbd-chip {
+      border-color: #374151;
+      background: #111827;
+      color: #d1d5db;
+    }
+
+    html.theme-dark .role-table th {
+      background: #1f2937;
+      border-color: #374151;
+    }
+
+    html.theme-dark .role-table td {
+      border-color: #374151;
+    }
+
+    html.theme-dark .role-table td.ok {
+      color: #4ade80;
+    }
+
+    html.theme-dark .role-table td.ng {
+      color: #f87171;
+    }
+
+    html.theme-dark .badge-get {
+      background: rgba(59, 130, 246, 0.16);
+      color: #93c5fd;
+    }
+
+    html.theme-dark .badge-post {
+      background: rgba(74, 222, 128, 0.14);
+      color: #86efac;
+    }
+
+    html.theme-dark .badge-note {
+      background: rgba(251, 191, 36, 0.18);
+      color: #fcd34d;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="max-w-5xl mx-auto px-4 py-8">
+    <section class="doc-header">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold mb-2">
+            <i class="fas fa-circle-question text-blue-600 mr-2"></i>Zeeta Web Help
+          </h1>
+          <p class="text-gray-600 text-sm md:text-base">
+            Help is organized into tabs so you can quickly find instructions for each screen.
+          </p>
+        </div>
+        <a id="language-switch" class="text-sm text-blue-600 hover:text-blue-800 whitespace-nowrap" href="/help.ja">日本語</a>
+      </div>
+    </section>
+
+    <nav class="tab-bar" aria-label="Help categories">
+      <button id="tab-trees" class="tab-btn" data-tab="trees">Managing Trees</button>
+      <button id="tab-editor" class="tab-btn" data-tab="editor">Node Editing</button>
+      <button id="tab-mcp" class="tab-btn" data-tab="mcp">MCP / API Integration</button>
+      <button id="tab-terms" class="tab-btn" data-tab="terms">Terms & Privacy</button>
+    </nav>
+
+    <!-- ========== Managing Trees ========== -->
+    <section id="panel-trees" class="help-panel" data-tab="trees">
+      <div class="guide-section">
+        <h2 class="text-xl font-bold mb-3">Managing Trees Help</h2>
+        <p class="text-sm text-gray-600 mb-3">Switch, create, and share trees from the left bar on the edge of the editor. Notifications, settings, and log out are on the right side of the header.</p>
+        <div class="help-grid">
+          <article class="help-card">
+            <h3><i class="fas fa-folder-tree text-indigo-600 mr-1"></i>Create a Tree</h3>
+            <p>Select <code>+</code> in the left bar, enter a name and description, and create it. The editor switches to the new tree.</p>
+          </article>
+          <article class="help-card">
+            <h3><i class="fas fa-users text-indigo-600 mr-1"></i>Invite Members</h3>
+            <p>Open the left bar with <code>☰</code>, choose <code>⋯</code> → “Member management” on a tree, then specify an email address and role to send an invitation.</p>
+          </article>
+          <article class="help-card">
+            <h3><i class="fas fa-bell text-indigo-600 mr-1"></i>Manage Notifications</h3>
+            <p>Use the notification bell in the header to mark notifications as read. You can also mark them all as read at once.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Workflows by Use Case</h3>
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">1) After You Log In</h4>
+        <ol class="flow-list mb-4">
+          <li>The editor opens the tree you used last (the first tree in the list the first time)</li>
+          <li>If you have no trees yet, the editor shows a screen that guides you to create one</li>
+          <li>Use <code>⚙</code> (Settings) in the header to switch the theme and between Japanese and English. Your choice is remembered the next time you open the page in the same browser</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">2) Managing Trees</h4>
+        <ol class="flow-list mb-4">
+          <li>Switch: click a round icon (the first letter of a tree name) in the left bar. Hover to see the tree name. Trees are listed with the most recently opened first (your trees and shared trees in one list; shared trees are marked E or V)</li>
+          <li>Open the list: <code>☰</code> at the left of the header opens the named tree list over the page (click outside or press Esc to close). Drag the right edge of the list to change its width (the width is kept for next time)</li>
+          <li>Create: <code>+</code> in the left bar → enter details → create</li>
+          <li>Edit name and description: <code>⋯</code> on a tree in the list → “Edit tree” → save</li>
+          <li>Delete: <code>⋯</code> on a tree in the list → “Delete” → confirm in the dialog</li>
+          <li>MCP integration: <code>⋯</code> on a tree in the list → “MCP integration” to get the MCP connection URL</li>
+          <li>Share a tree: <code>⋯</code> on a tree in the list → “Member management” → invite or remove members</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">3) Managing Members</h4>
+        <ol class="flow-list mb-4">
+          <li>Invite: enter an email address and role in the member management dialog, then send</li>
+          <li>Cancel invitation: click <code>×</code> in the pending invitations list</li>
+          <li>Remove member: click <code>×</code> in the member list (Owner only)</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">4) Notifications</h4>
+        <ol class="flow-list mb-4">
+          <li>Click a notification to mark it as read and, when applicable, open its linked page</li>
+          <li>Use “Mark all as read” to mark every notification as read</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">5) Member Roles (Permissions)</h4>
+        <p class="text-sm text-gray-600 mb-2">Assign a role when inviting a member. Owners can change roles later.</p>
+        <table class="role-table mb-2">
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Create/Edit Nodes</th>
+              <th>Delete/Move Nodes</th>
+              <th>Manage Members</th>
+              <th>Delete Tree</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Owner</strong></td>
+              <td class="ok">○</td>
+              <td class="ok">○</td>
+              <td class="ok">○</td>
+              <td class="ok">○</td>
+            </tr>
+            <tr>
+              <td><strong>Editor</strong></td>
+              <td class="ok">○</td>
+              <td class="ok">○</td>
+              <td class="ng">×</td>
+              <td class="ng">×</td>
+            </tr>
+            <tr>
+              <td><strong>Viewer</strong></td>
+              <td class="ng">×</td>
+              <td class="ng">×</td>
+              <td class="ng">×</td>
+              <td class="ng">×</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="text-xs text-gray-500">Viewers can only browse and search nodes.</p>
+      </div>
+    </section>
+
+    <section id="panel-terms" class="help-panel" data-tab="terms">
+      <div id="terms" class="guide-section"><h2 class="text-xl font-bold mb-3">Terms of Use</h2><p>zeetaweb ("the Service") is an individually operated trial for trying out trees in which a node can have multiple parents. By using it, you agree to the following.</p><ul class="list-disc pl-6 space-y-2 mt-3"><li><strong>No guarantee of data preservation.</strong> We do not guarantee that your data will be preserved or recoverable, or that the Service will remain available. Data may be lost or corrupted.</li><li><strong>Keep your own copies.</strong> Keep separate copies of anything you cannot afford to lose.</li><li><strong>Do not put confidential information in your trees.</strong> Do not enter passwords, customer information, or other confidential or personal information that would cause harm if disclosed. See the Privacy Policy for how information needed for sign-in and invitations is handled.</li><li><strong>Things may change.</strong> Features and screens may be changed or discontinued, and the Service itself may end. We will give notice in advance where possible, but this may not always be possible.</li><li><strong>Prohibited conduct.</strong> You must not access the Service without authorization, infringe others' rights, place excessive load on the Service, or violate applicable law. We may restrict or suspend access when such conduct is identified or when necessary to operate the Service safely.</li><li><strong>Liability.</strong> Liability for any loss or damage is governed by applicable law.</li></ul></div>
+      <div id="privacy" class="guide-section"><h2 class="text-xl font-bold mb-3">Privacy Policy</h2><p>Last updated: November 8, 2026</p><p class="mt-3">This explains what information zeetaweb ("the Service") handles and how it is used.</p><h3 class="text-lg font-bold mt-5 mb-2">Information we collect</h3><ul class="list-disc pl-6 space-y-2"><li>When you sign in with Google or GitHub, we receive your provider-specific user ID, email address, display name, and profile image URL. If your public GitHub email address is unavailable, we retrieve your primary email address.</li><li>The trees and nodes you create, and the images you attach</li><li>For abuse investigation and troubleshooting, we may record certain activities, including their time, user, operation and target, IP address, and user agent.</li><li>Cookies that maintain your session and help secure authentication. We may also store preferences and editing drafts in your browser's storage.</li></ul><h3 class="text-lg font-bold mt-5 mb-2">How we use it</h3><p>We use this information to sign you in, display your profile, store, display, search and share trees, match invitations to accounts and send invitation emails, investigate abuse, and troubleshoot problems. We do not use it for advertising or sell it to third parties.</p><h3 class="text-lg font-bold mt-5 mb-2">Third-party services</h3><p>The Service relies on the following services, which process information as needed:</p><ul class="list-disc pl-6 space-y-2"><li>Cloudflare: servers, database and image storage</li><li>Cloudflare Workers AI and Vectorize: to find relevant nodes, we use Workers AI to convert node titles, paths containing parent node titles, node content, and search terms into vectors, and store the search vectors in Vectorize.</li><li>Mailgun: sends invitation emails. Mailgun processes the invitee's email address, the inviter's display name or email address, the tree name, the assigned role, the invitation URL, and its expiration date.</li><li>Google / GitHub: sign-in</li><li>We may use CDNs such as jsDelivr and Cloudflare to deliver libraries and other assets. Your browser connects to those CDNs when they are used.</li></ul><h3 class="text-lg font-bold mt-5 mb-2">Sharing and MCP connections</h3><p>Invited members can view or edit a tree according to their assigned roles. Invitation emails include information such as the inviter's display name. If you connect an MCP client, it can access or modify tree data within the permissions you grant. Check the provider's terms and settings for how that client handles the data.</p><h3 class="text-lg font-bold mt-5 mb-2">Security</h3><p>We restrict access to information according to permissions and use security settings on authentication cookies. However, we cannot guarantee absolute security.</p><h3 class="text-lg font-bold mt-5 mb-2">Changes</h3><p>We may update this policy as the Service or our data practices change. If we change how we use Google user data, we will notify users, for example through the Service.</p></div>
+    </section>
+
+    <!-- ========== Node Editing ========== -->
+    <section id="panel-editor" class="help-panel" data-tab="editor">
+      <div class="guide-section">
+        <h2 class="text-xl font-bold mb-3">Node Editing Help</h2>
+        <p class="text-sm text-gray-600 mb-3">The node editor is primarily used for editing, restructuring, searching and sorting, and managing the trash.</p>
+        <div class="help-grid">
+          <article class="help-card">
+            <h3><i class="fas fa-floppy-disk text-blue-600 mr-1"></i>Edit and Save</h3>
+            <p>Edit the title and content, then save with the Save button or <code>Cmd/Ctrl + Enter</code>. The author, creation date, update date, and last updater appear in the node details dialog; the author cannot be changed on this screen.</p>
+          </article>
+          <article class="help-card">
+            <h3><i class="fas fa-diagram-project text-blue-600 mr-1"></i>Change the Structure</h3>
+            <p>Update the tree structure by creating child or sibling nodes, duplicating nodes, adding parents, or moving nodes to a new parent. DAG structures with multiple parents are supported.</p>
+          </article>
+          <article class="help-card">
+            <h3><i class="fas fa-trash text-blue-600 mr-1"></i>Manage the Trash</h3>
+            <p>Deleting normally moves a node to the trash. For a node with multiple parents, choose whether to unlink it from the visible parent or move it to the trash. The trash view lets you restore or permanently delete nodes.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Screen Images</h3>
+        <p class="text-sm text-gray-600">The numbers correspond to the explanations that follow. The screenshots show the English UI. On small screens, the images scroll horizontally.</p>
+        <figure id="shot-editor" class="screen-guide">
+          <figcaption>Node editing screen</figcaption>
+          <div class="shot-scroll" tabindex="0" role="region" aria-label="Numbered node editing screen. Scrollable horizontally">
+            <div class="shot-canvas">
+              <img src="/static/help/editor-en.png" width="1440" height="960" alt="Node editing screen. The tree is on the left, and the title, content, and action buttons are on the right. The numbers are explained below the image.">
+              <span class="shot-marker" style="left:83%;top:2.1%" aria-hidden="true">1</span>
+              <span class="shot-marker" style="left:28.5%;top:7.9%" aria-hidden="true">2</span>
+              <span class="shot-marker" style="left:40.5%;top:6.6%" aria-hidden="true">3</span>
+              <span class="shot-marker" style="left:89.6%;top:6.3%" aria-hidden="true">4</span>
+              <span class="shot-marker" style="left:96.1%;top:6.3%" aria-hidden="true">5</span>
+              <span class="shot-marker" style="left:77.1%;top:21.3%" aria-hidden="true">6</span>
+              <span class="shot-marker" style="left:66.8%;top:25.4%" aria-hidden="true">7</span>
+              <span class="shot-marker" style="left:89.9%;top:21.3%" aria-hidden="true">8</span>
+            </div>
+          </div>
+          <ul class="shot-legend" aria-label="Editor screen numbers"><li>1 Reference history (Back/Forward)</li><li>2 Node search</li><li>3 Parent nodes</li><li>4 Node details</li><li>5 Save</li><li>6 In-content search</li><li>7 Editor toolbar</li><li>8 View as HTML</li></ul>
+        </figure>
+        <figure id="shot-search" class="screen-guide screen-guide--search">
+          <figcaption>Search popup</figcaption>
+          <div class="shot-scroll" tabindex="0" role="region" aria-label="Numbered search screen. Scrollable horizontally">
+            <div class="shot-canvas">
+              <img src="/static/help/search-en.png" width="520" height="420" loading="lazy" alt="Below the search box are the search scope, only title, and the AND/OR toggle.">
+              <span class="shot-marker" style="left:45.4%;top:18.5%" aria-hidden="true">9</span>
+              <span class="shot-marker" style="left:32.9%;top:30%" aria-hidden="true">10</span>
+              <span class="shot-marker" style="left:51.3%;top:30%" aria-hidden="true">11</span>
+            </div>
+          </div>
+          <ul class="shot-legend" aria-label="Search screen numbers"><li>9 Keyword input</li><li>10 Search scope</li><li>11 only title (search titles only)</li></ul>
+        </figure>
+        <figure id="shot-detail" class="screen-guide screen-guide--detail">
+          <figcaption>Node details dialog (node detail)</figcaption>
+          <div class="shot-scroll" tabindex="0" role="region" aria-label="Numbered node details. Scrollable horizontally">
+            <div class="shot-canvas">
+              <img src="/static/help/detail-en.png" width="1051" height="614" loading="lazy" alt="The author and dates are at the top, the content history list is on the left, past content is on the right, and the Restore button is at the top right.">
+              <span class="shot-marker" style="left:10.5%;top:13.4%" aria-hidden="true">12</span>
+              <span class="shot-marker" style="left:12%;top:33%" aria-hidden="true">13</span>
+              <span class="shot-marker" style="left:71.9%;top:65.2%" aria-hidden="true">14</span>
+              <span class="shot-marker" style="left:93.5%;top:23.1%" aria-hidden="true">15</span>
+            </div>
+          </div>
+          <ul class="shot-legend" aria-label="Node details numbers"><li>12 Author, creation date, update date, and last updater</li><li>13 Content history list</li><li>14 Past content</li><li>15 Restore the selected content</li></ul>
+        </figure>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Workflows by Use Case</h3>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">1) Editing and Saving</h4>
+        <ol class="flow-list mb-4">
+          <li>Select a node and edit its title and content. The author, creation date, update date, and last updater are shown in <a href="#shot-editor">4 Node details</a></li>
+          <li>Click <a href="#shot-editor">5 Save</a>, or press <code>Cmd/Ctrl + Enter</code></li>
+          <li>If you select another node with unsaved changes, a confirmation dialog appears</li>
+          <li>Your scroll position is preserved when returning from preview to edit view</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">2) Changing the Node Structure</h4>
+        <ol class="flow-list mb-4">
+          <li>Create child node: <code>Alt+N</code> (adds a child to the selected node)</li>
+          <li>Create sibling node: <code>Alt+Shift+N</code> (adds a node under the same parent)</li>
+          <li>Duplicate node: <code>Alt+M</code> (duplicates it under the parent in the currently displayed path)</li>
+          <li>Add parent: <code>Cmd/Ctrl+C</code> → select the node to use as a parent → <code>Cmd/Ctrl+V</code><br>
+            <span class="text-xs text-gray-500">→ The node becomes part of a DAG structure with multiple parents</span></li>
+          <li>Move to a new parent: <code>Cmd/Ctrl+X</code> → select the new parent node → <code>Cmd/Ctrl+V</code><br>
+            <span class="text-xs text-gray-500">→ The node is detached from its original parent and moved under the new one</span></li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">3) Searching for Nodes</h4>
+        <p class="text-sm text-gray-600 mb-2" style="padding-left: 1.1rem;">Keyword search and semantic search using the vector database run in parallel. Nodes found by vector search are labeled “Vhit.”</p>
+        <ol class="flow-list mb-4">
+          <li>Open the search popup with <a href="#shot-editor">2 Node search</a> or <code>Alt+F</code>, then enter keywords in <a href="#shot-search">9 Keyword input</a></li>
+          <li>Enter multiple space-separated keywords to perform an AND search</li>
+          <li>Enter <code>id:</code> followed by a node’s public ID to find that node directly (6 alphanumeric characters; for example, <code>id:LHuB38</code>)</li>
+          <li>Switch <a href="#shot-search">10 Search scope</a> between root (the entire tree) and selected (the selected node and its descendants)<br>
+            <span class="text-xs text-gray-500">→ The scope applies to keyword search. Vhit results (AI-related suggestions) are drawn from all content you can access</span></li>
+          <li>Switch between AND and OR modes in the popup (default: AND)</li>
+          <li>To search titles only, enable <a href="#shot-search">11 only title</a>. Content is excluded from the search, and the AI-related search (Vhit) is not performed either</li>
+          <li>Search combines keyword and AI vector search. When relevant results exist, AI-related nodes appear below the “<strong>— Vhit —</strong>” divider</li>
+          <li>Click the “<strong>Vhit xx results</strong>” link to scroll to the “— Vhit —” divider (hover text: “vector search”)</li>
+          <li>Click a matched node to keep it selected with a blue outline, then use <code>‹ X/Y ›</code> on the right to move between matches (the current match uses a distinct highlight)</li>
+          <li>The search popup stays open after you pick a result, so you can compare it with the content. Close it with the popup’s × or <code>Esc</code></li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">4) Sorting Nodes</h4>
+        <ol class="flow-list mb-4">
+          <li>Open “Sort” from the parent node’s vertical three-dot menu to set the order of its child nodes</li>
+          <li>Combine manual / created date / updated date / title with ascending or descending order. The setting is saved per node</li>
+          <li>Top-level nodes are configured with “root sort” in the “Normal ▼” menu</li>
+          <li>In manual sort mode only, move the selected node with <code>Alt+↑</code> / <code>Alt+↓</code></li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">5) Deleting and Restoring</h4>
+        <ol class="flow-list mb-4">
+          <li>Delete: select “Trash” or press <code>Delete / Backspace</code></li>
+          <li>A node with one parent is moved to the trash after confirmation</li>
+          <li>For a node with multiple parents, radio buttons let you choose between unlinking it from the parent visible in the tree and moving the node to the trash</li>
+          <li>Open the trash view with the “Trash” button in the toolbar</li>
+          <li>Restore: select “Restore” in the trash view</li>
+          <li>Permanent deletion: select “Delete permanently” in the trash view</li>
+          <li class="text-gray-500 text-xs" style="margin-top:4px;">Creating, duplicating, and moving nodes are disabled in the trash view. Only “Restore” and “Delete permanently” are available.</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">6) Working with Images</h4>
+        <ol class="flow-list mb-4">
+          <li>Add an image: drag and drop an image file into the content area or paste it from the clipboard (it is inserted at the cursor)</li>
+          <li>Image menu: click the image icon above the content area to open the menu</li>
+          <li>Choose “Open in new tab” or “Delete” from the menu. The filename and thumbnail also appear in the menu</li>
+          <li class="text-gray-500 text-xs" style="margin-top:4px;">Images cannot be added in preview-only mode (a notice is displayed)</li>
+          <li class="text-gray-500 text-xs" style="margin-top:4px;">Supported formats: JPEG / PNG / GIF / WebP / SVG　　Maximum file size: 5MB</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">7) Managing Parent Relationships</h4>
+        <ol class="flow-list mb-4">
+          <li>Open <a href="#shot-editor">3 Parent nodes</a> to check parent node names and relationship types</li>
+          <li>Remove a parent: when the node has multiple parents, select <code>×</code> in the dropdown to unlink that parent. The last remaining parent cannot be removed. Use “move to a new parent” to move the node, and “Trash” to delete it</li>
+          <li>Change relationship type: choose one of the following from the parent node dropdown
+            <ul class="text-gray-600" style="padding-left:1rem; margin-top:4px; list-style:disc;">
+              <li><strong>STRUCTURAL</strong>: Standard parent-child structure (default)</li>
+              <li><strong>REFERENCE</strong>: Reference relationship (a weaker association)</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">8) Node History Navigation</h4>
+        <ol class="flow-list mb-4">
+          <li>Back: <code>Alt + ←</code> or the ← button in <a href="#shot-editor">1 Reference history</a></li>
+          <li>Forward: <code>Alt + →</code> or the → button in <a href="#shot-editor">1 Reference history</a></li>
+          <li>This navigates the history of selected nodes, not the browser history</li>
+          <li>This is different from restoring content to a past state. For content restore, see “14) Viewing Node Update History and Restoring Past States”</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">9) Display Settings</h4>
+        <ol class="flow-list mb-4">
+          <li>Markdown preview: toggle the “markdown preview” checkbox in the toolbar ON or OFF</li>
+          <li>While previewing, press <code>e</code> to return to edit view</li>
+          <li>View as HTML: when content begins with <code>&lt;!DOCTYPE html</code> or <code>&lt;html</code>, the “Open as HTML in new tab” button in the CONTENT header is enabled (DOCTYPE is case-insensitive, and an opening <code>```</code> followed by a newline is allowed; otherwise the button is disabled and dimmed)</li>
+          <li><a href="#shot-editor">7 Editor toolbar</a> switches between write only, preview only, full screen, and other modes</li>
+          <li>Reverse tree: switch to the “Reverse tree” tab in the toolbar<br>
+            <span class="text-xs text-gray-500">→ Displays reverse paths from the selected node toward the root as a tree</span></li>
+          <li>Reload tree: <code>Alt + R</code></li>
+          <li>Expand all child nodes: <code>Alt + O</code></li>
+          <li>Collapse all child nodes: <code>Alt + L</code></li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">10) Working with Root Nodes</h4>
+        <ol class="flow-list mb-2">
+          <li>Use the “Normal ▼” menu to create top-level nodes, collapse child nodes, and configure root sort</li>
+          <li>You cannot move a node directly under the root by unlinking its last parent relationship</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">11) Editing Tables</h4>
+        <ol class="flow-list mb-2">
+          <li>In edit mode with the cursor inside a table, click the table button in <a href="#shot-editor">7 Editor toolbar</a> to open the popup table editor loaded with that table</li>
+          <li>To create a new table, place the cursor outside any table in edit mode, then click the table button</li>
+          <li>You can add or remove rows and columns, select and copy cells, and paste from Excel or a spreadsheet</li>
+          <li>When multiple cells are selected, the footer shows the sum of their numeric values (for values such as “¥1,850,000,” “1980 yen,” and “20%,” the numeric portion of each cell is extracted and totaled; cells without numbers are ignored)</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">12) Searching Within the Content</h4>
+        <ol class="flow-list mb-4">
+          <li>Type into <a href="#shot-editor">6 In-content search</a> on the CONTENT row, then press Enter or the magnifier</li>
+          <li>Matches within the displayed node’s content are highlighted. Use the previous/next arrows to move between matches</li>
+          <li>Clearing the search box removes the highlights. To look for another node, use the search in 3)</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">13) Viewing the Author, Creation Date, Update Date, and Last Updater</h4>
+        <ol class="flow-list mb-4">
+          <li>Select a node and click <a href="#shot-editor">4 Node details (the i in a circle)</a> at the top right</li>
+          <li><a href="#shot-detail">12 Author, creation date, update date, and last updater</a> at the top of the dialog shows the author, creation date, update date, and last updater. The last updater is the user who made the most recent update; updates made via MCP include the client name. If unknown, (none) is shown. This dialog is for viewing the information only</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">14) Viewing Node Update History and Restoring Past States</h4>
+        <ol class="flow-list mb-4">
+          <li>Open 4 Node details to see <a href="#shot-detail">13 Content history list</a> with the newest entries first. The most recent version is selected initially</li>
+          <li>Each timestamp in the list is when that content was written. Every row shows who wrote that content and when (the current row shows the last update time). You can also see who made the update; updates made via MCP include the client name</li>
+          <li>Select a row in the list to show <a href="#shot-detail">14 Past content</a>. After checking the content, click <a href="#shot-detail">15 Restore</a> and confirm to restore it</li>
+          <li>The radio button on the left of each history row is used to compare versions. It is not selected initially. Hovering over it shows "Select the version to compare with"</li>
+          <li>Pick a comparison target with the radio button and click Compare to see the differences between the selected row and that version. Added lines are shown in green and removed lines in red. The comparison always runs from the older version to the newer one, and it is also available to Viewers</li>
+          <li><a href="#shot-detail">15 Restore</a> applies to the row you click and select. It is not related to the radio selection</li>
+          <li>Restore applies to the content only. It does not roll back the title or parent relationships. The content from before the restore also stays in the history</li>
+          <li>Content history keeps up to the latest 100 entries per node. Nothing is deleted after 7 days. Updates that do not change the content add no history</li>
+          <li>A node with no history cannot be restored. Viewers can browse the history, but the Restore button is not shown</li>
+          <li>If the node was updated elsewhere, the latest content and history are reloaded. Check the content again before restoring</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">15) Opening Mermaid Diagrams in a New Tab and Zooming</h4>
+        <ol class="flow-list mb-4">
+          <li>Switch the content to preview and click a displayed Mermaid diagram</li>
+          <li>The selected diagram opens in a new tab. You can zoom in and out, fit it to the window, zoom with the mouse wheel, and pan by dragging</li>
+          <li>This works on Mermaid diagrams. To open HTML content in a new tab, use <a href="#shot-editor">8 View as HTML</a></li>
+        </ol>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Keyboard Shortcut Reference</h3>
+        <ul class="plain-item-list text-sm text-gray-700">
+          <li><strong>Save</strong><div><span class="kbd-chip">Cmd/Ctrl + Enter</span></div></li>
+          <li><strong>Return to edit view (while previewing)</strong><div><span class="kbd-chip">e</span></div></li>
+          <li><strong>Create child node</strong><div><span class="kbd-chip">Alt + N</span></div></li>
+          <li><strong>Create sibling node</strong><div><span class="kbd-chip">Alt + Shift + N</span></div></li>
+          <li><strong>Duplicate</strong><div><span class="kbd-chip">Alt + M</span></div></li>
+          <li><strong>Search</strong><div><span class="kbd-chip">Alt + F</span></div></li>
+          <li><strong>Manual sorting</strong><div><span class="kbd-chip">Alt + ↑</span><span class="kbd-chip">Alt + ↓</span><span class="text-xs text-gray-400 ml-1">(manual sort mode only)</span></div></li>
+          <li><strong>Delete / choose to unlink</strong><div><span class="kbd-chip">Delete</span><span class="kbd-chip">Backspace</span></div></li>
+          <li><strong>Add parent / move to parent</strong><div><span class="kbd-chip">Cmd/Ctrl + C</span><span class="kbd-chip">Cmd/Ctrl + X</span><span class="kbd-chip">Cmd/Ctrl + V</span></div></li>
+          <li><strong>Node history: back / forward</strong><div><span class="kbd-chip">Alt + ←</span><span class="kbd-chip">Alt + →</span></div></li>
+          <li><strong>Expand / collapse all child nodes</strong><div><span class="kbd-chip">Alt + O</span><span class="kbd-chip">Alt + L</span></div></li>
+          <li><strong>Reload tree</strong><div><span class="kbd-chip">Alt + R</span></div></li>
+          <li><strong>Move between nodes in the tree</strong><div><span class="kbd-chip">↑</span><span class="kbd-chip">↓</span></div></li>
+          <li><strong>Expand / collapse node</strong><div><span class="kbd-chip">→</span><span class="kbd-chip">←</span></div></li>
+          <li><strong>Table editor: copy selection</strong><div><span class="kbd-chip">Cmd/Ctrl + C</span></div></li>
+          <li><strong>Table editor: undo (row/column operations or paste)</strong><div><span class="kbd-chip">Cmd/Ctrl + Z</span></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== MCP / API Integration ========== -->
+    <section id="panel-mcp" class="help-panel" data-tab="mcp">
+      <div class="guide-section">
+        <h2 class="text-xl font-bold mb-3">MCP / API Integration Help</h2>
+        <p class="text-sm text-gray-600 mb-3">
+          Zeeta Web supports the official OAuth authorization flow for MCP (Model Context Protocol).
+          Simply register the <strong>tree-specific MCP connection URL</strong> with your MCP client, then complete authorization by signing in to Zeeta and granting access in your browser.
+          <strong>You do not need to store secrets in a configuration file (JSON / TOML).</strong>
+        </p>
+        <div class="help-grid">
+          <article class="help-card">
+            <h3><i class="fas fa-link text-yellow-600 mr-1"></i>Register the URL</h3>
+            <p>Use <i class="fas fa-key text-indigo-600 mx-1"></i> on the tree card in My Page to copy that tree’s MCP connection URL, then register it with your MCP client.</p>
+          </article>
+          <article class="help-card">
+            <h3><i class="fas fa-shield-halved text-yellow-600 mr-1"></i>Grant Access in Your Browser</h3>
+            <p>When the client requests a login, the Zeeta consent screen opens in your browser. Check the target tree and permissions, then select “Allow.”</p>
+          </article>
+          <article class="help-card">
+            <h3><i class="fas fa-robot text-yellow-600 mr-1"></i>Start Using It</h3>
+            <p>After connecting, access tokens refresh automatically, so there is no key to replace. You can search, create, and update nodes using natural language.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Get an MCP Connection URL</h3>
+        <ol class="flow-list mb-4">
+          <li>Open My Page and click <i class="fas fa-key text-indigo-600 mx-1"></i> (MCP integration) on the target tree’s card</li>
+          <li>Under “MCP connection URL (for this tree),” select <strong>“Copy URL”</strong></li>
+          <li>Register the copied URL with your MCP client (see the client-specific instructions below)</li>
+        </ol>
+        <p class="text-sm text-gray-600">
+          The URL follows the format <code>https://&lt;your-domain&gt;/api/mcp/trees/&lt;number&gt;</code>, and the complete URL is displayed on screen.
+          You do not need to construct the tree ID yourself.
+        </p>
+        <p class="text-xs text-gray-500 mt-2">
+          This button is visible to the tree owner. If you participate as an Editor or Viewer, ask the owner to share the URL with you.
+          The URL is not a secret, but only members of that tree can connect.
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Connect from Codex</h3>
+        <h4 class="text-sm font-semibold text-gray-700 mb-2">Codex CLI</h4>
+        <div class="mcp-code">
+codex mcp add zeeta --url https://&lt;your-domain&gt;/api/mcp/trees/&lt;number&gt;
+codex mcp login zeeta
+        </div>
+        <p class="text-sm text-gray-600 mt-2 mb-4">
+          <code>codex mcp login</code> opens your browser and displays the Zeeta consent screen. Grant access to complete the connection.
+          Use <code>codex mcp list</code> to check status and <code>codex mcp logout zeeta</code> to disconnect.
+          OAuth login is available only for Streamable HTTP servers (Zeeta’s MCP connection URL uses Streamable HTTP).
+        </p>
+
+        <h4 class="text-sm font-semibold text-gray-700 mb-2">Codex Desktop App / IDE Extension</h4>
+        <ol class="flow-list mb-4">
+          <li>Desktop app: open Settings → <strong>MCP servers</strong> → <strong>Add server</strong> (in the IDE extension, open the gear menu → <strong>MCP servers</strong> → <strong>Add server</strong>)</li>
+          <li>
+            Change “Type” to <strong>Streamable HTTP</strong>
+            <p class="text-xs text-red-700 mt-1">
+              <i class="fas fa-triangle-exclamation mr-1"></i>The default is <code>STDIO</code>. With STDIO selected, the input is a launch command for a local process, so entering a URL there will not connect. Changing the type switches the field to a URL input.
+            </p>
+          </li>
+          <li>Enter a name (for example, <code>zeeta</code>) and the MCP connection URL, save, and restart the app or extension (arguments and environment variables can remain empty)</li>
+          <li>
+            <strong>Select the “Authenticate” button in the MCP server list</strong>
+            <p class="text-xs text-gray-500 mt-1">The Zeeta consent screen opens in your browser. Select “Allow.” The button indicates that the server has not yet been authenticated.</p>
+          </li>
+        </ol>
+        <p class="text-xs text-gray-500">
+          <strong>The tool list is not loaded until authentication is complete.</strong> If you mention the server in chat before authenticating, the response may say that the MCP server is unknown. Authenticate first.<br>
+          Codex CLI, the IDE extension, and the desktop app on the same machine share MCP settings from <code>config.toml</code>. Adding a server in one makes it available to the others.
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Connect from Claude</h3>
+        <h4 class="text-sm font-semibold text-gray-700 mb-2">Claude Code (CLI / Desktop App)</h4>
+        <div class="mcp-code">
+claude mcp add --transport http zeeta https://&lt;your-domain&gt;/api/mcp/trees/&lt;number&gt;
+        </div>
+        <p class="text-sm text-gray-600 mt-2 mb-4">
+          After adding the server, run <code>/mcp</code> in a Claude Code session, select <code>zeeta</code>, and choose Authenticate.
+          The Zeeta consent screen opens in your browser; grant access to connect. Use <code>claude mcp list</code> to check the connection state (<code>✔ Connected</code> / <code>! Needs authentication</code>).
+          Non-interactive execution (<code>claude -p</code>) cannot open the authorization flow, so authenticate in advance using <code>/mcp</code> in an interactive session or <code>claude mcp login zeeta</code>.
+          Do not specify <code>--header "Authorization: Bearer ..."</code> for OAuth, because doing so uses that header instead of OAuth.
+        </p>
+
+        <h4 class="text-sm font-semibold text-gray-700 mb-2">Claude Desktop / claude.ai (Custom Connector)</h4>
+        <ol class="flow-list mb-4">
+          <li>Individual plan: open <strong>Customize → Connectors</strong> (for Team / Enterprise, the owner opens <strong>Organization settings → Connectors</strong>)</li>
+          <li>Select the add button → choose <strong>Web</strong> under “Custom” → paste the MCP connection URL</li>
+          <li>After saving, complete the requested OAuth authorization on the Zeeta consent screen</li>
+        </ol>
+        <p class="text-xs text-gray-500">
+          Custom connectors connect from Anthropic’s cloud, so <strong>you need a production HTTPS URL reachable from the internet</strong>.
+          A local development URL using <code>localhost</code> cannot be registered (it can be used for local connections from Codex CLI or Claude Code).
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Permissions (Scopes)</h3>
+        <p class="text-sm text-gray-600 mb-3">
+          Only <strong>members of the tree identified by the URL</strong> can connect through OAuth. The granted permissions always reflect your current role in that tree.
+        </p>
+        <table class="role-table mb-2">
+          <thead>
+            <tr>
+              <th>Tree Role</th>
+              <th>Granted Scopes</th>
+              <th>Capabilities</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Owner / Editor</td>
+              <td><code>mcp:read</code> <code>mcp:write</code></td>
+              <td class="ok">Read + create, update, link, and move to trash</td>
+            </tr>
+            <tr>
+              <td>Viewer</td>
+              <td><code>mcp:read</code></td>
+              <td class="ng">Read only (write tools are rejected with <code>insufficient_scope</code>)</td>
+            </tr>
+          </tbody>
+        </table>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>A token is bound to one tree (URL) and cannot be used with another tree’s URL.</li>
+          <li>If your role changes from Editor to Viewer, existing tokens immediately lose write access.</li>
+          <li>If you are removed from the tree, existing tokens become invalid immediately (reauthorizing will not restore access to that tree).</li>
+          <li>Access tokens are short-lived (one hour); the client renews them automatically with a refresh token.</li>
+        </ul>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Disconnecting and Reauthorizing</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li><strong>Codex CLI</strong>: disconnect with <code>codex mcp logout zeeta</code>, then reauthorize with <code>codex mcp login zeeta</code>.</li>
+          <li><strong>Claude Code</strong>: open <code>/mcp</code> and choose Re-authenticate from the target server’s menu.</li>
+          <li><strong>claude.ai connector</strong>: remove and reconnect the connector in Connectors settings.</li>
+          <li>To revoke a token on the server, remove that user from the tree; the token becomes invalid immediately.</li>
+        </ul>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Troubleshooting</h3>
+        <ul class="plain-item-list text-sm text-gray-700">
+          <li>
+            <strong>The chat says it does not recognize or know about the MCP server</strong>
+            <p class="text-xs text-gray-500 mt-1">The server has not been authenticated yet. Its tool list is not loaded until authentication is complete. In Codex Desktop or the IDE extension, select <strong>Authenticate</strong> in the MCP server list. For Codex CLI, run <code>codex mcp login &lt;name&gt;</code>. For Claude Code, run <code>/mcp</code> and choose Authenticate.</p>
+          </li>
+          <li>
+            <strong>I entered the URL, but Codex Desktop or the IDE extension cannot connect</strong>
+            <p class="text-xs text-gray-500 mt-1">If “Type” is still set to <code>STDIO</code>, the input is treated as a launch command and the client tries to run the URL as a local process. Switch to <strong>Streamable HTTP</strong>, then paste the URL again.</p>
+          </li>
+          <li>
+            <strong>I keep being asked to authenticate, or the status remains <code>Needs authentication</code></strong>
+            <p class="text-xs text-gray-500 mt-1">Make sure the URL is correct and includes <code>/api/mcp/trees/&lt;number&gt;</code>. There is no <code>/api/mcp</code> endpoint without a tree number.</p>
+          </li>
+          <li>
+            <strong>The consent screen says that you are not a member of this tree</strong>
+            <p class="text-xs text-gray-500 mt-1">The account currently signed in to Zeeta is not a member of that tree. Ask the owner to invite you, or sign in again with a different account.</p>
+          </li>
+          <li>
+            <strong>A write tool fails with <code>insufficient_scope</code></strong>
+            <p class="text-xs text-gray-500 mt-1">Your role in the tree is Viewer. Ask the owner to change it to Editor or Owner, then reauthorize in the client.</p>
+          </li>
+          <li>
+            <strong>An <code>invalid_target</code> or <code>redirect_uri</code> error appears immediately after connecting</strong>
+            <p class="text-xs text-gray-500 mt-1">This occurs when the domain in the URL differs from the domain you are actually connecting to. Copy the URL again from My Page and register that URL.</p>
+          </li>
+          <li>
+            <strong><code>Invalid state parameter</code> appears during authentication in a development environment</strong>
+            <p class="text-xs text-gray-500 mt-1">This occurs when <code>127.0.0.1</code> and <code>localhost</code> are mixed in local development. Browsers treat them as separate hosts, so the cookie set when login begins is not sent to the callback. Open My Page using <code>localhost</code>, then register the URL copied from there. This does not occur in production, which uses a single domain.</p>
+          </li>
+          <li>
+            <strong>The claude.ai connector cannot connect</strong>
+            <p class="text-xs text-gray-500 mt-1">You need an HTTPS URL that Anthropic’s cloud can reach. URLs restricted to an internal network and <code>localhost</code> URLs cannot be used.</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Key MCP Commands</h3>
+        <ul class="plain-item-list text-sm text-gray-700">
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-get">Read</span>
+              <strong>get_root_node_id</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Returns the tree’s root node ID.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-get">Read</span>
+              <strong>read_node</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Returns the specified node’s title, content, parent-child relationships, child sorting settings, and other details. Set <code>include_images</code> to also retrieve image metadata.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-get">Read</span>
+              <strong>get_children</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Returns detailed information for all children of the specified node, including content and child sorting settings. Set <code>include_images</code> to also retrieve image metadata.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-get">Read</span>
+              <strong>get_parents</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Returns detailed information for all parents of the specified node, including content and child sorting settings.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-get">Read</span>
+              <strong>read_node_image</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Returns one node image at a time as base64.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-get">Read</span>
+              <strong>search_nodes</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Performs node search by keyword. Node IDs are 6-character public IDs. With <code>only_title: true</code>, only titles are searched and vector search is skipped. By default it runs keyword and vector search, returning <code>word[]</code> for keyword matches, <code>vector[]</code> for AI-related candidates not duplicated in the keyword results, a combined <code>items[]</code> list, and the counts <code>word_count</code> / <code>vector_count</code>.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">Write</span>
+              <strong>create_node</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Creates a new node. Child sorting settings can also be specified.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">Write</span>
+              <strong>create_node_image</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Adds a base64 image to a node and returns an image URL for insertion into the node content.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">Write</span>
+              <strong>create_node_tree</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Creates multiple nodes as a tree structure in one operation.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">Write</span>
+              <strong>update_node</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Updates a node’s title, content, and child sorting settings.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">Write</span>
+              <strong>append_node_content</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Appends text to the end of a node’s content.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">Write</span>
+              <strong>trash_node</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Moves a node to the trash (soft delete).</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">Write</span>
+              <strong>link_node / link_nodes</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Adds parent-child relationships between nodes; multiple relationships can be specified at once.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">Write</span>
+              <strong>unlink_node / unlink_nodes</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Removes parent-child relationships between nodes; multiple relationships can be specified at once.</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">Write</span>
+              <strong>update_link_relation_type</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Changes the parent-child relationship type (STRUCTURAL / REFERENCE).</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const validTabs = new Set(['trees', 'editor', 'mcp', 'terms'])
+      // マイページ廃止前のリンク（?tab=my-page）は「ツリーの管理」タブで受ける
+      const tabAliases = { 'my-page': 'trees' }
+      const tabButtons = Array.from(document.querySelectorAll('.tab-btn'))
+      const panels = Array.from(document.querySelectorAll('.help-panel'))
+
+      function getInitialTab() {
+        const params = new URLSearchParams(window.location.search)
+        const raw = params.get('tab') || ''
+        const requested = tabAliases[raw] || raw
+        return validTabs.has(requested) ? requested : 'trees'
+      }
+
+      function applyTab(tab) {
+        for (const button of tabButtons) {
+          button.classList.toggle('active', button.dataset.tab === tab)
+        }
+        for (const panel of panels) {
+          panel.classList.toggle('active', panel.dataset.tab === tab)
+        }
+      }
+
+      function setTab(tab) {
+        if (!validTabs.has(tab)) return
+        const url = new URL(window.location.href)
+        url.searchParams.set('tab', tab)
+        history.replaceState({}, '', url.toString())
+        applyTab(tab)
+      }
+
+      for (const button of tabButtons) {
+        button.addEventListener('click', () => setTab(button.dataset.tab))
+      }
+
+      const languageSwitch = document.getElementById('language-switch')
+      if (languageSwitch) languageSwitch.href = `/help.ja${window.location.search}`
+
+      applyTab(getInitialTab())
+      if (window.location.hash === '#privacy' && getInitialTab() === 'terms') {
+        document.getElementById('privacy')?.scrollIntoView()
+      }
+    })()
+  </script>
+</body>
+
+</html>

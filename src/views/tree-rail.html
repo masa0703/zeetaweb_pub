@@ -1,0 +1,32 @@
+<!-- 左バー（閉じた状態）: ツリーを頭文字アイコンで並べる。＋ボタンは固定し、一覧だけをスクロールさせる -->
+<nav id="tree-rail" class="tree-rail" aria-label="ツリー一覧" data-i18n-attr="aria-label:mypage.treeListLabel">
+    <button id="tree-rail-create-btn" class="tree-rail-create" type="button" data-tip="新しいツリーを作成" aria-label="新しいツリーを作成" data-i18n-attr="data-tip:mypage.createTree;aria-label:mypage.createTree">
+        <i class="fas fa-plus"></i>
+    </button>
+    <span class="tree-rail-sep" aria-hidden="true"></span>
+    <div id="tree-rail-list" class="tree-rail-list"></div>
+</nav>
+
+<!-- 左バー（開いた状態）: ペインの上に重ねて表示する -->
+<div id="tree-drawer-scrim" class="tree-drawer-scrim"></div>
+<aside id="tree-drawer" class="tree-drawer" aria-label="ツリー一覧" aria-hidden="true" data-i18n-attr="aria-label:mypage.treeListLabel">
+    <button id="tree-drawer-create-btn" class="tree-drawer-create" type="button">
+        <i class="fas fa-plus"></i><span data-i18n="mypage.newTree">新しいツリー</span>
+    </button>
+    <div id="tree-drawer-list" class="tree-drawer-list"></div>
+    <!-- 右端のつまみ: ドラッグ（またはフォーカスして ← →）で一覧の幅を変える -->
+    <div id="tree-drawer-resize" class="tree-drawer-resize" role="separator" aria-orientation="vertical" tabindex="0"
+        aria-label="一覧の幅を変更" title="一覧の幅を変更" data-i18n-attr="aria-label:mypage.resizeTreeList;title:mypage.resizeTreeList"></div>
+</aside>
+
+<!-- ツリーが0件のときの空画面 -->
+<section id="tree-empty-state" class="tree-empty-state" hidden>
+    <div>
+        <i class="fas fa-seedling tree-empty-icon" aria-hidden="true"></i>
+        <h2 data-i18n="mypage.emptyTitle">ツリーがまだありません</h2>
+        <p data-i18n="mypage.emptyBody">最初のツリーを作成して、ノードの整理を始めましょう。</p>
+        <button id="tree-empty-create-btn" class="tree-drawer-create" type="button">
+            <i class="fas fa-plus"></i><span data-i18n="mypage.createTree">新しいツリーを作成</span>
+        </button>
+    </div>
+</section>

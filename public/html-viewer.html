@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title data-i18n="htmlViewer.title">HTML表示 - Zeeta Web</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+  <script>(function(){try{var t=localStorage.getItem('zeeta-theme')||'system';if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('theme-dark')}catch(e){}})()</script>
+  <link rel="stylesheet" href="/static/dark.css">
+  <script src="/static/theme.js" defer></script>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { background: #f8fafc; color: #0f172a; }
+    #viewer-toolbar {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 12px;
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+      position: relative;
+      z-index: 2;
+    }
+    #viewer-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+    #viewer-sandbox-notice {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border: 1px solid #bbf7d0;
+      border-radius: 999px;
+      background: #f0fdf4;
+      color: #166534;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    #html-viewport {
+      width: 100%;
+      height: calc(100% - 48px);
+      position: relative;
+      background: #fff;
+    }
+    #html-frame {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #fff;
+    }
+    #html-frame[hidden] { display: none; }
+    #viewer-status {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-size: 14px;
+      pointer-events: none;
+      background: #fff;
+    }
+    #viewer-status[hidden] { display: none; }
+    @media (max-width: 640px) {
+      #viewer-toolbar { gap: 6px; padding-inline: 8px; }
+      #viewer-sandbox-notice { font-size: 11px; padding-inline: 7px; }
+    }
+    /* Dark theme（<html class="theme-dark">時に有効。判定は /static/theme.js）
+       表示内容はユーザーが書いたHTMLのため、キャンバス (#html-viewport) は白のまま */
+    html.theme-dark {
+      color-scheme: dark;
+    }
+    html.theme-dark body {
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+    html.theme-dark #viewer-toolbar {
+      background: #1f2937;
+      border-bottom-color: #374151;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+    html.theme-dark #viewer-name {
+      color: #e5e7eb;
+    }
+    html.theme-dark #viewer-sandbox-notice {
+      border-color: rgba(134, 239, 172, 0.4);
+      background: rgba(74, 222, 128, 0.14);
+      color: #86efac;
+    }
+    html.theme-dark #viewer-status {
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <header id="viewer-toolbar" data-i18n-attr="aria-label:htmlViewer.toolbarLabel" aria-label="HTML表示の操作">
+    <span id="viewer-name"></span>
+    <span id="viewer-sandbox-notice" data-i18n="htmlViewer.sandboxNotice">サンドボックス表示中</span>
+  </header>
+  <main id="html-viewport">
+    <!--
+      ユーザーが書いたHTMLをここに流し込む。sandbox に allow-same-origin を付けないため、
+      中身は opaque origin で動き、Zeeta のオリジン（Cookie・API・localStorage）には触れない。
+      この属性から allow-same-origin を足すと隔離が丸ごと失われるので追加しないこと。
+    -->
+    <iframe
+      id="html-frame"
+      sandbox="allow-scripts allow-modals allow-forms allow-popups"
+      referrerpolicy="no-referrer"
+      data-i18n-attr="title:htmlViewer.viewportLabel"
+      title="HTMLプレビュー"
+      hidden
+    ></iframe>
+    <div id="viewer-status">HTMLを読み込んでいます…</div>
+  </main>
+
+  <script>
+    (() => {
+      const READY_MESSAGE = 'zeeta:html-viewer-ready'
+      const LOAD_MESSAGE = 'zeeta:html-viewer-load'
+      const channel = new URLSearchParams(window.location.search).get('channel')
+      const trustedOrigin = window.location.origin
+      const sourceWindow = window.opener
+      const frame = document.getElementById('html-frame')
+      const status = document.getElementById('viewer-status')
+      const viewerName = document.getElementById('viewer-name')
+      status.textContent = t('htmlViewer.loading')
+
+      let loaded = false
+
+      function showError(message) {
+        frame.hidden = true
+        status.hidden = false
+        status.textContent = message
+      }
+
+      function loadDocument(payload) {
+        if (typeof payload.html !== 'string' || payload.html === '') throw new Error('Empty HTML payload')
+        frame.srcdoc = payload.html
+        frame.hidden = false
+        status.hidden = true
+        loaded = true
+        viewerName.textContent = payload.title || ''
+        document.title = payload.title
+          ? t('htmlViewer.titleWithName', { name: payload.title })
+          : t('htmlViewer.title')
+        // 表示後は opener への参照を切る（別タブ側から元タブを操作させない）
+        try { window.opener = null } catch (_) {}
+      }
+
+      function handleLoadMessage(event) {
+        if (event.origin !== trustedOrigin || event.source !== sourceWindow) return
+        if (!event.data || event.data.type !== LOAD_MESSAGE || event.data.channel !== channel) return
+        window.removeEventListener('message', handleLoadMessage)
+        try {
+          loadDocument(event.data)
+        } catch (error) {
+          console.error('[html-viewer]', error)
+          showError(t('htmlViewer.displayError'))
+        }
+      }
+      window.addEventListener('message', handleLoadMessage)
+
+      if (!channel || !sourceWindow) {
+        showError(t('htmlViewer.openFromPreview'))
+        return
+      }
+      sourceWindow.postMessage({ type: READY_MESSAGE, channel }, trustedOrigin)
+      window.setTimeout(() => {
+        if (!loaded) showError(t('htmlViewer.loadTimeout'))
+      }, 10000)
+    })()
+  </script>
+</body>
+</html>

@@ -1,0 +1,1290 @@
+{
+  "nodes": [
+    {
+      "id": "Cvg2Vs",
+      "title": "Hello:JP",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "XTo89B",
+      "title": "Hello:EN",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "D4Tcgv",
+      "title": "hello",
+      "content": "# Hello\nこのツリーは、zeetaを実際に触って試すためのサンプルです。\n不要になったら削除してください。\n\nzeetawebは、ツリー構造でテキスト情報を管理するツールです。\n他のツリーと決定的に違う点は、「親を複数持てる」という点。\n使い方のサンプルは、「Sample tree」ノードを参照してください。\n\n画面の操作は、ヘッダにある[「？」マーク](https://zeetaweb.jp/help.html?tab=editor)に記載しています。\n\n# 公開リポジトリ\n（工事中）\n\n# 注意事項\nzeetawebは、複数の親を持てるツリーを試すための、個人運営のお試し版です。ご利用にあたり、以下の点をご了承ください。\n\n- **データの保存は保証しません。** データの保存・復旧や、サービスを続けて提供することは保証していません。データが消えたり壊れたりする可能性があります。\n- **大切な内容は手元にも残してください。** 失って困る内容は、ご自身で別の場所にも控えを取ってください。\n- **機密情報はツリーに入れないでください。** パスワード、顧客情報など、漏れて困る情報や個人情報はツリーに入力しないでください。\n- **内容は変わることがあります。** 機能や画面を変更・停止したり、サービス自体を終了したりすることがあります。\n- **禁止事項。** 不正アクセス、他人の権利を侵害する行為、サービスに過大な負荷をかける行為、その他法令に違反する行為は禁止します。\n- **責任について。** 損害が生じた場合の責任は、適用される法令に従います。\n\n詳細は[利用規約](https://zeetaweb.jp/terms)をご覧ください。",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "aY2uJf",
+      "title": "CONTENT",
+      "content": "# CONTENT\nCONTENTには、markdownが使用できます。\n上部のツールバーにマウスオーバーするとツールの説明が表示されます。\nヘッダには「☑️markdown preview」があり、これをonにするとノード切替時にpreview表示になります。\n\nCONTENT（この部分）には、\n* 画像をペーストして貼り付けたり\n* mermaidで図を書いたり\n```mermaid\nflowchart LR\n    A[\"mermaidで\"] --> B[/\"図を描いたり\"\\] \n```\n* htmlを書いたり\n```html\n<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n<meta charset=\"utf-8\">\n<title>hello</title>\n</head>\n<body>\n<p>htmlコードを貼り付けたり</p>\n</body>\n</html>\n```\nできます。\nそれぞれ、クリックすると別タブを開いて自由なサイズで参照できます。",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "hLLjyB",
+      "title": "Sample tree",
+      "content": "親を複数持つことのサンプルです。",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "L9dzcc",
+      "title": "MCP",
+      "content": "zeetawebはMCPに対応しています。\n1ツリーが1MCPサーバになります。\n登録方法は、[こちらを参照してください](https://zeetaweb.jp/help?tab=mcp)。\n\n## 使い方の例\n- 「MCP zeeta01に接続して、Sample treeに何があるか教えて」\n    - zeeta01は、登録時に指定したMCP名\n- 「このexcelファイルをzeeta01に記録して」\n    - ノード階層を指定しなくても適度に分割する場合もありますが、「1シートは、1ノードにすること」のように伝えた方が確実です。\n- 「MCP (id:L9dzcc)を確認して」\n    - ノードを選択してコピー、エディタなどにペーストすると「{ノード名}(id:xxxxxx)」というテキストになります。\n    - id:xxxxxxが入っているとAIは、直接ノードを参照できます。\n    - 逆に入っていないと、ノード名で検索することになり、無駄に時間と手間がかかります。",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "PgwtVZ",
+      "title": "hello",
+      "content": "# Hello\nThis sample tree lets you try zeeta for yourself. Delete it when you no longer need it.\n\nzeetaweb is a tool for organizing text in a tree structure. Its distinguishing feature is that a node can have multiple parents. See the “Sample tree” node for examples.\n\nFor instructions on using the interface, see the [“?” icon](https://zeetaweb.jp/help.html?tab=editor) in the header.\n\n# Public repository\n(Under construction)\n\n# Important information\nzeetaweb (\"the Service\") is an individually operated trial for trying out trees in which a node can have multiple parents. By using it, you agree to the following.\n\n- **No guarantee of data preservation.** We do not guarantee that your data will be preserved or recoverable, or that the Service will remain available. Data may be lost or corrupted.\n- **Keep your own copies.** Keep separate copies of anything you cannot afford to lose.\n- **Do not put confidential information in your trees.** Do not enter passwords, customer information, or other confidential or personal information that would cause harm if disclosed.\n- **Things may change.** Features and screens may be changed or discontinued, and the Service itself may end.\n- **Prohibited conduct.** You must not access the Service without authorization, infringe others' rights, place excessive load on the Service, or violate applicable law.\n- **Liability.** Liability for any loss or damage is governed by applicable law.\n\nFor details, see the [Terms of Use](https://zeetaweb.jp/terms).",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "WHUvTE",
+      "title": "CONTENT",
+      "content": "# CONTENT\nYou can use Markdown in CONTENT. Hover over the toolbar at the top to see descriptions of its tools. Turn on “☑️markdown preview” in the header to show the preview when switching nodes.\n\nIn CONTENT (this area), you can:\n* Paste images\n* Draw diagrams with Mermaid\n```mermaid\nflowchart LR\n    A[\"Draw diagrams\"] --> B[/\"with Mermaid\"\\]\n```\n* Write HTML\n```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>hello</title>\n</head>\n<body>\n<p>Paste HTML code</p>\n</body>\n</html>\n```\nClick each item to open it in a separate tab and view it at your preferred size.",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "2noAun",
+      "title": "Sample tree",
+      "content": "Examples of nodes with multiple parents.",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "wKZKHT",
+      "title": "MCP",
+      "content": "zeetaweb supports MCP. Each tree acts as one MCP server. For setup instructions, [see here](https://zeetaweb.jp/help?tab=mcp).\n\n## Example prompts\n- “Connect to MCP zeeta01 and tell me what is in Sample tree.”\n    - zeeta01 is the MCP name specified during registration.\n- “Record this Excel file in zeeta01.”\n    - The AI may split the content appropriately without a specified node hierarchy, but an instruction such as “Use one node per sheet” is more reliable.\n- “Check MCP (id:wKZKHT).”\n    - Select and copy a node, then paste it into an editor to get text in the form “{node name}(id:xxxxxx)”.\n    - With the ID included, the AI can access the node directly.\n    - Without it, the AI must search by node name, taking extra time and effort.",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "KuAGfw",
+      "title": "simple",
+      "content": "最もシンプルな例。\n```\naaa\nbbb\n  ccc\nccc \n```\ncccは、simpleとbbbの2つの親を持ちます。\naaaも親に加えたい場合\n* cccを選択\n* コピー（cmd+c/ctrl+c）\n* aaaを選択\n* ペースト（cmd+v/ctrl+v）\n\naaaは、親から外したい場合\n* cccを選択\n* backspace/del\n* 確認メッセージ\n    * 「aaaとの関係を解除」を選択",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "R5DatQ",
+      "title": "料理レシピ",
+      "content": "料理レシピを「ジャンル」と「食材」の2つの切り口で整理したサンプルです。\n\n各レシピの下には、使う食材のノードがぶら下がっています。たとえば「鶏肉」は「親子丼」の下にも「チキンソテー」の下にも「食材別」の下にもあります。\nコピーではなく**同じ1つのノード**なので、どこから開いて編集しても全部に反映されます。\n「鶏肉を使うレシピ」を知りたいときは、「鶏肉」を選択し「逆ツリー」タブを開きます。",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "1wTc6T",
+      "title": "トレーサビリティ",
+      "content": "## 前提\n- 経費を申請するシステムを開発しようとしている。\n\n## 手順\n1. 会議やメールで要件が定義される。\n2. 要件をそれぞれの子ノードに記録する。\n3. 「要件」ノードを作って2のノードに親を追加する。\n4. 要件に必要な画面を子ノードに定義する。\n5. 「画面」ノードを作って4のノードに親を追加する。\n6. 画面に必要な情報や操作を定義する。\n7. 操作した結果を記録するデータを定義する。\n8. 「データ」ノードを作って7のノードに親を追加する。\n\n## 補足\n- データ「カメラ画像パス」は、何のためにあるのか？を調べるには、「カメラ画像パス」を選択し、逆ツリーで表示する。\n- 親を辿っていくと、2026-1001の会議で発生した要件であることがわかる。\n- ここでは単純化しているが、これ以外に、ユースケース、機能、バッチ、テストなども同様に紐付けられる。",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "F9arfj",
+      "title": "simple",
+      "content": "The simplest example.\n```\naaa\nbbb\n  ccc\nccc\n```\nccc has two parents: simple and bbb.\n\nTo add aaa as another parent:\n* Select ccc.\n* Copy it (cmd+c / ctrl+c).\n* Select aaa.\n* Paste (cmd+v / ctrl+v).\n\nTo remove aaa as a parent:\n* Select ccc.\n* Press backspace / del.\n* In the confirmation message, select “Unlink from aaa”.",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "MtY3u8",
+      "title": "Recipes",
+      "content": "This example organizes recipes in two ways: by cuisine and by ingredient.\n\nEach recipe contains nodes for its ingredients. For example, the same “Chicken” node appears under “Oyakodon”, “Chicken sauté”, and “Ingredients”. It is **one shared node**, not a copy, so edits made from any location appear everywhere.\n\nTo find recipes that use chicken, select “Chicken” and open the “Reverse tree” tab.",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "ytQ826",
+      "title": "Traceability",
+      "content": "## Scenario\n- You are developing an expense claim system.\n\n## Steps\n1. Requirements are defined in meetings and emails.\n2. Record each requirement in a child node.\n3. Create a “Requirements” node and add it as a parent of the nodes from step 2.\n4. Define the screens needed for each requirement as child nodes.\n5. Create a “Screens” node and add it as a parent of the nodes from step 4.\n6. Define the information and actions required for each screen.\n7. Define the data that records the results of those actions.\n8. Create a “Data” node and add it as a parent of the nodes from step 7.\n\n## Notes\n- To find out why the “Camera image path” data exists, select it and display its reverse tree.\n- Following its parents reveals that the requirement originated in the 2026-1001 meeting.\n- This example is simplified; use cases, functions, batch jobs, tests, and other items can also be linked in the same way.",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "pAdGY7",
+      "title": "aaa",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "JeJtp6",
+      "title": "bbb",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "aQFHWD",
+      "title": "ccc",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "jDcqz3",
+      "title": "食材",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "Sc6mM5",
+      "title": "料理",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "fK8U1R",
+      "title": "会議",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "iwTcaC",
+      "title": "メール",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "ZasjyW",
+      "title": "要件",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "WrXPia",
+      "title": "画面",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "wTzyL9",
+      "title": "データ",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "yXagLR",
+      "title": "aaa",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "RxtxLY",
+      "title": "bbb",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "rKyqDN",
+      "title": "ccc",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "pf5Dhi",
+      "title": "Ingredients",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "2kTata",
+      "title": "Dishes",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "EyMEU8",
+      "title": "Meetings",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "icGtRC",
+      "title": "Email",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "vbE55E",
+      "title": "Requirements",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "h4tLFi",
+      "title": "Screens",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "2S4khr",
+      "title": "Data",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "S5VJQB",
+      "title": "鶏肉",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "gaqWxx",
+      "title": "卵",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "VQAevP",
+      "title": "じゃがいも",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "SD5aiW",
+      "title": "和食",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "7YkAJL",
+      "title": "洋食",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "gi83nZ",
+      "title": "2026-1001 要件ヒアリング",
+      "content": "（議事内容）",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "1pS7Cs",
+      "title": "2026-1002 from 田中課長",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "WWtFCa",
+      "title": "スマホで領収書を撮って申請したい",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "WsxVK9",
+      "title": "上長承認を1クリックで行いたい",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "ihggA6",
+      "title": "経費申請画面",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "46kCyR",
+      "title": "承認画面",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "7NKkZQ",
+      "title": "申請データ",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "povpVB",
+      "title": "Chicken",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "WRkSrY",
+      "title": "Egg",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "KaYC86",
+      "title": "Potato",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "RdcZYa",
+      "title": "Japanese",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "83Z9ua",
+      "title": "Western",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "jkTTnk",
+      "title": "2026-1001 Requirements interview",
+      "content": "(Meeting notes)",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "W1nKdb",
+      "title": "2026-1002 From Manager Tanaka",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "LSs9U6",
+      "title": "Submit claims by photographing receipts with a smartphone",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "FUjKkH",
+      "title": "Approve claims with one click",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "by3C7W",
+      "title": "Expense claim screen",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "r6vzs9",
+      "title": "Approval screen",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "woUh5f",
+      "title": "Claim data",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "f9Nqrf",
+      "title": "親子丼",
+      "content": "## 材料（1人分）\n- 鶏もも肉 100g\n- 卵 2個\n- 玉ねぎ 1/4個\n- ごはん 1杯\n- だし 80ml、しょうゆ・みりん 各大さじ1、砂糖 小さじ1\n\n## 作り方\n```mermaid\nflowchart LR\n    A[\"鶏肉と玉ねぎを切る\"] --> B[\"煮汁で煮る\"] --> C[\"溶き卵でとじる\"] --> D((\"ごはんにのせる\"))\n```\n\n> 子ノードの「鶏肉」「卵」は、食材別にある「鶏肉」「卵」と同じノードです。",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "fsrkWX",
+      "title": "肉じゃが",
+      "content": "## 材料（2人分）\n- じゃがいも 2個\n- 牛薄切り肉 100g\n- 玉ねぎ 1/2個、にんじん 1/2本\n- だし 200ml、しょうゆ・みりん 各大さじ2、砂糖 大さじ1\n\n## 作り方\n1. 野菜を一口大に切る\n2. 肉と野菜を炒め、だしと調味料を入れる\n3. 落としぶたをして15分煮る",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "iLa7Aq",
+      "title": "オムレツ",
+      "content": "## 材料（1人分）\n- 卵 3個\n- 牛乳 大さじ1\n- バター 10g、塩こしょう 少々\n\n## 作り方\n1. 卵・牛乳・塩こしょうを混ぜる\n2. バターを溶かしたフライパンに流し、大きく混ぜる\n3. 半熟のうちに端に寄せて形を整える",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "NX6wm9",
+      "title": "チキンソテー",
+      "content": "## 材料（1人分）\n- 鶏もも肉 1枚\n- 塩こしょう 少々、オリーブオイル 小さじ1\n\n## 作り方\n1. 鶏肉に塩こしょうをする\n2. 皮目から中火で焼き、皮がパリッとしたら裏返す\n3. ふたをして中まで火を通す",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "LUJUY5",
+      "title": "ポテトサラダ",
+      "content": "## 材料（2人分）\n- じゃがいも 2個\n- ゆで卵 1個\n- きゅうり 1/2本\n- マヨネーズ 大さじ3、塩こしょう 少々\n\n## 作り方\n1. じゃがいもをゆでて潰す\n2. 刻んだゆで卵・きゅうりと合わせる\n3. マヨネーズと塩こしょうで和える",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "zQSw51",
+      "title": "「カメラで撮影」ボタン",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "nTjnzq",
+      "title": "「申請」ボタン",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "bVFvRM",
+      "title": "「承認」ボタン",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "7HqHdu",
+      "title": "申請者",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "5xCXzS",
+      "title": "申請内容",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "wRMCrt",
+      "title": "カメラ画像パス",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "At9URS",
+      "title": "状態（申請中／承認済／却下）",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "PpQk5f",
+      "title": "Oyakodon",
+      "content": "## Ingredients (1 serving)\n- 100 g chicken thigh\n- 2 eggs\n- 1/4 onion\n- 1 bowl of rice\n- 80 ml dashi; 1 tbsp each soy sauce and mirin; 1 tsp sugar\n\n## Method\n```mermaid\nflowchart LR\n    A[\"Cut chicken and onion\"] --> B[\"Simmer in sauce\"] --> C[\"Add beaten eggs\"] --> D((\"Serve over rice\"))\n```\n\n> The child nodes “Chicken” and “Egg” are the same nodes found under Ingredients.",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "6VeRkF",
+      "title": "Nikujaga",
+      "content": "## Ingredients (2 servings)\n- 2 potatoes\n- 100 g thinly sliced beef\n- 1/2 onion and 1/2 carrot\n- 200 ml dashi; 2 tbsp each soy sauce and mirin; 1 tbsp sugar\n\n## Method\n1. Cut the vegetables into bite-sized pieces.\n2. Stir-fry the beef and vegetables, then add the dashi and seasonings.\n3. Cover with a drop lid and simmer for 15 minutes.",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "zAXEvM",
+      "title": "Omelette",
+      "content": "## Ingredients (1 serving)\n- 3 eggs\n- 1 tbsp milk\n- 10 g butter; salt and pepper to taste\n\n## Method\n1. Mix the eggs, milk, salt, and pepper.\n2. Pour into a pan with melted butter and stir in broad strokes.\n3. While still soft, fold toward the edge and shape.",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "dE4McW",
+      "title": "Chicken sauté",
+      "content": "## Ingredients (1 serving)\n- 1 chicken thigh\n- Salt and pepper to taste; 1 tsp olive oil\n\n## Method\n1. Season the chicken with salt and pepper.\n2. Cook skin-side down over medium heat, then turn when the skin is crisp.\n3. Cover and cook through.",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "XuVohB",
+      "title": "Potato salad",
+      "content": "## Ingredients (2 servings)\n- 2 potatoes\n- 1 boiled egg\n- 1/2 cucumber\n- 3 tbsp mayonnaise; salt and pepper to taste\n\n## Method\n1. Boil and mash the potatoes.\n2. Combine with the chopped boiled egg and cucumber.\n3. Mix with mayonnaise, salt, and pepper.",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "c2f5Fq",
+      "title": "“Take photo” button",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "aR4dXS",
+      "title": "“Submit” button",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "hFqjtE",
+      "title": "“Approve” button",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "8Gq6pj",
+      "title": "Applicant",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "XzBtgg",
+      "title": "Claim details",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "UkkirW",
+      "title": "Camera image path",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    },
+    {
+      "id": "58FKNj",
+      "title": "Status (submitted / approved / rejected)",
+      "content": "",
+      "sortMode": "manual",
+      "sortDirection": "asc"
+    }
+  ],
+  "edges": [
+    {
+      "parent": "$root",
+      "child": "Cvg2Vs",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "$root",
+      "child": "XTo89B",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "Cvg2Vs",
+      "child": "D4Tcgv",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "Cvg2Vs",
+      "child": "aY2uJf",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "Cvg2Vs",
+      "child": "hLLjyB",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "Cvg2Vs",
+      "child": "L9dzcc",
+      "relation": "STRUCTURAL",
+      "position": 3
+    },
+    {
+      "parent": "XTo89B",
+      "child": "PgwtVZ",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "XTo89B",
+      "child": "WHUvTE",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "XTo89B",
+      "child": "2noAun",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "XTo89B",
+      "child": "wKZKHT",
+      "relation": "STRUCTURAL",
+      "position": 3
+    },
+    {
+      "parent": "hLLjyB",
+      "child": "KuAGfw",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "hLLjyB",
+      "child": "R5DatQ",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "hLLjyB",
+      "child": "1wTc6T",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "2noAun",
+      "child": "F9arfj",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "2noAun",
+      "child": "MtY3u8",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "2noAun",
+      "child": "ytQ826",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "KuAGfw",
+      "child": "pAdGY7",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "KuAGfw",
+      "child": "JeJtp6",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "KuAGfw",
+      "child": "aQFHWD",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "R5DatQ",
+      "child": "jDcqz3",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "R5DatQ",
+      "child": "Sc6mM5",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "1wTc6T",
+      "child": "fK8U1R",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "1wTc6T",
+      "child": "iwTcaC",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "1wTc6T",
+      "child": "ZasjyW",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "1wTc6T",
+      "child": "WrXPia",
+      "relation": "STRUCTURAL",
+      "position": 3
+    },
+    {
+      "parent": "1wTc6T",
+      "child": "wTzyL9",
+      "relation": "STRUCTURAL",
+      "position": 4
+    },
+    {
+      "parent": "F9arfj",
+      "child": "yXagLR",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "F9arfj",
+      "child": "RxtxLY",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "F9arfj",
+      "child": "rKyqDN",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "MtY3u8",
+      "child": "pf5Dhi",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "MtY3u8",
+      "child": "2kTata",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "ytQ826",
+      "child": "EyMEU8",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "ytQ826",
+      "child": "icGtRC",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "ytQ826",
+      "child": "vbE55E",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "ytQ826",
+      "child": "h4tLFi",
+      "relation": "STRUCTURAL",
+      "position": 3
+    },
+    {
+      "parent": "ytQ826",
+      "child": "2S4khr",
+      "relation": "STRUCTURAL",
+      "position": 4
+    },
+    {
+      "parent": "JeJtp6",
+      "child": "aQFHWD",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "jDcqz3",
+      "child": "S5VJQB",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "jDcqz3",
+      "child": "gaqWxx",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "jDcqz3",
+      "child": "VQAevP",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "Sc6mM5",
+      "child": "SD5aiW",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "Sc6mM5",
+      "child": "7YkAJL",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "fK8U1R",
+      "child": "gi83nZ",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "iwTcaC",
+      "child": "1pS7Cs",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "ZasjyW",
+      "child": "WWtFCa",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "ZasjyW",
+      "child": "WsxVK9",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "WrXPia",
+      "child": "ihggA6",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "WrXPia",
+      "child": "46kCyR",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "wTzyL9",
+      "child": "7NKkZQ",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "RxtxLY",
+      "child": "rKyqDN",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "pf5Dhi",
+      "child": "povpVB",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "pf5Dhi",
+      "child": "WRkSrY",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "pf5Dhi",
+      "child": "KaYC86",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "2kTata",
+      "child": "RdcZYa",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "2kTata",
+      "child": "83Z9ua",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "EyMEU8",
+      "child": "jkTTnk",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "icGtRC",
+      "child": "W1nKdb",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "vbE55E",
+      "child": "LSs9U6",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "vbE55E",
+      "child": "FUjKkH",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "h4tLFi",
+      "child": "by3C7W",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "h4tLFi",
+      "child": "r6vzs9",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "2S4khr",
+      "child": "woUh5f",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "SD5aiW",
+      "child": "f9Nqrf",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "SD5aiW",
+      "child": "fsrkWX",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "7YkAJL",
+      "child": "iLa7Aq",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "7YkAJL",
+      "child": "NX6wm9",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "7YkAJL",
+      "child": "LUJUY5",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "gi83nZ",
+      "child": "WWtFCa",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "1pS7Cs",
+      "child": "WsxVK9",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "WWtFCa",
+      "child": "ihggA6",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "WsxVK9",
+      "child": "46kCyR",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "ihggA6",
+      "child": "zQSw51",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "ihggA6",
+      "child": "nTjnzq",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "46kCyR",
+      "child": "7NKkZQ",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "46kCyR",
+      "child": "bVFvRM",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "7NKkZQ",
+      "child": "7HqHdu",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "7NKkZQ",
+      "child": "5xCXzS",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "7NKkZQ",
+      "child": "wRMCrt",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "7NKkZQ",
+      "child": "At9URS",
+      "relation": "STRUCTURAL",
+      "position": 3
+    },
+    {
+      "parent": "RdcZYa",
+      "child": "PpQk5f",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "RdcZYa",
+      "child": "6VeRkF",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "83Z9ua",
+      "child": "zAXEvM",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "83Z9ua",
+      "child": "dE4McW",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "83Z9ua",
+      "child": "XuVohB",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "jkTTnk",
+      "child": "LSs9U6",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "W1nKdb",
+      "child": "FUjKkH",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "LSs9U6",
+      "child": "by3C7W",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "FUjKkH",
+      "child": "r6vzs9",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "by3C7W",
+      "child": "c2f5Fq",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "by3C7W",
+      "child": "aR4dXS",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "r6vzs9",
+      "child": "hFqjtE",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "r6vzs9",
+      "child": "woUh5f",
+      "relation": "REFERENCE",
+      "position": 1
+    },
+    {
+      "parent": "woUh5f",
+      "child": "8Gq6pj",
+      "relation": "STRUCTURAL",
+      "position": 0
+    },
+    {
+      "parent": "woUh5f",
+      "child": "XzBtgg",
+      "relation": "STRUCTURAL",
+      "position": 1
+    },
+    {
+      "parent": "woUh5f",
+      "child": "UkkirW",
+      "relation": "STRUCTURAL",
+      "position": 2
+    },
+    {
+      "parent": "woUh5f",
+      "child": "58FKNj",
+      "relation": "STRUCTURAL",
+      "position": 3
+    },
+    {
+      "parent": "f9Nqrf",
+      "child": "S5VJQB",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "f9Nqrf",
+      "child": "gaqWxx",
+      "relation": "REFERENCE",
+      "position": 1
+    },
+    {
+      "parent": "fsrkWX",
+      "child": "VQAevP",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "iLa7Aq",
+      "child": "gaqWxx",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "NX6wm9",
+      "child": "S5VJQB",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "LUJUY5",
+      "child": "VQAevP",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "LUJUY5",
+      "child": "gaqWxx",
+      "relation": "REFERENCE",
+      "position": 1
+    },
+    {
+      "parent": "zQSw51",
+      "child": "wRMCrt",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "nTjnzq",
+      "child": "7NKkZQ",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "bVFvRM",
+      "child": "At9URS",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "PpQk5f",
+      "child": "povpVB",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "PpQk5f",
+      "child": "WRkSrY",
+      "relation": "REFERENCE",
+      "position": 1
+    },
+    {
+      "parent": "6VeRkF",
+      "child": "KaYC86",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "zAXEvM",
+      "child": "WRkSrY",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "dE4McW",
+      "child": "povpVB",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "XuVohB",
+      "child": "KaYC86",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "XuVohB",
+      "child": "WRkSrY",
+      "relation": "REFERENCE",
+      "position": 1
+    },
+    {
+      "parent": "c2f5Fq",
+      "child": "UkkirW",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "aR4dXS",
+      "child": "woUh5f",
+      "relation": "REFERENCE",
+      "position": 0
+    },
+    {
+      "parent": "hFqjtE",
+      "child": "58FKNj",
+      "relation": "REFERENCE",
+      "position": 0
+    }
+  ]
+}

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <title data-i18n="acceptInvitation.title">招待を受け入れる - Zeeta</title>
+    <script>(function(){try{var t=localStorage.getItem('zeeta-theme')||'system';if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('theme-dark')}catch(e){}})()</script>
+    <link rel="stylesheet" href="/static/dark.css">
+    <script src="/static/theme.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 48px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo h1 {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .loading, .error, .content {
+            display: none;
+        }
+
+        .loading.active, .error.active, .content.active {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .error-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .error h2 {
+            color: #e74c3c;
+            margin-bottom: 16px;
+            font-size: 24px;
+        }
+
+        .error p {
+            color: #666;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .content h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .invitation-details {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .role-editor {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .role-viewer {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .actions {
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            margin-left: 12px;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+
+        .note {
+            margin-top: 24px;
+            padding: 16px;
+            background: #fff3cd;
+            border-radius: 6px;
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        /* Dark theme（<html class="theme-dark">時に有効。判定は /static/theme.js） */
+        html.theme-dark body {
+            background: #0f172a;
+        }
+
+        html.theme-dark .container {
+            background: #1f2937;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        html.theme-dark .spinner {
+            border-color: #374151;
+            border-top-color: #818cf8;
+        }
+
+        html.theme-dark .error h2 {
+            color: #fca5a5;
+        }
+
+        html.theme-dark .error p {
+            color: #9ca3af;
+        }
+
+        html.theme-dark .content h2 {
+            color: #f3f4f6;
+        }
+
+        html.theme-dark .invitation-details {
+            background: #111827;
+        }
+
+        html.theme-dark .detail-row {
+            border-bottom-color: #374151;
+        }
+
+        html.theme-dark .detail-label {
+            color: #9ca3af;
+        }
+
+        html.theme-dark .detail-value {
+            color: #f3f4f6;
+        }
+
+        html.theme-dark .role-editor {
+            background: rgba(45, 212, 191, 0.18);
+            color: #5eead4;
+        }
+
+        html.theme-dark .role-viewer {
+            background: rgba(251, 191, 36, 0.18);
+            color: #fcd34d;
+        }
+
+        html.theme-dark .btn-secondary {
+            background: #1f2937;
+            color: #a5b4fc;
+        }
+
+        html.theme-dark .btn-secondary:hover {
+            background: #374151;
+        }
+
+        html.theme-dark .note {
+            background: rgba(251, 191, 36, 0.14);
+            color: #fcd34d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>Zeeta</h1>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading active" id="loading">
+            <div class="spinner"></div>
+            <p data-i18n="acceptInvitation.loading">招待情報を読み込んでいます...</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="error" id="error">
+            <div class="error-icon">⚠️</div>
+            <h2 data-i18n="acceptInvitation.errorHeading">エラーが発生しました</h2>
+            <p id="error-message"></p>
+            <a href="/index.html" class="btn btn-primary" data-i18n="acceptInvitation.backToTree">ツリーに戻る</a>
+        </div>
+
+        <!-- Success State -->
+        <div class="success-message" id="success">
+            <div class="success-icon">✅</div>
+            <h2 data-i18n="acceptInvitation.successHeading">招待を受け入れました！</h2>
+            <p data-i18n="acceptInvitation.successMessage">ツリーにアクセスできるようになりました。</p>
+            <a href="#" id="go-to-tree" class="btn btn-primary" data-i18n="acceptInvitation.openTree">ツリーを開く</a>
+        </div>
+
+        <!-- Content State -->
+        <div class="content" id="content">
+            <h2 data-i18n="acceptInvitation.heading">ツリーへの招待</h2>
+
+            <div class="invitation-details">
+                <div class="detail-row">
+                    <span class="detail-label" data-i18n="acceptInvitation.treeName">ツリー名</span>
+                    <span class="detail-value" id="tree-name"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label" data-i18n="acceptInvitation.inviter">招待者</span>
+                    <span class="detail-value" id="inviter-name"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label" data-i18n="acceptInvitation.role">あなたの役割</span>
+                    <span class="detail-value">
+                        <span class="role-badge" id="role-badge"></span>
+                    </span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label" data-i18n="acceptInvitation.invitedEmail">招待されたメールアドレス</span>
+                    <span class="detail-value" id="invitee-email"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label" data-i18n="acceptInvitation.expiresAt">有効期限</span>
+                    <span class="detail-value" id="expires-at"></span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" id="accept-btn">招待を受け入れる</button>
+                <a href="/index.html" class="btn btn-secondary" data-i18n="acceptInvitation.cancel">キャンセル</a>
+            </div>
+
+            <div class="note" id="login-note" style="display: none;">
+                ⚠️ <span data-i18n="acceptInvitation.loginRequired">この招待を受け入れるには、招待されたメールアドレスでログインする必要があります。</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get token from URL
+        const urlParams = new URLSearchParams(window.location.search)
+        const token = urlParams.get('token')
+
+        let invitationData = null
+        let treeId = null
+
+        const acceptButton = document.getElementById('accept-btn')
+        acceptButton.textContent = t('acceptInvitation.accept')
+
+        async function checkAuth() {
+            try {
+                const response = await fetch('/auth/me')
+                if (!response.ok) {
+                    // Not logged in - redirect to login with return URL
+                    // 絶対URLはサーバー側の戻り先検証で弾かれるため、アプリ内の相対パスで渡す
+                    const returnUrl = encodeURIComponent(window.location.pathname + window.location.search)
+                    window.location.href = `/login.html?redirect=${returnUrl}`
+                    return false
+                }
+                return true
+            } catch (error) {
+                console.error('Auth check failed:', error)
+                return false
+            }
+        }
+
+        async function loadInvitation() {
+            if (!token) {
+                showError(t('acceptInvitation.tokenMissing'))
+                return
+            }
+
+            try {
+                const response = await fetch(`/api/invitations/${token}`)
+                const data = await response.json()
+
+                if (!response.ok) {
+                    showError(data.error || t('acceptInvitation.loadFailed'))
+                    return
+                }
+
+                invitationData = data.data
+                displayInvitation(invitationData)
+
+            } catch (error) {
+                console.error('Failed to load invitation:', error)
+                showError(t('acceptInvitation.loadError'))
+            }
+        }
+
+        function displayInvitation(data) {
+            document.getElementById('tree-name').textContent = data.tree_name
+            document.getElementById('inviter-name').textContent = data.inviter_name
+            document.getElementById('invitee-email').textContent = data.invitee_email
+
+            const roleText = data.role === 'editor'
+                ? t('acceptInvitation.roleEditor')
+                : t('acceptInvitation.roleViewer')
+            const roleBadge = document.getElementById('role-badge')
+            roleBadge.textContent = roleText
+            roleBadge.className = `role-badge role-${data.role}`
+
+            const expiresDate = new Date(data.expires_at)
+            document.getElementById('expires-at').textContent = expiresDate.toLocaleString(
+                window.ZeetaI18n.locale === 'ja' ? 'ja-JP' : 'en-US'
+            )
+
+            document.getElementById('loading').classList.remove('active')
+            document.getElementById('content').classList.add('active')
+        }
+
+        function showError(message) {
+            document.getElementById('error-message').textContent = message
+            document.getElementById('loading').classList.remove('active')
+            document.getElementById('content').classList.remove('active')
+            document.getElementById('error').classList.add('active')
+        }
+
+        function showSuccess(treeId) {
+            document.getElementById('go-to-tree').href = `/index.html?tree=${treeId}`
+            document.getElementById('content').classList.remove('active')
+            document.getElementById('success').classList.add('active')
+
+            // Auto-redirect after 2 seconds
+            setTimeout(() => {
+                window.location.href = `/index.html?tree=${treeId}`
+            }, 2000)
+        }
+
+        async function acceptInvitation() {
+            const btn = document.getElementById('accept-btn')
+            btn.disabled = true
+            btn.textContent = t('acceptInvitation.processing')
+
+            try {
+                const response = await fetch(`/api/invitations/${token}/accept`, {
+                    method: 'POST'
+                })
+                const data = await response.json()
+
+                if (!response.ok) {
+                    throw new Error(data.error || t('acceptInvitation.acceptFailed'))
+                }
+
+                showSuccess(data.data.tree_id)
+
+            } catch (error) {
+                console.error('Failed to accept invitation:', error)
+                alert(error.message || t('acceptInvitation.acceptError'))
+                btn.disabled = false
+                btn.textContent = t('acceptInvitation.accept')
+            }
+        }
+
+        // Initialize
+        async function init() {
+            const isLoggedIn = await checkAuth()
+            if (!isLoggedIn) {
+                return // Will redirect to login
+            }
+
+            await loadInvitation()
+        }
+
+        // Event listeners
+        acceptButton.addEventListener('click', acceptInvitation)
+
+        // Start
+        init()
+    </script>
+</body>
+</html>

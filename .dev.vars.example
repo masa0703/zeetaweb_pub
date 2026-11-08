@@ -1,0 +1,31 @@
+# Development Environment Variables
+# Copy this file to .dev.vars and fill in your values
+
+# JWT Secret (minimum 32 characters)
+JWT_SECRET=your-jwt-secret-here-minimum-32-characters-recommended-to-use-crypto-random-bytes
+
+# Google OAuth Configuration
+# Get these from: https://console.cloud.google.com/apis/credentials
+GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+
+# GitHub OAuth Configuration
+# Get these from: https://github.com/settings/developers
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
+
+# Application URL (for OAuth redirects)
+APP_URL=http://localhost:3000
+
+# Test backdoor opt-in (development only)
+# /auth/test-login and /api/test/clear are gated by THREE independent signals:
+#   (1) APP_URL contains localhost / 127.0.0.1
+#   (2) ENABLE_TEST_ENDPOINTS is exactly "true"
+#   (3) Request Host is localhost / 127.0.0.1
+# All three must be true. NEVER set this in Cloudflare Pages production.
+ENABLE_TEST_ENDPOINTS=true
+
+# Mailgun Configuration (for sending invitation emails)
+# Get these from: https://app.mailgun.com/app/sending/domains
+MAILGUN_API_KEY=your-mailgun-api-key-here
+MAILGUN_DOMAIN=mail.example.com

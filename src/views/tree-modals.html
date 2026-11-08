@@ -1,0 +1,214 @@
+<!-- ツリー管理のモーダル（旧マイページから移設）。処理は /static/tree-rail.js -->
+
+<!-- Create Tree Modal -->
+<div id="create-tree-modal" class="tree-modal">
+    <div class="tree-modal-content">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-bold text-gray-800" data-i18n="mypage.createTree">新しいツリーを作成</h3>
+            <button type="button" onclick="closeCreateTreeModal()" class="text-gray-400 hover:text-gray-600" aria-label="閉じる" data-i18n-attr="aria-label:common.close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="create-tree-form" onsubmit="createTree(event)">
+            <div class="mb-4">
+                <label for="tree-name" class="block text-sm font-medium text-gray-700 mb-2">
+                    <span data-i18n="mypage.treeName">ツリー名</span> <span class="text-red-500">*</span>
+                </label>
+                <input type="text" id="tree-name" name="name" required maxlength="100"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    placeholder="例: プロジェクトアルファ" data-i18n-attr="placeholder:mypage.treeNamePlaceholder">
+            </div>
+
+            <div class="mb-6">
+                <label for="tree-description" class="block text-sm font-medium text-gray-700 mb-2">
+                    <span data-i18n="mypage.descriptionOptional">説明（任意）</span>
+                </label>
+                <textarea id="tree-description" name="description" rows="3" maxlength="500"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    placeholder="このツリーについての説明を入力..." data-i18n-attr="placeholder:mypage.descriptionPlaceholder"></textarea>
+            </div>
+
+            <div class="flex justify-end space-x-3">
+                <button type="button" onclick="closeCreateTreeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                    <span data-i18n="mypage.cancel">キャンセル</span>
+                </button>
+                <button type="submit" class="tree-btn-primary">
+                    <span data-i18n="mypage.create">作成</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Tree Confirmation Modal -->
+<div id="delete-tree-modal" class="tree-modal">
+    <div class="tree-modal-content" style="max-width: 400px;">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-bold text-gray-800" data-i18n="mypage.deleteTree">ツリーを削除</h3>
+            <button type="button" onclick="closeDeleteTreeModal()" class="text-gray-400 hover:text-gray-600" aria-label="閉じる" data-i18n-attr="aria-label:common.close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <input type="hidden" id="delete-tree-id" value="">
+        <p class="text-gray-600 mb-4">
+            ツリー「<span id="delete-tree-name" class="font-semibold"></span>」を削除しますか？
+        </p>
+        <p class="text-sm text-red-600 mb-6">
+            <span data-i18n="mypage.deleteIrreversible">この操作は元に戻せません。</span>
+        </p>
+
+        <div class="flex justify-end space-x-3">
+            <button type="button" onclick="closeDeleteTreeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                <span data-i18n="mypage.cancel">キャンセル</span>
+            </button>
+            <button type="button" onclick="executeDeleteTree()"
+                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                <span data-i18n="mypage.delete">削除</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Tree Modal -->
+<div id="edit-tree-modal" class="tree-modal">
+    <div class="tree-modal-content" style="max-width: 400px;">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-bold text-gray-800" data-i18n="mypage.editTreeName">ツリーを編集</h3>
+            <button type="button" onclick="closeEditTreeModal()" class="text-gray-400 hover:text-gray-600" aria-label="閉じる" data-i18n-attr="aria-label:common.close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="edit-tree-form" onsubmit="submitEditTreeName(event)">
+            <input type="hidden" id="edit-tree-id" value="">
+            <input type="hidden" id="edit-tree-icon" value="">
+            <div class="mb-6">
+                <span class="block text-sm font-medium text-gray-700 mb-2" data-i18n="mypage.treeIcon">アイコン</span>
+                <div class="tree-icon-field">
+                    <span id="edit-tree-icon-preview" class="tree-chip" aria-hidden="true"></span>
+                    <button type="button" id="edit-tree-icon-change" class="tree-icon-btn" onclick="toggleTreeIconPicker()" aria-expanded="false" aria-controls="edit-tree-icon-picker">
+                        <span data-i18n="mypage.treeIconChange">変更</span>
+                    </button>
+                    <button type="button" id="edit-tree-icon-clear" class="tree-icon-btn tree-icon-btn-quiet" onclick="clearTreeIcon()" hidden>
+                        <span data-i18n="mypage.treeIconClear">なしに戻す</span>
+                    </button>
+                </div>
+                <div id="edit-tree-icon-picker" class="tree-icon-picker" hidden></div>
+            </div>
+            <fieldset class="mb-6">
+                <legend class="block text-sm font-medium text-gray-700 mb-2" data-i18n="mypage.treeColor">色</legend>
+                <div id="edit-tree-color-options" class="tree-color-options"></div>
+            </fieldset>
+            <div class="mb-6">
+                <label for="edit-tree-name" class="block text-sm font-medium text-gray-700 mb-2">
+                    <span data-i18n="mypage.treeName">ツリー名</span> <span class="text-red-500">*</span>
+                </label>
+                <input type="text" id="edit-tree-name" name="name" required maxlength="100"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+            </div>
+
+            <div class="mb-6">
+                <label for="edit-tree-description" class="block text-sm font-medium text-gray-700 mb-2">
+                    <span data-i18n="mypage.descriptionOptional">説明（任意）</span>
+                </label>
+                <textarea id="edit-tree-description" name="description" rows="3" maxlength="500"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    placeholder="このツリーについての説明を入力..." data-i18n-attr="placeholder:mypage.descriptionPlaceholder"></textarea>
+            </div>
+
+            <div class="flex justify-end space-x-3">
+                <button type="button" onclick="closeEditTreeModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                    <span data-i18n="mypage.cancel">キャンセル</span>
+                </button>
+                <button type="submit" class="tree-btn-primary">
+                    <span data-i18n="mypage.save">保存</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Member Management Modal -->
+<div id="member-modal" class="tree-modal">
+    <div class="tree-modal-content">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-bold text-gray-800" data-i18n="mypage.memberManagement">メンバー管理</h3>
+            <button type="button" onclick="closeMemberModal()" class="text-gray-400 hover:text-gray-600" aria-label="閉じる" data-i18n-attr="aria-label:common.close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div id="invite-section" class="mb-6 p-4 bg-gray-50 rounded-lg" style="display: none;">
+            <h4 class="text-sm font-semibold text-gray-700 mb-3" data-i18n="mypage.inviteByEmail">メールで招待</h4>
+            <form id="invite-form" onsubmit="sendInvitation(event)" class="flex items-end space-x-2">
+                <div class="flex-1">
+                    <input type="email" id="invite-email" name="email" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="example@email.com">
+                </div>
+                <div>
+                    <select id="invite-role" name="role"
+                        class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option value="editor" data-i18n="mypage.roleEditor">編集者</option>
+                        <option value="viewer" data-i18n="mypage.roleViewer">閲覧者</option>
+                    </select>
+                </div>
+                <button type="submit" data-i18n="mypage.invite"
+                    class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">招待</button>
+            </form>
+        </div>
+
+        <div id="pending-invitations-section" style="display: none;">
+            <h4 class="text-sm font-semibold text-gray-700 mb-3" data-i18n="mypage.pendingInvitations">招待中</h4>
+            <div id="pending-invitations-list" class="space-y-2 mb-6"></div>
+        </div>
+
+        <div>
+            <h4 class="text-sm font-semibold text-gray-700 mb-3" data-i18n="mypage.currentMembers">現在のメンバー</h4>
+            <div id="members-list" class="space-y-3"></div>
+        </div>
+    </div>
+</div>
+
+<!-- MCP Integration Modal -->
+<div id="mcp-modal" class="tree-modal">
+    <div class="tree-modal-content" style="max-width: 680px;">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold text-gray-800">
+                <span data-i18n="mypage.mcpIntegration">MCP連携</span>
+                <span id="mcp-tree-name" class="text-sm text-gray-500 font-normal ml-2"></span>
+            </h3>
+            <button type="button" onclick="closeMcpModal()" class="text-gray-400 hover:text-gray-600" aria-label="閉じる" data-i18n-attr="aria-label:common.close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div id="mcp-oauth-stage">
+            <p class="text-sm text-gray-600 mb-4">
+                <span data-i18n="mypage.mcpDescriptionBefore">MCPクライアントに下記の </span><strong data-i18n="mypage.mcpConnectionUrlLabel">MCP接続URL</strong><span data-i18n="mypage.mcpDescriptionAfter"> を登録すると、ブラウザでZeetaにログイン・許可するだけで接続できます。</span>
+                <span data-i18n="mypage.mcpNoSecret">設定ファイルに秘密情報を書き込む必要はありません。</span>
+            </p>
+
+            <div class="mb-4 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+                <h4 class="text-sm font-semibold text-indigo-900 mb-2" data-i18n="mypage.mcpTreeUrlHeading">MCP接続URL（このツリー専用）</h4>
+                <div id="mcp-connection-url" class="mcp-code mb-3"></div>
+                <button type="button" onclick="copyMcpConnectionUrl()" class="px-3 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-sm">
+                    <i class="fas fa-copy mr-1"></i><span data-i18n="mypage.copyUrl">URLをコピー</span>
+                </button>
+            </div>
+
+            <ul class="text-xs text-gray-500 space-y-1 mb-5">
+                <li data-i18n="mypage.mcpPermissionNote">権限はこのツリーでのあなたの現在の権限に従います（閲覧者は読み取り専用）。</li>
+                <li data-i18n="mypage.mcpTokenRevocationNote">ツリーのメンバーから外れると、発行済みトークンは即時無効になります。</li>
+            </ul>
+
+            <div class="flex items-center pt-4 border-t border-gray-200">
+                <a href="/help?tab=mcp" target="_blank" rel="noopener" class="text-sm text-indigo-600 hover:text-indigo-800">
+                    <i class="fas fa-book-open mr-1"></i><span data-i18n="mypage.mcpClientSetup">MCPクライアント設定方法</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

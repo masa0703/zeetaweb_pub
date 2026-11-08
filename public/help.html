@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>ヘルプ - Zeeta Web</title>
+  <script>(function(){try{var t=localStorage.getItem('zeeta-theme')||'system';if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('theme-dark')}catch(e){}})()</script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/static/dark.css">
+  <script src="/static/theme.js" defer></script>
+  <style>
+    body {
+      background: #f5f7fb;
+      min-height: 100vh;
+      color: #1f2937;
+    }
+
+    .doc-header {
+      border-bottom: 2px solid #dbe4f0;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid #d1d5db;
+      padding-bottom: 8px;
+    }
+
+    .tab-btn {
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: #fff;
+      color: #4b5563;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: #dbeafe;
+      border-color: #93c5fd;
+      color: #1d4ed8;
+    }
+
+    .help-panel {
+      display: none;
+    }
+
+    .help-panel.active {
+      display: block;
+    }
+
+    .guide-section {
+      border-left: 4px solid #c7d2fe;
+      padding-left: 14px;
+      margin-bottom: 1.4rem;
+    }
+
+    .help-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin-top: 8px;
+    }
+
+    .help-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 12px;
+    }
+
+    .help-card h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 0 0 6px;
+    }
+
+    .help-card p {
+      font-size: 13px;
+      line-height: 1.55;
+      color: #4b5563;
+      margin: 0;
+    }
+
+    .flow-list {
+      margin: 0;
+      padding-left: 1.1rem;
+      color: #374151;
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    .flow-list li {
+      margin-bottom: 4px;
+    }
+
+    .flow-list a, .shot-legend a { color: #1d4ed8; text-decoration: underline; text-underline-offset: 3px; }
+    .screen-guide { margin: 1rem 0 1.5rem; scroll-margin-top: 20px; }
+    .screen-guide figcaption { font-weight: 600; margin-bottom: 10px; }
+    .shot-scroll { overflow-x: auto; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; }
+    .shot-scroll:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+    .shot-canvas { position: relative; min-width: 760px; }
+    .shot-canvas img { display: block; width: 100%; height: auto; }
+    .shot-marker { position: absolute; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; width: 27px; height: 27px; border-radius: 50%; background: #1d4ed8; color: white; border: 2px solid white; box-shadow: 0 1px 5px #17255466; font-size: 18px; font-weight: bold; line-height: 1; pointer-events: none; }
+    .shot-legend { display: flex; flex-wrap: wrap; gap: 6px 20px; padding-top: 10px; font-size: 13px; color: #334155; }
+    .screen-guide--search { max-width: 600px; }
+    .screen-guide--search .shot-canvas { min-width: 500px; }
+    .screen-guide--detail .shot-canvas { min-width: 760px; }
+
+    .plain-item-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .plain-item-list li {
+      padding: 9px 0;
+      border-bottom: 1px solid #e5e7eb;
+      line-height: 1.6;
+    }
+
+    .plain-item-list li:last-child {
+      border-bottom: none;
+    }
+
+    .kbd-chip {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #f9fafb;
+      color: #374151;
+      margin-right: 4px;
+      margin-top: 4px;
+    }
+
+    .role-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      margin-top: 8px;
+    }
+
+    .role-table th {
+      background: #f3f4f6;
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+      border: 1px solid #e5e7eb;
+    }
+
+    .role-table td {
+      padding: 8px 12px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .role-table td.ok {
+      color: #16a34a;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .role-table td.ng {
+      color: #dc2626;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .mcp-code {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-radius: 8px;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin-top: 8px;
+      white-space: pre;
+    }
+
+    .badge {
+      display: inline-block;
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge-get { background: #dbeafe; color: #1d4ed8; }
+    .badge-post { background: #dcfce7; color: #15803d; }
+    .badge-note { background: #fef9c3; color: #854d0e; }
+
+    /* Dark theme（<html class="theme-dark">時に有効。判定は /static/theme.js） */
+    html.theme-dark body {
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
+    html.theme-dark .doc-header {
+      border-bottom-color: #374151;
+    }
+
+    html.theme-dark .tab-bar {
+      border-bottom-color: #374151;
+    }
+
+    html.theme-dark .tab-btn {
+      border-color: #374151;
+      background: #1f2937;
+      color: #d1d5db;
+    }
+
+    html.theme-dark .tab-btn.active {
+      background: rgba(59, 130, 246, 0.16);
+      border-color: rgba(96, 165, 250, 0.45);
+      color: #93c5fd;
+    }
+
+    html.theme-dark .guide-section {
+      border-left-color: rgba(165, 180, 252, 0.45);
+    }
+
+    html.theme-dark .help-card {
+      border-color: #374151;
+      background: #1f2937;
+    }
+
+    html.theme-dark .help-card h3 {
+      color: #f3f4f6;
+    }
+
+    html.theme-dark .help-card p {
+      color: #9ca3af;
+    }
+
+    html.theme-dark .flow-list {
+      color: #d1d5db;
+    }
+
+    html.theme-dark .flow-list a,
+    html.theme-dark .shot-legend a {
+      color: #93c5fd;
+    }
+
+    html.theme-dark .shot-scroll {
+      border-color: #374151;
+      background: #111827;
+    }
+
+    html.theme-dark .shot-legend {
+      color: #9ca3af;
+    }
+
+    html.theme-dark .plain-item-list li {
+      border-bottom-color: #374151;
+    }
+
+    html.theme-dark .kbd-chip {
+      border-color: #374151;
+      background: #111827;
+      color: #d1d5db;
+    }
+
+    html.theme-dark .role-table th {
+      background: #1f2937;
+      border-color: #374151;
+    }
+
+    html.theme-dark .role-table td {
+      border-color: #374151;
+    }
+
+    html.theme-dark .role-table td.ok {
+      color: #4ade80;
+    }
+
+    html.theme-dark .role-table td.ng {
+      color: #f87171;
+    }
+
+    html.theme-dark .badge-get {
+      background: rgba(59, 130, 246, 0.16);
+      color: #93c5fd;
+    }
+
+    html.theme-dark .badge-post {
+      background: rgba(74, 222, 128, 0.14);
+      color: #86efac;
+    }
+
+    html.theme-dark .badge-note {
+      background: rgba(251, 191, 36, 0.18);
+      color: #fcd34d;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="max-w-5xl mx-auto px-4 py-8">
+    <section class="doc-header">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold mb-2">
+            <i class="fas fa-circle-question text-blue-600 mr-2"></i>Zeeta Web ヘルプ
+          </h1>
+          <p class="text-gray-600 text-sm md:text-base">
+            画面ごとに必要な操作だけを確認できるように、ヘルプをタブで分けています。
+          </p>
+        </div>
+        <a id="language-switch" class="text-sm text-blue-600 hover:text-blue-800 whitespace-nowrap" href="/help.en">English</a>
+      </div>
+    </section>
+
+    <nav class="tab-bar" aria-label="ヘルプカテゴリ">
+      <button id="tab-trees" class="tab-btn" data-tab="trees">ツリーの管理</button>
+      <button id="tab-editor" class="tab-btn" data-tab="editor">ノード編集</button>
+      <button id="tab-mcp" class="tab-btn" data-tab="mcp">MCP / API 連携</button>
+      <button id="tab-terms" class="tab-btn" data-tab="terms">利用規約・プライバシー</button>
+    </nav>
+
+    <!-- ========== ツリーの管理 ========== -->
+    <section id="panel-trees" class="help-panel" data-tab="trees">
+      <div class="guide-section">
+        <h2 class="text-xl font-bold mb-3">ツリーの管理ヘルプ</h2>
+        <p class="text-sm text-gray-600 mb-3">ツリーの切り替え・作成・共有は、編集画面の左端にある左バーで行います。通知・設定・ログアウトはヘッダーの右側にあります。</p>
+        <div class="help-grid">
+          <article class="help-card">
+            <h3><i class="fas fa-folder-tree text-indigo-600 mr-1"></i>ツリーを作る</h3>
+            <p>左バーの <code>＋</code> から名前と説明を入力して作成します。作成すると、そのツリーの編集画面に切り替わります。</p>
+          </article>
+          <article class="help-card">
+            <h3><i class="fas fa-users text-indigo-600 mr-1"></i>メンバーを招待する</h3>
+            <p>左バーを <code>☰</code> で開き、ツリーの <code>⋯</code> →「メンバー管理」からメールアドレスと役割を指定して招待します。</p>
+          </article>
+          <article class="help-card">
+            <h3><i class="fas fa-bell text-indigo-600 mr-1"></i>通知を処理する</h3>
+            <p>ヘッダーの通知ベルから通知を既読化できます。「すべて既読」で一括既読も可能です。</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">ユースケース別の流れ</h3>
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">1) ログイン後の表示</h4>
+        <ol class="flow-list mb-4">
+          <li>ログインすると、最後に開いたツリーの編集画面が開きます（初めてのときは一覧の先頭のツリー）</li>
+          <li>ツリーが1つも無いときは「新しいツリーを作成」を案内する画面になります</li>
+          <li>ヘッダーの <code>⚙</code>（設定）でテーマと日本語／英語を切り替えられます。選択は同じブラウザでの次回表示にも使われます</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">2) ツリー管理</h4>
+        <ol class="flow-list mb-4">
+          <li>切り替え: 左バーの丸アイコン（ツリー名の頭文字）をクリック。マウスを重ねるとツリー名が出ます。ツリーは最後に開いた順に並びます（自分のツリーと共有されたツリーを区別せず1列。共有されたツリーには E／V の印が付きます）</li>
+          <li>一覧を開く: ヘッダー左端の <code>☰</code> で、ツリー名つきの一覧を画面に重ねて開きます（外側をクリックするか Esc で閉じる）。一覧の右端をドラッグすると幅を変えられます（次回も同じ幅で開きます）</li>
+          <li>作成: 左バーの <code>＋</code> → 入力 → 作成</li>
+          <li>名前・説明の変更: 一覧でツリーの <code>⋯</code> →「ツリーを編集」→ 保存</li>
+          <li>削除: 一覧でツリーの <code>⋯</code> →「削除」→ 確認ダイアログで確定</li>
+          <li>MCP連携: 一覧でツリーの <code>⋯</code> →「MCP連携」からMCP接続URLを取得</li>
+          <li>ツリーの共有: 一覧でツリーの <code>⋯</code> →「メンバー管理」→ 共有したいメンバーを招待・削除</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">3) メンバー管理</h4>
+        <ol class="flow-list mb-4">
+          <li>招待: メンバー管理モーダルでメールアドレスと役割を入力して送信</li>
+          <li>招待取り消し: 招待中リストの <code>×</code> をクリックして取り消し</li>
+          <li>メンバー削除: メンバー一覧の <code>×</code> をクリックして削除（Ownerのみ）</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">4) 通知</h4>
+        <ol class="flow-list mb-4">
+          <li>通知アイテムをクリックすると既読になり、必要に応じてリンク先へ遷移</li>
+          <li>「すべて既読」で通知を一括既読化</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">5) メンバー役割（権限）</h4>
+        <p class="text-sm text-gray-600 mb-2">メンバーには招待時に役割を設定します。後から変更することも可能です（Ownerのみ）。</p>
+        <table class="role-table mb-2">
+          <thead>
+            <tr>
+              <th>役割</th>
+              <th>ノード作成・編集</th>
+              <th>ノード削除・移動</th>
+              <th>メンバー管理</th>
+              <th>ツリー削除</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Owner</strong></td>
+              <td class="ok">○</td>
+              <td class="ok">○</td>
+              <td class="ok">○</td>
+              <td class="ok">○</td>
+            </tr>
+            <tr>
+              <td><strong>Editor</strong></td>
+              <td class="ok">○</td>
+              <td class="ok">○</td>
+              <td class="ng">×</td>
+              <td class="ng">×</td>
+            </tr>
+            <tr>
+              <td><strong>Viewer</strong></td>
+              <td class="ng">×</td>
+              <td class="ng">×</td>
+              <td class="ng">×</td>
+              <td class="ng">×</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="text-xs text-gray-500">Viewer はノードの閲覧・検索のみ行えます。</p>
+      </div>
+    </section>
+
+    <section id="panel-terms" class="help-panel" data-tab="terms">
+      <div id="terms" class="guide-section">
+        <h2 class="text-xl font-bold mb-3">利用規約</h2>
+        <p>zeetaweb（以下「本サービス」）は、複数の親を持てるツリーを試すための、個人運営のお試し版です。ご利用にあたり、以下の点をご了承ください。</p>
+        <ul class="list-disc pl-6 space-y-2 mt-3">
+          <li><strong>データの保存は保証しません。</strong> データの保存・復旧や、サービスを続けて提供することは保証していません。データが消えたり壊れたりする可能性があります。</li>
+          <li><strong>大切な内容は手元にも残してください。</strong> 失って困る内容は、ご自身で別の場所にも控えを取ってください。</li>
+          <li><strong>機密情報はツリーに入れないでください。</strong> パスワード、顧客情報など、漏れて困る情報や個人情報はツリーに入力しないでください。ログインや招待に必要な情報の扱いは、プライバシーポリシーをご覧ください。</li>
+          <li><strong>内容は変わることがあります。</strong> 機能や画面を変更・停止したり、サービス自体を終了したりすることがあります。できる限り事前にお知らせしますが、予告できない場合もあります。</li>
+          <li><strong>禁止事項。</strong> 不正アクセス、他人の権利を侵害する行為、サービスに過大な負荷をかける行為、その他法令に違反する行為は禁止します。これらが確認された場合や、サービスを安全に運営するために必要な場合は、利用を制限または停止することがあります。</li>
+          <li><strong>責任について。</strong> 損害が生じた場合の責任は、適用される法令に従います。</li>
+        </ul>
+      </div>
+      <div id="privacy" class="guide-section">
+        <h2 class="text-xl font-bold mb-3">プライバシーポリシー</h2>
+        <p>最終更新日: 2026-11-08</p>
+        <p class="mt-3">zeetaweb（以下「本サービス」）が扱う情報と、その使い道を説明します。</p>
+        <h3 class="text-lg font-bold mt-5 mb-2">集める情報</h3>
+        <ul class="list-disc pl-6 space-y-2"><li>GoogleまたはGitHubでログインすると、アカウントを識別するための各サービスのユーザーID、メールアドレス、表示名、プロフィール画像のURLを受け取ります。GitHubでは、公開メールアドレスが取得できない場合、プライマリメールアドレスを受け取ります。</li><li>あなたが作成したツリー・ノードの内容と、添付した画像</li><li>不正利用の調査や障害対応のため、一部の操作について、日時、ユーザー、操作の種類と対象、IPアドレス、ブラウザの種類（User-Agent）などを記録することがあります。</li><li>ログイン状態の維持や認証の安全確認のためのCookie。また、表示設定や編集中の下書きなどを、お使いのブラウザの保存領域に保存することがあります。</li></ul>
+        <h3 class="text-lg font-bold mt-5 mb-2">使い道</h3><p>受け取った情報は、ログイン、プロフィールの表示、ツリーの保存・表示・検索・共有、招待先の照合と招待メールの送信、不正利用の調査、障害対応に使います。広告には使わず、第三者に販売しません。</p>
+        <h3 class="text-lg font-bold mt-5 mb-2">外部サービス</h3><p>本サービスは次の外部サービスを使っており、必要な範囲で情報がそれらのサービスで処理されます。</p><ul class="list-disc pl-6 space-y-2"><li>Cloudflare: サーバー、データベース、画像の保存</li><li>Cloudflare Workers AI と Vectorize: 関連するノードを検索するため、ノードのタイトル、親ノードのタイトルを含むパス、本文、および検索語をWorkers AIでベクトルに変換し、検索用のベクトルをVectorizeに保存します。</li><li>Mailgun: 招待メールの送信。招待先のメールアドレス、招待者の表示名またはメールアドレス、ツリー名、付与する権限、招待URLと有効期限がMailgunで処理されます。</li><li>Google / GitHub: ログイン</li><li>画面表示に必要なライブラリなどの配信に、jsDelivrやCloudflareなどのCDNを使うことがあります。その際、ブラウザから各CDNに接続されます。</li></ul>
+        <h3 class="text-lg font-bold mt-5 mb-2">共有とMCP連携</h3><p>招待したメンバーは、付与された権限に応じてツリーを閲覧・編集できます。招待メールには招待者の表示名などが含まれます。MCPクライアントを連携した場合は、許可した範囲のツリー情報をそのクライアントが取得・操作できます。連携先での情報の扱いは、その提供者の条件と設定をご確認ください。</p>
+        <h3 class="text-lg font-bold mt-5 mb-2">安全管理</h3><p>情報へのアクセスを権限に応じて制限し、認証用のCookieには安全性を高める設定を使っています。ただし、情報の完全な安全性を保証することはできません。</p>
+        <h3 class="text-lg font-bold mt-5 mb-2">変更</h3><p>このポリシーは、本サービスや情報の扱いの変更に応じて更新します。Googleユーザーデータの使い方を変える場合は、本サービス内などでお知らせします。</p>
+      </div>
+    </section>
+
+    <!-- ========== ノード編集 ========== -->
+    <section id="panel-editor" class="help-panel" data-tab="editor">
+      <div class="guide-section">
+        <h2 class="text-xl font-bold mb-3">ノード編集ヘルプ</h2>
+        <p class="text-sm text-gray-600 mb-3">ノード編集は「編集」「構造変更」「検索/並び替え」「ゴミ箱操作」を中心に使います。</p>
+        <div class="help-grid">
+          <article class="help-card">
+            <h3><i class="fas fa-floppy-disk text-blue-600 mr-1"></i>編集して保存</h3>
+            <p>タイトル・本文を編集し、保存ボタンまたは <code>Cmd/Ctrl + Enter</code> で確定します。作成者・作成日・更新日・更新者はノード詳細ダイアログに表示され、画面上では作成者を変更できません。</p>
+          </article>
+          <article class="help-card">
+            <h3><i class="fas fa-diagram-project text-blue-600 mr-1"></i>構造を操作</h3>
+            <p>子/兄弟ノード作成、複製、親追加・親移動でツリー構造を更新できます。複数の親を持てる DAG 構造に対応しています。</p>
+          </article>
+          <article class="help-card">
+            <h3><i class="fas fa-trash text-blue-600 mr-1"></i>ゴミ箱を操作</h3>
+            <p>削除は通常はゴミ箱へ移動です。複数親ノードでは、今見えている親との関係解消かゴミ箱移動かを選べます。ゴミ箱ビューで復元や完全削除ができます。</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">画面イメージ</h3>
+        <p class="text-sm text-gray-600">番号は後続の説明文と対応しています。画像は日本語表示のサンプルです。小さい画面では画像を横にスクロールできます。</p>
+        <figure id="shot-editor" class="screen-guide">
+          <figcaption>ノード編集画面</figcaption>
+          <div class="shot-scroll" tabindex="0" role="region" aria-label="番号付きノード編集画面。横スクロール可能">
+            <div class="shot-canvas">
+              <img src="/static/help/editor-ja.png" width="1440" height="960" alt="ノード編集画面。左にツリー、右にタイトル・本文と操作ボタン。番号の説明は画像の下にあります。">
+              <span class="shot-marker" style="left:84%;top:5%" aria-hidden="true">1</span>
+              <span class="shot-marker" style="left:28.5%;top:11.7%" aria-hidden="true">2</span>
+              <span class="shot-marker" style="left:40%;top:10%" aria-hidden="true">3</span>
+              <span class="shot-marker" style="left:89.9%;top:10%" aria-hidden="true">4</span>
+              <span class="shot-marker" style="left:96.3%;top:10%" aria-hidden="true">5</span>
+              <span class="shot-marker" style="left:77%;top:18.2%" aria-hidden="true">6</span>
+              <span class="shot-marker" style="left:37%;top:27.5%" aria-hidden="true">7</span>
+              <span class="shot-marker" style="left:89.9%;top:18.2%" aria-hidden="true">8</span>
+            </div>
+          </div>
+          <ul class="shot-legend" aria-label="編集画面の番号一覧"><li>1 参照履歴（戻る／進む）</li><li>2 ノード検索</li><li>3 親ノード</li><li>4 ノード詳細</li><li>5 保存</li><li>6 本文内検索</li><li>7 エディタのツールバー</li><li>8 HTML表示</li></ul>
+        </figure>
+        <figure id="shot-search" class="screen-guide screen-guide--search">
+          <figcaption>検索ポップアップ</figcaption>
+          <div class="shot-scroll" tabindex="0" role="region" aria-label="番号付き検索画面。横スクロール可能">
+            <div class="shot-canvas">
+              <img src="/static/help/search-ja.png" width="520" height="420" loading="lazy" alt="検索欄の下に検索範囲、only title、AND／ORの切り替えが並びます。">
+              <span class="shot-marker" style="left:82%;top:11%" aria-hidden="true">9</span>
+              <span class="shot-marker" style="left:21%;top:39%" aria-hidden="true">10</span>
+              <span class="shot-marker" style="left:46%;top:39%" aria-hidden="true">11</span>
+            </div>
+          </div>
+          <ul class="shot-legend" aria-label="検索画面の番号一覧"><li>9 キーワード入力</li><li>10 検索範囲</li><li>11 only title（タイトルのみ検索）</li></ul>
+        </figure>
+        <figure id="shot-detail" class="screen-guide screen-guide--detail">
+          <figcaption>ノード詳細ダイアログ（node detail）</figcaption>
+          <div class="shot-scroll" tabindex="0" role="region" aria-label="番号付きノード詳細。横スクロール可能">
+            <div class="shot-canvas">
+              <img src="/static/help/detail-ja.png" width="1052" height="614" loading="lazy" alt="上部に作成者と日時、左に本文履歴、右に過去の本文、右上に戻すボタンがあります。">
+              <span class="shot-marker" style="left:58%;top:13.5%" aria-hidden="true">12</span>
+              <span class="shot-marker" style="left:3.5%;top:40%" aria-hidden="true">13</span>
+              <span class="shot-marker" style="left:47%;top:40%" aria-hidden="true">14</span>
+              <span class="shot-marker" style="left:89%;top:23%" aria-hidden="true">15</span>
+            </div>
+          </div>
+          <ul class="shot-legend" aria-label="ノード詳細の番号一覧"><li>12 作成者・作成日・更新日・更新者</li><li>13 本文の履歴一覧</li><li>14 過去の本文</li><li>15 選んだ本文に戻す</li></ul>
+        </figure>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">ユースケース別の流れ</h3>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">1) 編集・保存</h4>
+        <ol class="flow-list mb-4">
+          <li>ノードを選択し、タイトル・本文を編集します。作成者・作成日・更新日・更新者は <a href="#shot-editor">4 ノード詳細</a> で確認できます</li>
+          <li><a href="#shot-editor">5 保存</a> をクリック、または <code>Cmd/Ctrl + Enter</code></li>
+          <li>別ノードを選択すると未保存の変更がある場合に確認ダイアログが表示されます</li>
+          <li>プレビュー表示から編集表示に戻すときは、スクロール位置が引き継がれます</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">2) ノード構造の操作</h4>
+        <ol class="flow-list mb-4">
+          <li>子ノード作成: <code>Alt+N</code>（選択ノードの子として追加）</li>
+          <li>兄弟ノード作成: <code>Alt+Shift+N</code>（同じ親の下に追加）</li>
+          <li>ノード複製: <code>Alt+M</code>（現在表示しているパスの親ノード下に複製）</li>
+          <li>親追加: <code>Cmd/Ctrl+C</code> → 親にしたいノードを選択 → <code>Cmd/Ctrl+V</code><br>
+            <span class="text-xs text-gray-500">→ ノードが複数の親を持つ DAG 構造になります</span></li>
+          <li>親移動: <code>Cmd/Ctrl+X</code> → 新しい親ノードを選択 → <code>Cmd/Ctrl+V</code><br>
+            <span class="text-xs text-gray-500">→ 元の親から切り離して別の親へ移動します</span></li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">3) ノードを検索する</h4>
+        <p class="text-sm text-gray-600 mb-2" style="padding-left: 1.1rem;">ワード検索と、ベクトルDBによる意味検索を並行して実施します。ベクトルDBによる検索でヒットしたノードは「Vhit」と表現します。</p>
+        <ol class="flow-list mb-4">
+          <li><a href="#shot-editor">2 検索ボタン</a>、または <code>Alt+F</code> で検索ポップアップを開き、<a href="#shot-search">9 検索欄</a> にキーワードを入力して検索します</li>
+          <li>スペース区切りで複数キーワードを入力するとAND検索になります</li>
+          <li><code>id:公開ID</code> と入力すると特定のノードを直接検索できます（6文字の英数字。例: <code>id:LHuB38</code>）</li>
+          <li><a href="#shot-search">10 検索範囲</a> を root（ツリー全体）または selected（選択ノード以下）で切り替えられます<br>
+            <span class="text-xs text-gray-500">→ scope が適用されるのはワード検索です。Vhit（AI 関連候補）はアクセス可能な範囲から提案されます</span></li>
+          <li>AND / OR モードをポップアップで切り替えられます（デフォルト: AND）</li>
+          <li>タイトルを検索する: <a href="#shot-search">11 only title</a> にチェックを入れて検索します。本文は対象外となり、AI関連検索（Vhit）も行いません</li>
+          <li>検索時はワード検索に加えて AI ベクトル検索も併用され、該当があれば「<strong>— Vhit —</strong>」区切りで AI 関連ノードが表示されます</li>
+          <li>「<strong>Vhit xx件</strong>」のリンクをクリックすると「— Vhit —」区切りまでスクロールします（マウスオーバーで「vector検索」と表示）</li>
+          <li>ヒットしたノードをクリックすると選択が青枠で保持され、右端の <code>‹ X/Y ›</code> で前後のマッチへ移動できます（現在のマッチは別色で強調）</li>
+          <li>検索結果を選んだ後も検索窓は残るため、本文と見比べられます。閉じるときは検索窓の × または <code>Esc</code> を使います</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">4) ノードを並び替える</h4>
+        <ol class="flow-list mb-4">
+          <li>親ノードの縦三点メニューから「ソート」を開くと、その子ノードの並び順を設定できます</li>
+          <li>手動 / 作成日 / 更新日 / タイトル と、昇順 / 降順を組み合わせます。設定はノードごとに保存されます</li>
+          <li>最上位のノードは「通常▼」メニューの「rootのソート」で設定します</li>
+          <li>手動ソート時のみ <code>Alt+↑</code> / <code>Alt+↓</code> で選択ノードの順番を移動できます</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">5) 削除・復元</h4>
+        <ol class="flow-list mb-4">
+          <li>削除: 「ゴミ箱」または <code>Delete / Backspace</code></li>
+          <li>単一親ノードでは確認後にゴミ箱へ移動します</li>
+          <li>複数親ノードでは、ツリー上で見えている親との関係を解消するか、このノードをゴミ箱へ移動するかをラジオボタンで選べます</li>
+          <li>ゴミ箱ビューへの切り替え: ツールバーの「ゴミ箱」ボタン</li>
+          <li>復元: ゴミ箱ビューで「戻す」</li>
+          <li>完全削除: ゴミ箱ビューで「完全に削除」</li>
+          <li class="text-gray-500 text-xs" style="margin-top:4px;">ゴミ箱ビュー表示中はノードの作成・複製・移動は無効です。「戻す」「完全に削除」のみ操作できます。</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">6) 画像の操作</h4>
+        <ol class="flow-list mb-4">
+          <li>画像を追加: 画像ファイルを内容エリアへドラッグ&ドロップ、またはクリップボードから貼り付け（カーソル位置に挿入されます）</li>
+          <li>画像メニュー: 内容上部の画像アイコンをクリックするとメニューが開きます</li>
+          <li>メニューから「別タブで表示」「削除」を選べます。ファイル名とサムネイルもメニュー内で確認できます</li>
+          <li class="text-gray-500 text-xs" style="margin-top:4px;">プレビューのみ表示中は画像の追加はできません（案内が表示されます）</li>
+          <li class="text-gray-500 text-xs" style="margin-top:4px;">対応形式: JPEG / PNG / GIF / WebP / SVG　　最大ファイルサイズ: 5MB</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">7) 親ノード関係の操作</h4>
+        <ol class="flow-list mb-4">
+          <li><a href="#shot-editor">3 親ノード</a> を開き、親ノード名や関係タイプを確認します</li>
+          <li>親ノード削除: 親が複数ある場合、ドロップダウンの <code>×</code> からその親との関係を解除できます。最後の1つの親は解除できません。移動には「親移動」、削除には「ゴミ箱」を使います</li>
+          <li>関係タイプ変更: 親ノードドロップダウンで以下から選択
+            <ul class="text-gray-600" style="padding-left:1rem; margin-top:4px; list-style:disc;">
+              <li><strong>STRUCTURAL</strong>: 標準的な親子構造（デフォルト）</li>
+              <li><strong>REFERENCE</strong>: 参照関係（弱い結びつき）</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">8) ノード参照履歴ナビゲーション</h4>
+        <ol class="flow-list mb-4">
+          <li>戻る: <code>Alt + ←</code> または <a href="#shot-editor">1 参照履歴</a> の ← ボタン</li>
+          <li>進む: <code>Alt + →</code> または <a href="#shot-editor">1 参照履歴</a> の → ボタン</li>
+          <li>ブラウザの「戻る」ではなく、選択したノードの履歴を辿ります</li>
+          <li>本文を過去の状態に戻す操作とは異なります。本文の復元は「ノード更新履歴を見る・過去の状態に戻す」を参照してください</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">9) 表示設定</h4>
+        <ol class="flow-list mb-4">
+          <li>Markdown プレビュー: ツールバーの「markdown preview」チェックボックスで ON/OFF 切り替え</li>
+          <li>プレビュー表示中は <code>e</code> キーで編集表示へ戻れます</li>
+          <li>HTMLとして表示: 内容が <code>&lt;!DOCTYPE html</code> または <code>&lt;html</code> で始まる場合、CONTENT ヘッダーの「HTMLとして別タブで開く」ボタンが有効になります（DOCTYPE の大文字小文字差と先頭の <code>```</code> + 改行は許容。それ以外は無効・淡色表示）</li>
+          <li><a href="#shot-editor">7 エディタのツールバー</a> で編集のみ・プレビューのみ・全画面などを切り替えられます</li>
+          <li>リバーストリー（逆ツリー）: ツールバーの「逆ツリー」タブで切り替え<br>
+            <span class="text-xs text-gray-500">→ 選択ノードからルートに向かう逆方向のパスをツリー形式で表示します</span></li>
+          <li>ツリー再読み込み: <code>Alt + R</code></li>
+          <li>子ノード全展開: <code>Alt + O</code></li>
+          <li>子ノード全折りたたみ: <code>Alt + L</code></li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">10) 最上位（ルート直下）の操作</h4>
+        <ol class="flow-list mb-2">
+          <li>「通常▼」メニューから最上位ノードの新規作成、子ノードの折りたたみ、rootのソートができます</li>
+          <li>最後の親との関係を解除してルート直下に移すことはできません</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">11) 表（テーブル）の編集</h4>
+        <ol class="flow-list mb-2">
+          <li>編集モードでカーソルが表内にある状態で、<a href="#shot-editor">7 ツールバー</a> のテーブルボタンをクリックすると、既存の表を読み込んだポップアップ式テーブルエディタが開きます</li>
+          <li>新しい表を作る場合は、編集モードで表の外にカーソルを置いてからテーブルボタンをクリックします</li>
+          <li>行・列の追加／削除、セルの選択・コピー、Excel やスプレッドシートからの貼り付けに対応しています</li>
+          <li>複数セルを選択すると、フッターに数値の合計が表示されます（「¥1,850,000」「1980円」「20%」など、各セルから数値部分を抽出して合算。数字を含まないセルは無視）</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">12) 表示中の本文を検索する</h4>
+        <ol class="flow-list mb-4">
+          <li>CONTENT 行の <a href="#shot-editor">6 本文内検索</a> に文字を入力し、Enter または虫眼鏡を押します</li>
+          <li>表示中ノードの本文内で一致した箇所が強調されます。前後の矢印で一致箇所へ移動できます</li>
+          <li>検索欄を空にすると強調表示を解除します。別のノードを探す場合は 2 の検索を使います</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">13) 作成者・作成日・最終更新日・更新者を見る</h4>
+        <ol class="flow-list mb-4">
+          <li>ノードを選択し、右上の <a href="#shot-editor">4 ノード詳細（丸の中に i）</a> をクリックします</li>
+          <li>ダイアログ上部の <a href="#shot-detail">12 作成者・作成日・更新日・更新者</a> に作成者・作成日・更新日・更新者が表示されます。更新者は最終更新した人で、MCP経由の更新ではクライアント名も併記されます。入っていない場合は (none) と表示されます。ここでは情報の確認のみ行えます</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">14) ノード更新履歴を見る・過去の状態に戻す</h4>
+        <ol class="flow-list mb-4">
+          <li>4 ノード詳細を開くと、<a href="#shot-detail">13 本文の履歴一覧</a> が新しい順に表示されます。最初は直前の版が選択されています</li>
+          <li>一覧の日時は、その内容が「更新された日時」です。どの行も、その内容を書いた人と日時が表示されます（現在行は最終更新日時）。更新者も確認でき、MCP経由の更新ではクライアント名も併記されます</li>
+          <li>履歴の行を選ぶと、<a href="#shot-detail">14 過去の本文</a> が表示されます。内容を確かめてから <a href="#shot-detail">15 戻す</a> を押し、確認に同意すると復元されます</li>
+          <li>履歴一覧の各行の左にあるラジオボタンは履歴の比較に使います。初期状態では選択されていません。マウスを乗せると「比較対象を選択してください」と表示されます</li>
+          <li>ラジオで比較相手を選び「比較」を押すと、選択中の行と比較相手の差分が表示されます。追加された行は緑、削除された行は赤です。表示の向きは常に古い版→新しい版で、Viewer でも使えます</li>
+          <li><a href="#shot-detail">15 戻す</a> の対象は、クリックして選択した行です。ラジオの選択とは関係ありません</li>
+          <li>復元の対象は本文です。タイトルや親子関係を巻き戻す操作ではありません。復元前の本文も履歴に残ります</li>
+          <li>本文の履歴はノードごとに最新100件まで保持します。7日経過による削除はありません。本文が変わっていない更新は履歴を増やしません</li>
+          <li>履歴がないときは復元できません。Viewer は履歴を閲覧できますが「戻す」は表示されません</li>
+          <li>他の場所で更新されていた場合は、最新の本文と履歴を読み直します。内容を確認し直してから復元してください</li>
+        </ol>
+
+        <h4 class="text-sm font-semibold text-gray-800 mb-2">15) Mermaid図を別タブで表示・拡大する</h4>
+        <ol class="flow-list mb-4">
+          <li>本文をプレビュー表示にし、表示されたMermaid図をクリックします</li>
+          <li>選んだ図が別タブで開きます。拡大・縮小・全体表示、ホイールによるズーム、ドラッグによる移動ができます</li>
+          <li>この操作の対象はMermaid図です。HTML本文の別タブ表示は <a href="#shot-editor">8 HTML表示</a> を使います</li>
+        </ol>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">ショートカット早見表</h3>
+        <ul class="plain-item-list text-sm text-gray-700">
+          <li><strong>保存</strong><div><span class="kbd-chip">Cmd/Ctrl + Enter</span></div></li>
+          <li><strong>編集表示へ戻る（プレビュー表示中）</strong><div><span class="kbd-chip">e</span></div></li>
+          <li><strong>子ノード作成</strong><div><span class="kbd-chip">Alt + N</span></div></li>
+          <li><strong>兄弟ノード作成</strong><div><span class="kbd-chip">Alt + Shift + N</span></div></li>
+          <li><strong>複製</strong><div><span class="kbd-chip">Alt + M</span></div></li>
+          <li><strong>検索</strong><div><span class="kbd-chip">Alt + F</span></div></li>
+          <li><strong>手動並び替え</strong><div><span class="kbd-chip">Alt + ↑</span><span class="kbd-chip">Alt + ↓</span><span class="text-xs text-gray-400 ml-1">（手動ソート時のみ）</span></div></li>
+          <li><strong>削除 / 関係解消選択</strong><div><span class="kbd-chip">Delete</span><span class="kbd-chip">Backspace</span></div></li>
+          <li><strong>親追加 / 親移動</strong><div><span class="kbd-chip">Cmd/Ctrl + C</span><span class="kbd-chip">Cmd/Ctrl + X</span><span class="kbd-chip">Cmd/Ctrl + V</span></div></li>
+          <li><strong>ノード参照履歴 戻る / 進む</strong><div><span class="kbd-chip">Alt + ←</span><span class="kbd-chip">Alt + →</span></div></li>
+          <li><strong>子ノード全展開 / 全折りたたみ</strong><div><span class="kbd-chip">Alt + O</span><span class="kbd-chip">Alt + L</span></div></li>
+          <li><strong>ツリー再読み込み</strong><div><span class="kbd-chip">Alt + R</span></div></li>
+          <li><strong>ツリー内ノード移動</strong><div><span class="kbd-chip">↑</span><span class="kbd-chip">↓</span></div></li>
+          <li><strong>ノード展開 / 折りたたみ</strong><div><span class="kbd-chip">→</span><span class="kbd-chip">←</span></div></li>
+          <li><strong>テーブル編集: 選択範囲をコピー</strong><div><span class="kbd-chip">Cmd/Ctrl + C</span></div></li>
+          <li><strong>テーブル編集: 元に戻す（行・列操作 / 貼り付け）</strong><div><span class="kbd-chip">Cmd/Ctrl + Z</span></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== MCP / API連携 ========== -->
+    <section id="panel-mcp" class="help-panel" data-tab="mcp">
+      <div class="guide-section">
+        <h2 class="text-xl font-bold mb-3">MCP / API 連携ヘルプ</h2>
+        <p class="text-sm text-gray-600 mb-3">
+          Zeeta Web は MCP（Model Context Protocol）の公式 OAuth 認証に対応しています。
+          MCPクライアントには <strong>ツリーごとの MCP接続URL</strong> を登録するだけで、認証はブラウザ上でZeetaにログイン・許可して完了します。
+          <strong>設定ファイル（JSON / TOML）に秘密情報を書き込む必要はありません。</strong>
+        </p>
+        <div class="help-grid">
+          <article class="help-card">
+            <h3><i class="fas fa-link text-yellow-600 mr-1"></i>URLを登録する</h3>
+            <p>マイページのツリーカードにある <i class="fas fa-key text-indigo-600 mx-1"></i> から、そのツリー専用の MCP接続URL をコピーしてMCPクライアントに登録します。</p>
+          </article>
+          <article class="help-card">
+            <h3><i class="fas fa-shield-halved text-yellow-600 mr-1"></i>ブラウザで許可する</h3>
+            <p>クライアントがログインを要求すると、ブラウザでZeetaの同意画面が開きます。対象ツリーと権限を確認して「許可する」を押します。</p>
+          </article>
+          <article class="help-card">
+            <h3><i class="fas fa-robot text-yellow-600 mr-1"></i>そのまま使う</h3>
+            <p>接続後はアクセストークンが自動更新されるため、キーの貼り替えは不要です。自然言語でノードを検索・作成・更新できます。</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">MCP接続URL を取得する</h3>
+        <ol class="flow-list mb-4">
+          <li>マイページを開き、対象ツリーのカードにある <i class="fas fa-key text-indigo-600 mx-1"></i>（MCP連携）をクリックします</li>
+          <li>表示された「MCP接続URL（このツリー専用）」の<strong>「URLをコピー」</strong>を押します</li>
+          <li>コピーしたURLをMCPクライアントへ登録します（下記の各クライアント手順を参照）</li>
+        </ol>
+        <p class="text-sm text-gray-600">
+          URLは <code>https://&lt;your-domain&gt;/api/mcp/trees/&lt;番号&gt;</code> の形式で、画面には完成形が表示されます。
+          ツリーIDを自分で組み立てる必要はありません。
+        </p>
+        <p class="text-xs text-gray-500 mt-2">
+          このボタンはツリーのオーナーに表示されます。編集者・閲覧者としてツリーに参加している場合は、オーナーからURLを共有してもらってください。
+          URLは秘密情報ではありませんが、接続できるのはそのツリーのメンバーだけです。
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Codex から接続する</h3>
+        <h4 class="text-sm font-semibold text-gray-700 mb-2">Codex CLI</h4>
+        <div class="mcp-code">
+codex mcp add zeeta --url https://&lt;your-domain&gt;/api/mcp/trees/&lt;番号&gt;
+codex mcp login zeeta
+        </div>
+        <p class="text-sm text-gray-600 mt-2 mb-4">
+          <code>codex mcp login</code> でブラウザが開き、Zeetaの同意画面が表示されます。許可すると接続が完了します。
+          状態は <code>codex mcp list</code>、切断は <code>codex mcp logout zeeta</code> で確認・実行できます。
+          OAuthログインは Streamable HTTP サーバーでのみ利用できます（ZeetaのMCP接続URLは Streamable HTTP です）。
+        </p>
+
+        <h4 class="text-sm font-semibold text-gray-700 mb-2">Codex デスクトップアプリ / IDE拡張</h4>
+        <ol class="flow-list mb-4">
+          <li>デスクトップアプリ: 設定（Settings）→ <strong>MCP servers</strong> → <strong>Add server</strong> を開きます（IDE拡張は歯車メニュー → <strong>MCP servers</strong> → <strong>Add server</strong>）</li>
+          <li>
+            「タイプ」を <strong>ストリーミング可能な HTTP（Streamable HTTP）</strong> に切り替えます
+            <p class="text-xs text-red-700 mt-1">
+              <i class="fas fa-triangle-exclamation mr-1"></i>初期状態は <code>STDIO</code> です。STDIOのままだと入力欄が「起動用コマンド」（ローカルプロセスの起動コマンド）なので、そこにURLを入れても接続できません。タイプを切り替えるとURL入力欄に変わります。
+            </p>
+          </li>
+          <li>名前（例: <code>zeeta</code>）と MCP接続URL を入力して保存し、アプリ／拡張を再起動します（引数・環境変数は空のままでよい）</li>
+          <li>
+            <strong>MCPサーバー一覧に表示される「認証する」ボタンを押します</strong>
+            <p class="text-xs text-gray-500 mt-1">ブラウザでZeetaの同意画面が開くので「許可する」を押します。ボタンが出ているのは未認証の状態です。</p>
+          </li>
+        </ol>
+        <p class="text-xs text-gray-500">
+          <strong>認証を完了するまでツール一覧は読み込まれません。</strong>そのため未認証のままチャットでサーバー名を指定しても「そのMCPは不明」という応答になります。先に「認証する」を済ませてください。<br>
+          同一マシンの Codex CLI / IDE拡張 / デスクトップアプリは <code>config.toml</code> のMCP設定を共有します。片方で追加すれば他方にも反映されます。
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">Claude から接続する</h3>
+        <h4 class="text-sm font-semibold text-gray-700 mb-2">Claude Code（CLI / デスクトップアプリ）</h4>
+        <div class="mcp-code">
+claude mcp add --transport http zeeta https://&lt;your-domain&gt;/api/mcp/trees/&lt;番号&gt;
+        </div>
+        <p class="text-sm text-gray-600 mt-2 mb-4">
+          追加後、Claude Code のセッション内で <code>/mcp</code> を実行し、<code>zeeta</code> を選んで認証（Authenticate）を実行します。
+          ブラウザでZeetaの同意画面が開き、許可すると接続されます。<code>claude mcp list</code> で接続状態（<code>✔ Connected</code> / <code>! Needs authentication</code>）を確認できます。
+          非対話実行（<code>claude -p</code>）では認証フローを開けないため、事前に対話セッションの <code>/mcp</code> または <code>claude mcp login zeeta</code> で認証しておきます。
+          <code>--header "Authorization: Bearer ..."</code> を指定するとOAuthではなくそのヘッダーが使われるため、OAuth方式では指定しません。
+        </p>
+
+        <h4 class="text-sm font-semibold text-gray-700 mb-2">Claude デスクトップ / claude.ai（カスタムコネクタ）</h4>
+        <ol class="flow-list mb-4">
+          <li>個人プラン: <strong>Customize → Connectors</strong>（Team / Enterprise はオーナーが <strong>Organization settings → Connectors</strong>）を開きます</li>
+          <li>追加ボタン →「Custom」の <strong>Web</strong> を選び、MCP接続URL を貼り付けます</li>
+          <li>保存後にOAuth認証を求められるので、Zeetaの同意画面で許可します</li>
+        </ol>
+        <p class="text-xs text-gray-500">
+          カスタムコネクタはAnthropicのクラウドから接続されるため、<strong>インターネットから到達できる本番URL（HTTPS）が必要</strong>です。
+          <code>localhost</code> の開発環境URLは登録できません（Codex CLI / Claude Code のローカル接続では利用できます）。
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">権限（スコープ）</h3>
+        <p class="text-sm text-gray-600 mb-3">
+          OAuthで接続できるのは <strong>URLが指すツリーのメンバーだけ</strong>です。付与される権限は、常にそのツリーでのあなたの現在の権限に従います。
+        </p>
+        <table class="role-table mb-2">
+          <thead>
+            <tr>
+              <th>ツリーでの権限</th>
+              <th>付与されるスコープ</th>
+              <th>できること</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>オーナー / 編集者</td>
+              <td><code>mcp:read</code> <code>mcp:write</code></td>
+              <td class="ok">読み取り + 作成・更新・リンク・ゴミ箱移動</td>
+            </tr>
+            <tr>
+              <td>閲覧者</td>
+              <td><code>mcp:read</code></td>
+              <td class="ng">読み取りのみ（書込ツールは <code>insufficient_scope</code> で拒否）</td>
+            </tr>
+          </tbody>
+        </table>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li>トークンは1ツリー（URL）に束縛されます。別ツリーのURLには使えません。</li>
+          <li>権限が編集者から閲覧者へ変更されると、既存トークンでも書込は即時できなくなります。</li>
+          <li>ツリーのメンバーから外れると、既存トークンは即時無効になります（再認証してもツリーには接続できません）。</li>
+          <li>アクセストークンは短命（1時間）で、クライアントがリフレッシュトークンで自動更新します。</li>
+        </ul>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">切断・再認証</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li><strong>Codex CLI</strong>: <code>codex mcp logout zeeta</code> で切断し、<code>codex mcp login zeeta</code> で再認証します。</li>
+          <li><strong>Claude Code</strong>: <code>/mcp</code> から対象サーバーのメニューで再認証（Re-authenticate）を選びます。</li>
+          <li><strong>claude.ai コネクタ</strong>: Connectors 設定から対象コネクタを削除・再接続します。</li>
+          <li>サーバー側でトークンを失効させたい場合は、そのユーザーをツリーのメンバーから外します（トークンは即時無効になります）。</li>
+        </ul>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">トラブルシューティング</h3>
+        <ul class="plain-item-list text-sm text-gray-700">
+          <li>
+            <strong>チャットで「そのMCPは不明」「そんなMCPは知らない」と言われる</strong>
+            <p class="text-xs text-gray-500 mt-1">まだ認証していない状態です。認証が完了するまでツール一覧は読み込まれません。Codexデスクトップ／IDE拡張ならMCPサーバー一覧の「<strong>認証する</strong>」、Codex CLIなら <code>codex mcp login &lt;名前&gt;</code>、Claude Codeなら <code>/mcp</code> の Authenticate を実行してください。</p>
+          </li>
+          <li>
+            <strong>URLを入れたのに接続できない（Codexデスクトップ／IDE拡張）</strong>
+            <p class="text-xs text-gray-500 mt-1">「タイプ」が <code>STDIO</code> のままだと入力欄は「起動用コマンド」で、URLをローカルプロセスとして起動しようとします。<strong>ストリーミング可能な HTTP</strong> に切り替えてから貼り直してください。</p>
+          </li>
+          <li>
+            <strong>認証を求められ続ける / <code>Needs authentication</code> のまま</strong>
+            <p class="text-xs text-gray-500 mt-1">URLが正しいか（<code>/api/mcp/trees/&lt;番号&gt;</code> まで含んでいるか）を確認してください。ツリー番号のない <code>/api/mcp</code> は存在しません。</p>
+          </li>
+          <li>
+            <strong>同意画面で「あなたはこのツリーのメンバーではありません」と表示される</strong>
+            <p class="text-xs text-gray-500 mt-1">Zeetaにログインしているアカウントが、そのツリーのメンバーに含まれていません。オーナーに招待を依頼するか、別アカウントでログインし直してください。</p>
+          </li>
+          <li>
+            <strong>書込ツールが <code>insufficient_scope</code> で失敗する</strong>
+            <p class="text-xs text-gray-500 mt-1">ツリーでの権限が閲覧者になっています。オーナーに編集者以上への変更を依頼し、その後クライアント側で再認証してください。</p>
+          </li>
+          <li>
+            <strong>接続直後に <code>invalid_target</code> や <code>redirect_uri</code> のエラーになる</strong>
+            <p class="text-xs text-gray-500 mt-1">URLのドメインが実際に接続しているドメインと異なる場合に発生します。マイページからコピーし直したURLで登録してください。</p>
+          </li>
+          <li>
+            <strong>認証中に <code>Invalid state parameter</code> と表示される（開発環境）</strong>
+            <p class="text-xs text-gray-500 mt-1">ローカル開発で <code>127.0.0.1</code> と <code>localhost</code> が混在すると発生します。ブラウザは両者を別ホストとして扱うため、ログイン開始時のクッキーがコールバックへ送られません。<code>localhost</code> 側でマイページを開き、そこでコピーしたURLを登録し直してください。本番環境（単一ドメイン）では発生しません。</p>
+          </li>
+          <li>
+            <strong>claude.ai のコネクタが接続できない</strong>
+            <p class="text-xs text-gray-500 mt-1">Anthropicのクラウドから到達できるHTTPSのURLが必要です。社内ネットワーク限定や <code>localhost</code> のURLは利用できません。</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="guide-section">
+        <h3 class="text-lg font-bold mb-3">主要 MCP コマンド一覧</h3>
+        <ul class="plain-item-list text-sm text-gray-700">
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-get">読取</span>
+              <strong>get_root_node_id</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">ツリーのルートノード ID を取得します。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-get">読取</span>
+              <strong>read_node</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">指定したノードのタイトル・内容・親子関係・子ソート設定などを取得します。<code>include_images</code> で画像メタデータも取得できます。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-get">読取</span>
+              <strong>get_children</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">指定したノードの子ノード一覧を、本文・子ソート設定付きの詳細情報でまとめて取得します。<code>include_images</code> で画像メタデータも取得できます。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-get">読取</span>
+              <strong>get_parents</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">指定したノードの親ノード一覧を、本文・子ソート設定付きの詳細情報でまとめて取得します。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-get">読取</span>
+              <strong>read_node_image</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">ノード画像を1枚ずつ base64 で取得します。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-get">読取</span>
+              <strong>search_nodes</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">キーワードでノードを検索します。ノードIDは6文字の公開IDです。<code>only_title: true</code> ではタイトルのみを検索し、ベクトル検索は行いません。通常はワード検索とベクトル検索を行い、<code>word[]</code>（ワード一致）、<code>vector[]</code>（ワード結果と重複しない AI 関連候補）、統合した <code>items[]</code>、件数 <code>word_count</code> / <code>vector_count</code> を返します。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">書込</span>
+              <strong>create_node</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">新しいノードを作成します。子ソート設定も指定できます。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">書込</span>
+              <strong>create_node_image</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">base64 画像をノードへ追加し、本文差し替え用の画像 URL を返します。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">書込</span>
+              <strong>create_node_tree</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">ツリー構造のノードをまとめて作成します。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">書込</span>
+              <strong>update_node</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">ノードのタイトル・内容・子ソート設定を更新します。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">書込</span>
+              <strong>append_node_content</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">ノードの内容末尾にテキストを追記します。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">書込</span>
+              <strong>trash_node</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">ノードをゴミ箱へ移動します（論理削除）。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">書込</span>
+              <strong>link_node / link_nodes</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">ノード間に親子関係を追加します（複数まとめて指定可）。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">書込</span>
+              <strong>unlink_node / unlink_nodes</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">ノード間の親子関係を削除します（複数まとめて指定可）。</p>
+          </li>
+          <li>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-post">書込</span>
+              <strong>update_link_relation_type</strong>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">親子関係のタイプ（STRUCTURAL / REFERENCE）を変更します。</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const validTabs = new Set(['trees', 'editor', 'mcp', 'terms'])
+      // マイページ廃止前のリンク（?tab=my-page）は「ツリーの管理」タブで受ける
+      const tabAliases = { 'my-page': 'trees' }
+      const tabButtons = Array.from(document.querySelectorAll('.tab-btn'))
+      const panels = Array.from(document.querySelectorAll('.help-panel'))
+
+      function getInitialTab() {
+        const params = new URLSearchParams(window.location.search)
+        const raw = params.get('tab') || ''
+        const requested = tabAliases[raw] || raw
+        return validTabs.has(requested) ? requested : 'trees'
+      }
+
+      function applyTab(tab) {
+        for (const button of tabButtons) {
+          button.classList.toggle('active', button.dataset.tab === tab)
+        }
+        for (const panel of panels) {
+          panel.classList.toggle('active', panel.dataset.tab === tab)
+        }
+      }
+
+      function setTab(tab) {
+        if (!validTabs.has(tab)) return
+        const url = new URL(window.location.href)
+        url.searchParams.set('tab', tab)
+        history.replaceState({}, '', url.toString())
+        applyTab(tab)
+      }
+
+      for (const button of tabButtons) {
+        button.addEventListener('click', () => setTab(button.dataset.tab))
+      }
+
+      const languageSwitch = document.getElementById('language-switch')
+      if (languageSwitch) languageSwitch.href = `/help.en${window.location.search}`
+
+      applyTab(getInitialTab())
+      if (window.location.hash === '#privacy' && getInitialTab() === 'terms') {
+        document.getElementById('privacy')?.scrollIntoView()
+      }
+    })()
+  </script>
+</body>
+
+</html>
