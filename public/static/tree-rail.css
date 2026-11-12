@@ -889,3 +889,25 @@ html.theme-dark .tree-modal-content {
 #editor-pane[hidden] {
   display: none !important;
 }
+
+/* プロフィール設定モーダルのアバター */
+.profile-modal-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #667eea;
+}
+
+.profile-modal-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+  color: #fff;
+  font-size: 2rem;
+}
+
+.profile-modal-avatar[hidden] {
+  display: none;
+}

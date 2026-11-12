@@ -256,7 +256,9 @@ test.describe('左バー（ツリー切替・管理）', () => {
     await expect(page.locator('#settings-menu')).toBeVisible()
     await expect(page.locator('#theme-switcher')).toBeVisible()
     await expect(page.locator('#lang-switcher')).toBeVisible()
-    await expect(page.locator('#profile-link')).toHaveAttribute('href', '/profile.html')
+    // プロフィール設定はページ遷移せずモーダルで開く（2026-11-10。開閉は TC-PROFILE-002）
+    await expect(page.locator('#profile-link')).toBeVisible()
+    await expect(page.locator('#profile-link')).not.toHaveAttribute('href', /.*/)
 
     // ユーザーアイコン・表示名・メールアドレスはヘッダーに出さない（2026-10-30 ユーザー判断）
     await expect(header.locator('.header-user, #user-avatar, #user-name, #user-email')).toHaveCount(0)

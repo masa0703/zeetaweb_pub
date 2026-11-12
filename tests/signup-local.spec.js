@@ -12,8 +12,8 @@ test('local test login can exercise new-user signup and reuse the same account',
   expect(hello).toBeTruthy()
   try {
     const nodes = await (await page.request.get(`${origin}/api/trees/${hello.id}/nodes-lite`)).json()
-    expect(JSON.stringify(nodes)).toContain('Hello:JP')
-    expect(JSON.stringify(nodes)).toContain('Hello:EN')
+    expect(JSON.stringify(nodes)).toContain('Hello: JP')
+    expect(JSON.stringify(nodes)).toContain('Hello: EN')
     await page.goto(url)
     await waitForAppReady(page)
     const again = await (await page.request.get(`${origin}/api/trees`)).json()

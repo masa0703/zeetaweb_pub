@@ -2,22 +2,15 @@
   "nodes": [
     {
       "id": "Cvg2Vs",
-      "title": "Hello:JP",
-      "content": "",
+      "title": "Hello: JP",
+      "content": "# Hello\nこのツリーは、zeetaを実際に触って試すためのサンプルです。\n不要になったら削除してください。\n\nzeetawebは、ツリー構造でテキスト情報を管理するツールです。\n他のツリーと決定的に違う点は、「親を複数持てる」という点。\n使い方のサンプルは、「Sample tree」ノードを参照してください。\n\n画面の操作は、ヘッダにある[「？」マーク](https://zeetaweb.jp/help.html?tab=editor)に記載しています。\n\n# 公開リポジトリ\n[masa0703/zeetaweb_pub](https://github.com/masa0703/zeetaweb_pub)\n\n# 注意事項\nzeetawebは、複数の親を持てるツリーを試すための、個人運営のお試し版です。ご利用にあたり、以下の点をご了承ください。\n\n- **データの保存は保証しません。** データの保存・復旧や、サービスを続けて提供することは保証していません。データが消えたり壊れたりする可能性があります。\n- **大切な内容は手元にも残してください。** 失って困る内容は、ご自身で別の場所にも控えを取ってください。\n- **機密情報はツリーに入れないでください。** パスワード、顧客情報など、漏れて困る情報や個人情報はツリーに入力しないでください。\n- **内容は変わることがあります。** 機能や画面を変更・停止したり、サービス自体を終了したりすることがあります。\n- **禁止事項。** 不正アクセス、他人の権利を侵害する行為、サービスに過大な負荷をかける行為、その他法令に違反する行為は禁止します。\n- **責任について。** 損害が生じた場合の責任は、適用される法令に従います。\n\n詳細は[利用規約](https://zeetaweb.jp/terms)をご覧ください。",
       "sortMode": "manual",
       "sortDirection": "asc"
     },
     {
       "id": "XTo89B",
-      "title": "Hello:EN",
-      "content": "",
-      "sortMode": "manual",
-      "sortDirection": "asc"
-    },
-    {
-      "id": "D4Tcgv",
-      "title": "hello",
-      "content": "# Hello\nこのツリーは、zeetaを実際に触って試すためのサンプルです。\n不要になったら削除してください。\n\nzeetawebは、ツリー構造でテキスト情報を管理するツールです。\n他のツリーと決定的に違う点は、「親を複数持てる」という点。\n使い方のサンプルは、「Sample tree」ノードを参照してください。\n\n画面の操作は、ヘッダにある[「？」マーク](https://zeetaweb.jp/help.html?tab=editor)に記載しています。\n\n# 公開リポジトリ\n[masa0703/zeetaweb_pub](https://github.com/masa0703/zeetaweb_pub)\n\n# 注意事項\nzeetawebは、複数の親を持てるツリーを試すための、個人運営のお試し版です。ご利用にあたり、以下の点をご了承ください。\n\n- **データの保存は保証しません。** データの保存・復旧や、サービスを続けて提供することは保証していません。データが消えたり壊れたりする可能性があります。\n- **大切な内容は手元にも残してください。** 失って困る内容は、ご自身で別の場所にも控えを取ってください。\n- **機密情報はツリーに入れないでください。** パスワード、顧客情報など、漏れて困る情報や個人情報はツリーに入力しないでください。\n- **内容は変わることがあります。** 機能や画面を変更・停止したり、サービス自体を終了したりすることがあります。\n- **禁止事項。** 不正アクセス、他人の権利を侵害する行為、サービスに過大な負荷をかける行為、その他法令に違反する行為は禁止します。\n- **責任について。** 損害が生じた場合の責任は、適用される法令に従います。\n\n詳細は[利用規約](https://zeetaweb.jp/terms)をご覧ください。",
+      "title": "Hello: EN",
+      "content": "# Hello\nThis sample tree lets you try zeeta for yourself. Delete it when you no longer need it.\n\nzeetaweb is a tool for organizing text in a tree structure. Its distinguishing feature is that a node can have multiple parents. See the “Sample tree” node for examples.\n\nFor instructions on using the interface, see the [“?” icon](https://zeetaweb.jp/help.html?tab=editor) in the header.\n\n# Public repository\n[masa0703/zeetaweb_pub](https://github.com/masa0703/zeetaweb_pub)\n\n# Important information\nzeetaweb (\"the Service\") is an individually operated trial for trying out trees in which a node can have multiple parents. By using it, you agree to the following.\n\n- **No guarantee of data preservation.** We do not guarantee that your data will be preserved or recoverable, or that the Service will remain available. Data may be lost or corrupted.\n- **Keep your own copies.** Keep separate copies of anything you cannot afford to lose.\n- **Do not put confidential information in your trees.** Do not enter passwords, customer information, or other confidential or personal information that would cause harm if disclosed.\n- **Things may change.** Features and screens may be changed or discontinued, and the Service itself may end.\n- **Prohibited conduct.** You must not access the Service without authorization, infringe others' rights, place excessive load on the Service, or violate applicable law.\n- **Liability.** Liability for any loss or damage is governed by applicable law.\n\nFor details, see the [Terms of Use](https://zeetaweb.jp/terms).",
       "sortMode": "manual",
       "sortDirection": "asc"
     },
@@ -39,13 +32,6 @@
       "id": "L9dzcc",
       "title": "MCP",
       "content": "zeetawebはMCPに対応しています。\n1ツリーが1MCPサーバになります。\n登録方法は、[こちらを参照してください](https://zeetaweb.jp/help?tab=mcp)。\n\n## 使い方の例\n- 「MCP zeeta01に接続して、Sample treeに何があるか教えて」\n    - zeeta01は、登録時に指定したMCP名\n- 「このexcelファイルをzeeta01に記録して」\n    - ノード階層を指定しなくても適度に分割する場合もありますが、「1シートは、1ノードにすること」のように伝えた方が確実です。\n- 「MCP (id:L9dzcc)を確認して」\n    - ノードを選択してコピー、エディタなどにペーストすると「{ノード名}(id:xxxxxx)」というテキストになります。\n    - id:xxxxxxが入っているとAIは、直接ノードを参照できます。\n    - 逆に入っていないと、ノード名で検索することになり、無駄に時間と手間がかかります。",
-      "sortMode": "manual",
-      "sortDirection": "asc"
-    },
-    {
-      "id": "PgwtVZ",
-      "title": "hello",
-      "content": "# Hello\nThis sample tree lets you try zeeta for yourself. Delete it when you no longer need it.\n\nzeetaweb is a tool for organizing text in a tree structure. Its distinguishing feature is that a node can have multiple parents. See the “Sample tree” node for examples.\n\nFor instructions on using the interface, see the [“?” icon](https://zeetaweb.jp/help.html?tab=editor) in the header.\n\n# Public repository\n[masa0703/zeetaweb_pub](https://github.com/masa0703/zeetaweb_pub)\n\n# Important information\nzeetaweb (\"the Service\") is an individually operated trial for trying out trees in which a node can have multiple parents. By using it, you agree to the following.\n\n- **No guarantee of data preservation.** We do not guarantee that your data will be preserved or recoverable, or that the Service will remain available. Data may be lost or corrupted.\n- **Keep your own copies.** Keep separate copies of anything you cannot afford to lose.\n- **Do not put confidential information in your trees.** Do not enter passwords, customer information, or other confidential or personal information that would cause harm if disclosed.\n- **Things may change.** Features and screens may be changed or discontinued, and the Service itself may end.\n- **Prohibited conduct.** You must not access the Service without authorization, infringe others' rights, place excessive load on the Service, or violate applicable law.\n- **Liability.** Liability for any loss or damage is governed by applicable law.\n\nFor details, see the [Terms of Use](https://zeetaweb.jp/terms).",
       "sortMode": "manual",
       "sortDirection": "asc"
     },
@@ -604,12 +590,6 @@
     },
     {
       "parent": "Cvg2Vs",
-      "child": "D4Tcgv",
-      "relation": "STRUCTURAL",
-      "position": 0
-    },
-    {
-      "parent": "Cvg2Vs",
       "child": "aY2uJf",
       "relation": "STRUCTURAL",
       "position": 1
@@ -625,12 +605,6 @@
       "child": "L9dzcc",
       "relation": "STRUCTURAL",
       "position": 3
-    },
-    {
-      "parent": "XTo89B",
-      "child": "PgwtVZ",
-      "relation": "STRUCTURAL",
-      "position": 0
     },
     {
       "parent": "XTo89B",
@@ -852,7 +826,7 @@
       "parent": "iwTcaC",
       "child": "1pS7Cs",
       "relation": "STRUCTURAL",
-      "position": 0
+      "position": 1
     },
     {
       "parent": "ZasjyW",
@@ -996,7 +970,7 @@
       "parent": "gi83nZ",
       "child": "WWtFCa",
       "relation": "REFERENCE",
-      "position": 0
+      "position": 3
     },
     {
       "parent": "1pS7Cs",
@@ -1008,13 +982,13 @@
       "parent": "WWtFCa",
       "child": "ihggA6",
       "relation": "REFERENCE",
-      "position": 0
+      "position": 3
     },
     {
       "parent": "WsxVK9",
       "child": "46kCyR",
       "relation": "REFERENCE",
-      "position": 0
+      "position": 2
     },
     {
       "parent": "ihggA6",
@@ -1032,13 +1006,13 @@
       "parent": "46kCyR",
       "child": "7NKkZQ",
       "relation": "REFERENCE",
-      "position": 0
+      "position": 1
     },
     {
       "parent": "46kCyR",
       "child": "bVFvRM",
       "relation": "STRUCTURAL",
-      "position": 1
+      "position": 2
     },
     {
       "parent": "7NKkZQ",
@@ -1062,7 +1036,7 @@
       "parent": "7NKkZQ",
       "child": "At9URS",
       "relation": "STRUCTURAL",
-      "position": 3
+      "position": 4
     },
     {
       "parent": "RdcZYa",
@@ -1176,7 +1150,7 @@
       "parent": "f9Nqrf",
       "child": "gaqWxx",
       "relation": "REFERENCE",
-      "position": 1
+      "position": 0
     },
     {
       "parent": "fsrkWX",
@@ -1206,7 +1180,7 @@
       "parent": "LUJUY5",
       "child": "gaqWxx",
       "relation": "REFERENCE",
-      "position": 1
+      "position": 0
     },
     {
       "parent": "zQSw51",
@@ -1218,7 +1192,7 @@
       "parent": "nTjnzq",
       "child": "7NKkZQ",
       "relation": "REFERENCE",
-      "position": 0
+      "position": 3
     },
     {
       "parent": "bVFvRM",
@@ -1236,7 +1210,7 @@
       "parent": "PpQk5f",
       "child": "WRkSrY",
       "relation": "REFERENCE",
-      "position": 1
+      "position": 0
     },
     {
       "parent": "6VeRkF",
@@ -1266,7 +1240,7 @@
       "parent": "XuVohB",
       "child": "WRkSrY",
       "relation": "REFERENCE",
-      "position": 1
+      "position": 0
     },
     {
       "parent": "c2f5Fq",

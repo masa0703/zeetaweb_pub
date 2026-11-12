@@ -3493,7 +3493,7 @@ function updateTreeHeader() {
         border-radius: 6px;
       ">
         <input id="md-preview-toggle" type="checkbox" ${isMarkdownPreviewPreferred() ? 'checked' : ''} />
-        <span>markdown preview</span>
+        <span>preview</span>
       </label>`)}
       <span class="header-account-sep" aria-hidden="true"></span>
       <a href="/help.html?tab=editor" target="_blank" rel="noopener noreferrer" title="${t('common.help')}" class="text-gray-500 hover:text-indigo-500 hover:bg-gray-100" style="

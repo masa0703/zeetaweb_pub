@@ -52,7 +52,7 @@ test('signup creates a complete independent tree and login does not duplicate it
   assert.equal(db.sqlite.prepare('SELECT count(*) n FROM trees').get().n, 1)
   assert.equal(db.sqlite.prepare('SELECT role FROM tree_members WHERE user_id=?').get(created.id).role, 'owner')
   const roots = db.sqlite.prepare(`SELECT child.title FROM trees t JOIN node_relations r ON r.parent_node_id=t.root_node_id JOIN nodes child ON child.id=r.child_node_id ORDER BY r.position`).all()
-  assert.deepEqual(roots.map(x => x.title), ['Hello:JP', 'Hello:EN'])
+  assert.deepEqual(roots.map(x => x.title), ['Hello: JP', 'Hello: EN'])
   const multi = db.sqlite.prepare(`SELECT count(*) n FROM (SELECT child_node_id FROM node_relations GROUP BY child_node_id HAVING count(*) > 1)`).get().n
   assert.ok(multi >= 4)
   const mcp = db.sqlite.prepare("SELECT public_id, content FROM nodes WHERE title='MCP'").all()
@@ -80,7 +80,7 @@ test('signup runs against a real local D1 binding', async () => {
     await upsertOAuthUser(db, user)
     await upsertOAuthUser(db, user)
     assert.equal((await db.prepare('SELECT count(*) n FROM trees').first()).n, 1)
-    assert.equal((await db.prepare('SELECT count(*) n FROM nodes').first()).n, 86)
-    assert.equal((await db.prepare('SELECT count(*) n FROM node_relations').first()).n, 116)
+    assert.equal((await db.prepare('SELECT count(*) n FROM nodes').first()).n, 84)
+    assert.equal((await db.prepare('SELECT count(*) n FROM node_relations').first()).n, 114)
   } finally { await mf.dispose() }
 })

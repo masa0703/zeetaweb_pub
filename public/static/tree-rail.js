@@ -615,7 +615,7 @@
               </select>
             </label>
             <div class="tree-menu-sep"></div>
-            <a id="profile-link" class="tree-menu-item" href="/profile.html"><i class="fas fa-user-cog"></i>${escapeText(t('mypage.profileSettingsTitle'))}</a>
+            <button id="profile-link" class="tree-menu-item" type="button"><i class="fas fa-user-cog"></i>${escapeText(t('mypage.profileSettingsTitle'))}</button>
             <a id="terms-privacy-link" class="tree-menu-item" href="/help?tab=terms" target="_blank" rel="noopener"><i class="fas fa-file-contract"></i>${escapeText(t('mypage.termsPrivacy'))}</a>
             <div class="tree-menu-sep"></div>
             <div class="settings-version">${escapeText(t('mypage.buildLabel'))} <span id="version-badge">${escapeText(window.__BUILD_STAMP__ || '')}</span></div>
@@ -672,6 +672,11 @@
       })
     }
 
+    byId('profile-link')?.addEventListener('click', () => {
+      setSettingsOpen(false)
+      openProfileModal()
+    })
+
     byId('logout-btn')?.addEventListener('click', async () => {
       const run = () => (typeof window.logout === 'function' ? window.logout() : (window.location.href = '/login.html'))
       if (typeof window.runWithUnsavedGuard === 'function') await window.runWithUnsavedGuard(run)
@@ -680,6 +685,109 @@
 
     // 通知は DOMContentLoaded 時点ではヘッダーが無く取りこぼすので、描画後に読み直す
     if (typeof window.loadNotifications === 'function') window.loadNotifications()
+  }
+
+  // ---------------- モーダル: プロフィール設定 ----------------
+  // 別ページ（/profile.html）へ遷移するとツリーの選択・開閉状態が失われるため、モーダルで開く
+
+  const PROFILE_PROVIDER_ICONS = {
+    google: { icon: 'fab fa-google mr-2 text-red-500', label: 'Google' },
+    github: { icon: 'fab fa-github mr-2', label: 'GitHub' },
+    test: { icon: 'fas fa-flask mr-2 text-blue-500', label: 'Test Account' }
+  }
+
+  function isProfileModalOpen() {
+    return byId('profile-modal')?.classList.contains('active') ?? false
+  }
+
+  function setProfileModalError(message) {
+    const error = byId('profile-modal-error')
+    if (!error) return
+    error.textContent = message || ''
+    error.hidden = !message
+  }
+
+  /** @param {{ email?: string, display_name?: string, avatar_url?: string, oauth_provider?: string }} profile */
+  function fillProfileModal(profile) {
+    byId('profile-modal-email').value = profile.email || ''
+    byId('profile-modal-display-name').value = profile.display_name || ''
+
+    const avatar = byId('profile-modal-avatar')
+    const hasAvatar = typeof profile.avatar_url === 'string' && /^https:\/\//.test(profile.avatar_url)
+    avatar.hidden = !hasAvatar
+    if (hasAvatar) avatar.src = profile.avatar_url
+    else avatar.removeAttribute('src')
+    byId('profile-modal-avatar-placeholder').hidden = hasAvatar
+
+    const provider = PROFILE_PROVIDER_ICONS[profile.oauth_provider] || { icon: 'fas fa-user mr-2', label: profile.oauth_provider || 'Unknown' }
+    const providerEl = byId('profile-modal-provider')
+    providerEl.querySelector('i').className = provider.icon
+    providerEl.querySelector('span').textContent = provider.label
+  }
+
+  async function openProfileModal() {
+    setProfileModalError('')
+    byId('profile-modal-form')?.reset()
+    openModal('profile-modal')
+    try {
+      const response = await fetch('/api/profile', { credentials: 'include' })
+      const data = await response.json().catch(() => ({}))
+      if (!response.ok || !data.success || !data.data) throw new Error(data.error || 'Failed to load profile')
+      fillProfileModal(data.data)
+      byId('profile-modal-display-name')?.focus()
+    } catch (error) {
+      console.error('Failed to load profile:', error)
+      setProfileModalError(t('profile.loadFailed'))
+    }
+  }
+
+  function closeProfileModal() {
+    closeModal('profile-modal')
+    setProfileModalError('')
+  }
+
+  async function submitProfileModal(event) {
+    event.preventDefault()
+    const displayName = byId('profile-modal-display-name').value.trim()
+    if (!displayName) {
+      setProfileModalError(t('profile.displayNameRequired'))
+      return
+    }
+
+    const saveButton = byId('profile-modal-save')
+    saveButton.disabled = true
+    try {
+      const response = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ display_name: displayName })
+      })
+      const data = await response.json().catch(() => ({}))
+      if (!response.ok || !data.success) throw new Error(data.error || 'Failed to update profile')
+      if (state.currentUser) state.currentUser = { ...state.currentUser, display_name: data.data?.display_name ?? displayName }
+      closeProfileModal()
+      notify(t('profile.updateSuccess'), 'success')
+    } catch (error) {
+      console.error('Failed to update profile:', error)
+      setProfileModalError(t('profile.updateFailed'))
+    } finally {
+      saveButton.disabled = false
+    }
+  }
+
+  function bindProfileModalEvents() {
+    // 背景（モーダルの外側）クリックで閉じる
+    byId('profile-modal')?.addEventListener('click', (event) => {
+      if (event.target === event.currentTarget) closeProfileModal()
+    })
+    // Esc で閉じる。エディタ側のショートカットへ渡さない
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !isProfileModalOpen()) return
+      event.preventDefault()
+      event.stopPropagation()
+      closeProfileModal()
+    }, true)
   }
 
   // ---------------- モーダル: ツリーの作成・編集・削除 ----------------
@@ -1211,6 +1319,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     bindRailEvents()
     bindDrawerResize()
+    bindProfileModalEvents()
   })
 
   window.ZeetaTreeRail = {
@@ -1242,6 +1351,8 @@
     closeMcpModal,
     copyMcpConnectionUrl,
     closeMemberModal,
+    closeProfileModal,
+    submitProfileModal,
     sendInvitation,
     changeMemberRole,
     removeMember,
