@@ -8,6 +8,8 @@ A web outline editor that organizes nodes as a tree in which a node can have mul
 
 **Try it:** https://zeetaweb.jp (free trial; sign in with Google or GitHub)
 
+![zeetaweb: the same node appears under several parents in the tree (the badge shows its parent count), with the node editor on the right](assets/screenshot.png)
+
 ## Features
 
 - Sign in with a Google or GitHub account (OAuth)

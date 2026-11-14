@@ -8,6 +8,8 @@
 
 **お試し:** https://zeetaweb.jp （無料のお試し版。Google / GitHub アカウントでログイン）
 
+![zeetaweb の画面：同じノードがツリーの複数の親の下に現れる（数字のバッジは親の数）。右はノードの編集画面](assets/screenshot.png)
+
 ## 主な機能
 
 - Google / GitHub アカウントでのログイン（OAuth）
