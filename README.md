@@ -1,5 +1,7 @@
 # zeetaweb
 
+[![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/masa0703/zeetaweb_pub)
+
 ノードを木構造（DAG: 1つのノードが複数の親を持てる）で整理する Web アウトラインエディタです。Cloudflare Pages / Workers / D1 / R2 / Workers AI / Vectorize の上で動きます。
 
 ## 主な機能
