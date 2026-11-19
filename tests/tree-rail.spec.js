@@ -174,7 +174,9 @@ test.describe('左バー（ツリー切替・管理）', () => {
     await page.setViewportSize({ width: 1280, height: 600 })
     await testLogin(page, 1)
     let first
-    for (let i = 0; i < 25; i++) {
+    // 一覧があふれれば足りる（600px の高さでは約11件であふれる）。
+    // 所有ツリーの上限（MAX_TREES_PER_USER = 20）より少なくし、上限が下がっても落ちないようにする
+    for (let i = 0; i < 15; i++) {
       const tree = await createTree(page, `Many ${String(i).padStart(2, '0')}`)
       first = first || tree
     }

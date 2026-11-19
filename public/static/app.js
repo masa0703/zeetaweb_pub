@@ -6193,6 +6193,74 @@ function takeReloadSelectionPath(nodeId) {
   return isValidTreePath(saved.nodePath, nodeId) ? saved.nodePath : null
 }
 
+// ===============================
+// ツリーごとに最後に選択したノード（端末ごと。localStorage）
+// 仕様の正は zeeta「最後のノードを記憶する (id:1Dck6L)」
+// ===============================
+const LAST_SELECTED_NODE_STORAGE_PREFIX = 'zeeta:last-selected-node:'
+
+function getLastSelectedNodeStorageKey() {
+  // 同じブラウザで別アカウントを使っても混ざらないよう、ユーザーごとに分ける
+  return currentUser?.id ? `${LAST_SELECTED_NODE_STORAGE_PREFIX}${currentUser.id}` : null
+}
+
+/** @returns {Record<string, { nodeId: string, nodePath: string | null, at: string }>} */
+function readLastSelectedNodeMap() {
+  const key = getLastSelectedNodeStorageKey()
+  if (!key) return {}
+  try {
+    const parsed = JSON.parse(localStorage.getItem(key) || '{}')
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {}
+  } catch (error) {
+    console.warn('Failed to read last-selected node map:', error)
+    return {}
+  }
+}
+
+function writeLastSelectedNodeMap(map) {
+  const key = getLastSelectedNodeStorageKey()
+  if (!key) return
+  try {
+    localStorage.setItem(key, JSON.stringify(map))
+  } catch (error) {
+    console.warn('Failed to persist last-selected node map:', error)
+  }
+}
+
+// 右ペインにノードを表示したときに呼ぶ。ゴミ箱ビューで見たノードは覚えない
+function rememberLastSelectedNode(nodeId) {
+  if (!nodeId || !Number.isFinite(currentTreeId) || treeViewMode === 'trash') return
+  const id = String(nodeId)
+  const nodePath = treeViewMode === 'normal' && isValidTreePath(selectedNodePath, id) ? selectedNodePath : null
+  const map = readLastSelectedNodeMap()
+  const previous = map[String(currentTreeId)]
+  if (previous?.nodeId === id && previous?.nodePath === nodePath) return
+  writeLastSelectedNodeMap({ ...map, [String(currentTreeId)]: { nodeId: id, nodePath, at: new Date().toISOString() } })
+}
+
+function forgetLastSelectedNode(treeId = currentTreeId) {
+  const map = readLastSelectedNodeMap()
+  if (!(String(treeId) in map)) return
+  const { [String(treeId)]: _removed, ...rest } = map
+  writeLastSelectedNodeMap(rest)
+}
+
+// URL にノード指定が無く開いたとき、このツリーで最後に選んでいたノードを開く。
+// 削除済み・ゴミ箱の中・開けないときはエラーを出さず記録を消し、何も選択しない
+async function restoreLastSelectedNode() {
+  const entry = readLastSelectedNodeMap()[String(currentTreeId)]
+  const nodeId = typeof entry?.nodeId === 'string' ? entry.nodeId : null
+  if (!nodeId) return
+  if (!getNormalReachableNodeIdSet().has(nodeId)) {
+    forgetLastSelectedNode()
+    return
+  }
+  const nodePath = isValidTreePath(entry.nodePath, nodeId) ? entry.nodePath : null
+  const opened = await openNodeAlongPreferredPath(nodeId, { recordHistory: false, nodePath })
+  // null は後続の操作に追い越されただけなので記録は残す
+  if (opened === false) forgetLastSelectedNode()
+}
+
 // URL・ノードリンクからノードを開く。全ての祖先ではなく、優先経路上の祖先だけを展開して選ぶ。
 // options.nodePath があればその経路（呼び出し側で検証済み）を使う
 async function openNodeAlongPreferredPath(nodeId, options = {}) {
@@ -7696,6 +7764,7 @@ function renderEditor(node = null, parents = []) {
     return
   }
 
+  rememberLastSelectedNode(node.id)
   suppressDirtyCheck()
   try {
     currentEditorNodeId = node.id
@@ -9947,6 +10016,8 @@ async function initializeApp() {
     if (!opened) {
       showToast(t('editor.requestedNodeOpenFailed'), 'error')
     }
+  } else {
+    await restoreLastSelectedNode()
   }
 
   hideLoading()
