@@ -73,9 +73,9 @@ test.describe('Authentication Flow', () => {
     // Click logout button
     await page.click('#logout-btn')
 
-    // Should redirect to login page
-    await page.waitForURL(/\/login(?:\.html)?(?:[?#]|$)/)
-    expect(new URL(page.url()).pathname).toMatch(/^\/login(?:\.html)?$/)
+    // Should land on the landing page (/), signed out
+    await page.waitForURL(url => new URL(url).pathname === '/')
+    await expect(page.locator('#landing-try-btn')).toBeVisible()
 
     // Try to access the editor again
     await page.goto(`/index.html`)

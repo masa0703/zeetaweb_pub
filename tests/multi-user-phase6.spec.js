@@ -94,8 +94,9 @@ test.describe('Version Conflict Detection', () => {
       // Create User 2 first to ensure user exists
       await testLogin(page2, 2)
       await page2.click('#logout-btn')
-      await page2.waitForURL(/\/login(?:\.html)?(?:[?#]|$)/)
-      expect(new URL(page2.url()).pathname).toMatch(/^\/login(?:\.html)?$/)
+      // ログアウト後は紹介ページ（/）へ移る
+      await page2.waitForURL(url => new URL(url).pathname === '/')
+      await page2.locator('#landing-try-btn').waitFor()
 
       // Login back as User 1 and add User 2 as editor
       await testLogin(page1, 1)
@@ -160,8 +161,9 @@ test.describe('Version Conflict Detection', () => {
       // Create User 2
       await testLogin(page2, 2)
       await page2.click('#logout-btn')
-      await page2.waitForURL(/\/login(?:\.html)?(?:[?#]|$)/)
-      expect(new URL(page2.url()).pathname).toMatch(/^\/login(?:\.html)?$/)
+      // ログアウト後は紹介ページ（/）へ移る
+      await page2.waitForURL(url => new URL(url).pathname === '/')
+      await page2.locator('#landing-try-btn').waitFor()
 
       // Add User 2 as editor
       await testLogin(page1, 1)
@@ -266,8 +268,9 @@ test.describe('Conflict Resolution Actions', () => {
       // Create User 2
       await testLogin(page2, 2)
       await page2.click('#logout-btn')
-      await page2.waitForURL(/\/login(?:\.html)?(?:[?#]|$)/)
-      expect(new URL(page2.url()).pathname).toMatch(/^\/login(?:\.html)?$/)
+      // ログアウト後は紹介ページ（/）へ移る
+      await page2.waitForURL(url => new URL(url).pathname === '/')
+      await page2.locator('#landing-try-btn').waitFor()
 
       // Add User 2 as editor
       await testLogin(page1, 1)
@@ -354,8 +357,9 @@ test.describe('Conflict Resolution Actions', () => {
       // Create User 2
       await testLogin(page2, 2)
       await page2.click('#logout-btn')
-      await page2.waitForURL(/\/login(?:\.html)?(?:[?#]|$)/)
-      expect(new URL(page2.url()).pathname).toMatch(/^\/login(?:\.html)?$/)
+      // ログアウト後は紹介ページ（/）へ移る
+      await page2.waitForURL(url => new URL(url).pathname === '/')
+      await page2.locator('#landing-try-btn').waitFor()
 
       // Add User 2 as editor
       await testLogin(page1, 1)
@@ -447,8 +451,9 @@ test.describe('Conflict Resolution Actions', () => {
       // Create User 2
       await testLogin(page2, 2)
       await page2.click('#logout-btn')
-      await page2.waitForURL(/\/login(?:\.html)?(?:[?#]|$)/)
-      expect(new URL(page2.url()).pathname).toMatch(/^\/login(?:\.html)?$/)
+      // ログアウト後は紹介ページ（/）へ移る
+      await page2.waitForURL(url => new URL(url).pathname === '/')
+      await page2.locator('#landing-try-btn').waitFor()
 
       // Add User 2 as editor
       await testLogin(page1, 1)
@@ -527,8 +532,9 @@ test.describe('Conflict Resolution Actions', () => {
       // Create User 2
       await testLogin(page2, 2)
       await page2.click('#logout-btn')
-      await page2.waitForURL(/\/login(?:\.html)?(?:[?#]|$)/)
-      expect(new URL(page2.url()).pathname).toMatch(/^\/login(?:\.html)?$/)
+      // ログアウト後は紹介ページ（/）へ移る
+      await page2.waitForURL(url => new URL(url).pathname === '/')
+      await page2.locator('#landing-try-btn').waitFor()
 
       // Add User 2 as editor
       await testLogin(page1, 1)

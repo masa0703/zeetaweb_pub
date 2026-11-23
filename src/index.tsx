@@ -777,8 +777,8 @@ const CSP_DIRECTIVES = [
 
 app.use('*', async (c, next) => {
   await next()
-  // 検索エンジン拒否
-  c.header('X-Robots-Tag', 'noindex, nofollow, noarchive')
+  // 検索エンジン拒否。紹介ページ（未ログインの /）だけはルート側で index を指定しており、それは上書きしない
+  if (!c.res.headers.get('x-robots-tag')) c.header('X-Robots-Tag', 'noindex, nofollow, noarchive')
   // クリックジャッキング防止
   c.header('X-Frame-Options', 'DENY')
   // MIME sniffing 防止
@@ -823,8 +823,9 @@ app.onError((error, c) => {
 })
 
 // robots.txt（Cloudflare 自動生成 robots.txt より優先される）
+// クロールを許すのは紹介ページ（/ ちょうど。`$` は末尾一致）と、その表示に要る /static/ だけ
 app.get('/robots.txt', (c) => {
-  return c.text('User-agent: *\nDisallow: /\n', 200, {
+  return c.text('User-agent: *\nAllow: /$\nAllow: /static/\nDisallow: /\n', 200, {
     'Content-Type': 'text/plain; charset=utf-8',
     'X-Robots-Tag': 'noindex, nofollow, noarchive',
   })
@@ -861,6 +862,7 @@ import acceptInvitationHtml from '../public/accept-invitation.html?raw'
 import profileHtml from '../public/profile.html?raw'
 import helpHtml from '../public/help.html?raw'
 import helpEnHtml from '../public/help.en.html?raw'
+import landingHtml from '../public/landing.html?raw'
 import mermaidViewerHtml from '../public/mermaid-viewer.html?raw'
 import htmlViewerHtml from '../public/html-viewer.html?raw'
 import imageViewerHtml from '../public/image-viewer.html?raw'
@@ -7549,8 +7551,45 @@ const getEditorHTML = () => `
     </html>
   `
 
-// Root route - Editor
-app.get('/', (c) => c.html(localizedHtml(c, getEditorHTML())))
+// Root route - 未ログインでクエリなしなら紹介ページ、それ以外は従来どおり編集画面。
+// ログイン済みの人・共有リンク等のクエリ付き URL（/?tree=…）の挙動は変えない
+// （未ログインのクエリ付きは編集画面の初期化がログイン画面へ送る）。
+const escapeAttr = (value: string) => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
+
+// canonical と OGP は絶対 URL が要るため、APP_URL（本番は https://zeetaweb.jp）から組み立てる。
+// 未設定ならリクエストのオリジンを使う
+const withLandingMeta = (c: Context, html: string) => {
+  const origin = ((c.env as { APP_URL?: string })?.APP_URL || new URL(c.req.url).origin).replace(/\/+$/, '')
+  const url = escapeAttr(`${origin}/`)
+  const image = escapeAttr(`${origin}/static/landing/screenshot.jpg`)
+  const meta = [
+    `<link rel="canonical" href="${url}">`,
+    `<meta property="og:type" content="website">`,
+    `<meta property="og:url" content="${url}">`,
+    `<meta property="og:image" content="${image}">`,
+    `<meta name="twitter:card" content="summary_large_image">`,
+  ].join('\n  ')
+  return html.replace('<!--LANDING_META-->', () => meta)
+}
+
+const isSignedOut = async (c: Context): Promise<boolean> => {
+  try {
+    return !(await getOAuthSessionUser(c))
+  } catch (error) {
+    // 判定できないときは従来の編集画面を返す（画面側の認証確認がログインへ送る）
+    console.error('[landing] session check failed:', error)
+    return false
+  }
+}
+
+app.get('/', async (c) => {
+  const hasQuery = new URL(c.req.url).search !== ''
+  if (!hasQuery && await isSignedOut(c)) {
+    // 検索エンジンに載せるのはこのページだけ（他は全ページ noindex）
+    return c.html(localizedHtml(c, withLandingMeta(c, landingHtml)), 200, { 'X-Robots-Tag': 'index, follow' })
+  }
+  return c.html(localizedHtml(c, getEditorHTML()))
+})
 
 // /index.html route - Same as root
 app.get('/index.html', (c) => c.html(localizedHtml(c, getEditorHTML())))

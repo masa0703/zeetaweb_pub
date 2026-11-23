@@ -531,5 +531,92 @@
     "displayNameRequired": "表示名を入力してください",
     "saving": "保存中...",
     "updateFailed": "プロフィールの更新に失敗しました"
+  },
+  "landing": {
+    "title": "zeeta — 1つのメモを複数の親の下に置けるアウトライナー",
+    "nav": {
+      "signIn": "ログイン"
+    },
+    "hero": {
+      "eyebrow": "DAG アウトライナー",
+      "heading": "1つのメモを、複数の親の下に置けるアウトライナー。",
+      "sub": "同じメモを複製せずに、いくつもの観点で整理できる。",
+      "try": "試す",
+      "source": "GitHub のソース",
+      "note": "無料・Google アカウントでログイン",
+      "imageAlt": "zeeta の編集画面。ノード「Submit claims by photographing」が会議の下と Requirements の下の両方に表示され、バッジで親が2つあることを示している。",
+      "caption": "同じノードが「Meetings」と「Requirements」の両方の下にある。バッジの数字は親の数。"
+    },
+    "problem": {
+      "heading": "たいていのツールは、置き場所を1つに決めさせる。",
+      "treeTitle": "ツリーはフォルダを1つ選ばせる",
+      "treeBody": "2か所に属するメモも、どちらか1か所に置くしかない。複製すれば、いずれ食い違う。",
+      "tagTitle": "タグは構造を失う",
+      "tagBody": "タグはいくつでも付けられるが、ただの平らな分類。作った順序や入れ子は残らない。",
+      "linkTitle": "リンクは階層を失う",
+      "linkBody": "リンクは何でもつなげるが、上からたどる階層がない。できるのは網で、アウトラインではない。"
+    },
+    "how": {
+      "heading": "zeeta はアウトラインのまま、「親は1つ」の制約だけを外す。",
+      "multiTitle": "親を複数持てる",
+      "multiBody": "どのノードも複数の親の下に置ける（厳密なツリーではなく DAG）。それでも実体は1つなので、どこで編集しても全部に反映される。",
+      "reverseTitle": "逆ツリー",
+      "reverseBody": "表示を反転すると、ノードの親、その親…とたどれる。「これはどこから来た？」がワンクリックで分かる。",
+      "regroupTitle": "組み直しても元の階層が残る",
+      "regroupBody": "別の観点でノードを集め直しても、元の階層はそのまま残る。"
+    },
+    "example": {
+      "heading": "例: この要件はどこから来た？",
+      "step1": "いつもどおり議事録を書く。出てきた要件は、その会議の子ノードにする。",
+      "step2": "あとで「要件」ノードを作り、同じ要件ノードを2つ目の親として下に集める。",
+      "step3": "数か月後「要件04 はなぜあるの？」と聞かれたら、要件04 の逆ツリーを開く。10/5 のキックオフから来たと分かる。",
+      "normalTree": "通常ツリー",
+      "reverseTree": "要件04 の逆ツリー",
+      "meetings": "会議",
+      "kickoff": "10/5 キックオフ",
+      "review": "10/12 レビュー",
+      "requirements": "要件",
+      "req03": "要件03 — Google でログイン",
+      "req04": "要件04 — CSV で出力",
+      "twoParents": "親が2つ"
+    },
+    "more": {
+      "heading": "ほかにできること",
+      "shareTitle": "共有",
+      "shareBody": "ツリーごとに、閲覧者・編集者として人を招待できる。",
+      "markdownTitle": "Markdown",
+      "markdownBody": "本文は Markdown。表、コードブロック、Mermaid の図も書ける。",
+      "imagesTitle": "画像",
+      "imagesBody": "ノードに画像を貼り付け・ドロップできる。",
+      "historyTitle": "編集履歴",
+      "historyBody": "編集はすべて残る。版を比べて、古い版に戻せる。",
+      "searchTitle": "検索",
+      "searchBody": "ツリー全体からタイトルと本文を検索できる。",
+      "i18nTitle": "English / 日本語",
+      "i18nBody": "画面は英語と日本語に対応。",
+      "mcp": "AI アシスタントからも読み書きできる。ツリーごとにリモート MCP サーバーとして使える。",
+      "mcpLink": "使い方"
+    },
+    "story": {
+      "heading": "生い立ち",
+      "desktopWhen": "20年以上前",
+      "desktopBody": "デスクトップのフリーソフトとして誕生。議事録・要件・画面・DB 定義・テストまで、プロジェクトの情報を1つのツリーに集めてチームで共有する使い方をされていた。",
+      "webWhen": "2025年",
+      "webBody": "Web アプリとして作り直した。1人で複数のツリーを持て、ツリーごとに共有できる。"
+    },
+    "oss": {
+      "heading": "オープンソース",
+      "licenseTitle": "MIT ライセンス。",
+      "licenseBody": "コードは GitHub で公開。無保証。",
+      "cloudflareTitle": "Cloudflare 専用。",
+      "cloudflareBody": "Pages・Workers・D1・R2・Workers AI で動く。ほかの環境では書き直しが必要。",
+      "hostedTitle": "ホスト版は無保証。",
+      "hostedBody": "提供の継続とデータの保存は保証しない。使い続けたい場合は、リポジトリを fork して自分の Cloudflare アカウントで動かしてほしい。"
+    },
+    "footer": {
+      "terms": "利用規約",
+      "privacy": "プライバシー",
+      "switchLanguage": "English"
+    }
   }
 }

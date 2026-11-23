@@ -531,5 +531,92 @@
     "displayNameRequired": "Please enter a display name",
     "saving": "Saving...",
     "updateFailed": "Failed to update profile"
+  },
+  "landing": {
+    "title": "zeeta — an outliner where a note can have more than one parent",
+    "nav": {
+      "signIn": "Sign in"
+    },
+    "hero": {
+      "eyebrow": "A DAG outliner",
+      "heading": "An outliner where a note can live under more than one parent.",
+      "sub": "Organize the same notes from several angles — without making copies.",
+      "try": "Try it",
+      "source": "Source on GitHub",
+      "note": "Free · Sign in with Google",
+      "imageAlt": "The zeeta editor. The node “Submit claims by photographing” appears both under a meeting and under Requirements; a badge shows it has 2 parents.",
+      "caption": "The same node under “Meetings” and “Requirements”. The badge counts its parents."
+    },
+    "problem": {
+      "heading": "Most tools make you pick one place.",
+      "treeTitle": "A tree wants one folder",
+      "treeBody": "A note that belongs in two places ends up in one of them — or gets copied, and the copies drift apart.",
+      "tagTitle": "Tags lose the structure",
+      "tagBody": "A note can carry many tags, but a tag is a flat bucket. The order and nesting you built are gone.",
+      "linkTitle": "Links lose the hierarchy",
+      "linkBody": "Links connect anything to anything, but there is nothing to browse top-down. You get a web, not an outline."
+    },
+    "how": {
+      "heading": "zeeta keeps the outline and drops the one-parent rule.",
+      "multiTitle": "More than one parent",
+      "multiBody": "Any node can sit under several parents — a DAG rather than a strict tree. It is still one node: edit it in one place and it changes everywhere.",
+      "reverseTitle": "A reverse tree",
+      "reverseBody": "Flip the view to see a node's parents, and their parents. “Where did this come from?” takes one click.",
+      "regroupTitle": "Regroup without losing the original",
+      "regroupBody": "Collect nodes under a new viewpoint. The hierarchy they came from stays as it was."
+    },
+    "example": {
+      "heading": "Example: where did this requirement come from?",
+      "step1": "Take meeting notes as usual. Each requirement goes under the meeting where it came up.",
+      "step2": "Later, add a “Requirements” node and attach the same requirement nodes to it as a second parent.",
+      "step3": "Months later someone asks why Req 04 exists. Open its reverse tree: it came from the 10/05 kickoff.",
+      "normalTree": "Normal tree",
+      "reverseTree": "Reverse tree of Req 04",
+      "meetings": "Meetings",
+      "kickoff": "10/05 Kickoff",
+      "review": "10/12 Review",
+      "requirements": "Requirements",
+      "req03": "Req 03 — Sign in with Google",
+      "req04": "Req 04 — Export as CSV",
+      "twoParents": "2 parents"
+    },
+    "more": {
+      "heading": "What else it does",
+      "shareTitle": "Sharing",
+      "shareBody": "Invite people to a tree as viewers or editors.",
+      "markdownTitle": "Markdown",
+      "markdownBody": "Node content is Markdown, with tables, code blocks and Mermaid diagrams.",
+      "imagesTitle": "Images",
+      "imagesBody": "Paste or drop images into a node.",
+      "historyTitle": "History",
+      "historyBody": "Every edit is kept. Compare versions and restore an old one.",
+      "searchTitle": "Search",
+      "searchBody": "Search titles and content across a tree.",
+      "i18nTitle": "English / 日本語",
+      "i18nBody": "The interface comes in English and Japanese.",
+      "mcp": "AI assistants can read and write your trees too — each tree works as a remote MCP server.",
+      "mcpLink": "How it works"
+    },
+    "story": {
+      "heading": "Where it came from",
+      "desktopWhen": "20+ years ago",
+      "desktopBody": "zeeta started as a free desktop app. Teams used it to keep a whole project — minutes, requirements, screens, database tables, tests — in one shared tree.",
+      "webWhen": "2025",
+      "webBody": "Rebuilt from scratch as a web app, with multiple trees per person and sharing per tree."
+    },
+    "oss": {
+      "heading": "Open source",
+      "licenseTitle": "MIT license.",
+      "licenseBody": "The code is on GitHub. No warranty.",
+      "cloudflareTitle": "Cloudflare only.",
+      "cloudflareBody": "Pages, Workers, D1, R2 and Workers AI. It does not run elsewhere without a rewrite.",
+      "hostedTitle": "The hosted version comes with no guarantees.",
+      "hostedBody": "It may not stay up, and your data is not guaranteed to be kept. To rely on it, fork the repo and run it on your own Cloudflare account."
+    },
+    "footer": {
+      "terms": "Terms",
+      "privacy": "Privacy",
+      "switchLanguage": "日本語"
+    }
   }
 }

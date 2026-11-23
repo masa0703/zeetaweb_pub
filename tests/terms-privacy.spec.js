@@ -46,6 +46,26 @@ test.describe('利用規約とプライバシーポリシー', () => {
     expect(text).toContain('https://zeetaweb.jp/terms')
     expect(text).not.toContain('運営者は責任を負いません')
     expect(text).not.toContain('The operator accepts no liability')
+    // 有料化の予定は無いので「あとで有料になる」と読める言い方を使わない
+    expect(text).not.toMatch(/trial|お試し|試用/i)
+    expect(text).toContain('個人運営の無料・無保証のサービス')
+    expect(text).toContain('It comes with no guarantees.')
+  })
+  test('privacy policy names Google as the only sign-in provider', async ({ page }) => {
+    for (const path of ['/help.ja?tab=terms', '/help.en?tab=terms']) {
+      await page.goto(`${BASE_URL}${path}`)
+      const text = await page.locator('#privacy').innerText()
+      expect(text).toContain('Google')
+      expect(text, path).not.toContain('GitHub')
+    }
+  })
+  test('terms do not use trial wording', async ({ page }) => {
+    for (const [path, expected] of [['/help.ja?tab=terms', '個人運営の無料・無保証のサービス'], ['/help.en?tab=terms', 'It comes with no guarantees.']]) {
+      await page.goto(`${BASE_URL}${path}`)
+      const text = await page.locator('#terms').innerText()
+      expect(text).toContain(expected)
+      expect(text).not.toMatch(/trial|お試し|試用/i)
+    }
   })
   test('privacy policy does not expose a contact email or a deletion section', async ({ page }) => {
     for (const path of ['/help.ja?tab=terms', '/help.en?tab=terms']) {

@@ -678,7 +678,7 @@
     })
 
     byId('logout-btn')?.addEventListener('click', async () => {
-      const run = () => (typeof window.logout === 'function' ? window.logout() : (window.location.href = '/login.html'))
+      const run = () => (typeof window.logout === 'function' ? window.logout() : (window.location.href = '/'))
       if (typeof window.runWithUnsavedGuard === 'function') await window.runWithUnsavedGuard(run)
       else run()
     })

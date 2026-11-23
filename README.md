@@ -6,13 +6,13 @@ English | [日本語](README.ja.md)
 
 A web outline editor that organizes nodes as a tree in which a node can have multiple parents (a DAG). It runs on Cloudflare Pages / Workers / D1 / R2 / Workers AI / Vectorize.
 
-**Try it:** https://zeetaweb.jp (free trial; sign in with Google or GitHub)
+**Try it:** https://zeetaweb.jp (free; sign in with Google)
 
 ![zeetaweb: the same node appears under several parents in the tree (the badge shows its parent count), with the node editor on the right](assets/screenshot.png)
 
 ## Features
 
-- Sign in with a Google or GitHub account (OAuth)
+- Sign in with a Google account (OAuth)
 - Create, edit and reorder trees and nodes. A single node can sit under multiple parents (structural links / reference links)
 - Markdown rendering of node content, image attachments (R2), edit history and restoring past versions
 - Keyword search and vector search with Workers AI + Vectorize (production only)
@@ -24,14 +24,14 @@ A web outline editor that organizes nodes as a tree in which a node can have mul
 
 - **Cloudflare only.** The database (D1), image storage (R2), search (Workers AI / Vectorize), and build and deploy (Pages / Wrangler) are all implemented with Cloudflare features. It will not run in other environments (a typical server, AWS, Vercel, etc.) without being rewritten.
 - **No warranty.** As stated in the MIT License, the author accepts no liability for data corruption or loss, service outages, or anything else arising from use of this software.
-- **The hosted version run by the author is a trial.** Continued availability and data preservation are not guaranteed. If you want to keep using it, fork this repository and run it on your own Cloudflare account.
+- **The hosted version run by the author comes with no guarantees.** Continued availability and data preservation are not guaranteed. If you want to keep using it, fork this repository and run it on your own Cloudflare account.
 - **Issues and pull requests are not accepted.** They may be closed without a response. No support is provided.
 
 ## Requirements
 
 - Node.js 22 or later
 - A Cloudflare account (D1 / R2 / Pages; Workers AI / Vectorize for vector search)
-- Google and GitHub OAuth apps
+- A Google OAuth app (a GitHub OAuth app is optional; without it, sign-in is Google only)
 - Mailgun, if you want to send invitation emails (if unset, sending is skipped and everything else still works)
 
 ## Setup
@@ -77,7 +77,7 @@ Write the names of the resources you created, and the `database_id` shown when e
 | --- | --- |
 | `JWT_SECRET` | Signing key for session JWTs. A random value of 32 or more characters (e.g. `openssl rand -base64 48`) |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google OAuth. The redirect URI is `<APP_URL>/auth/callback/google` |
-| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | GitHub OAuth. The callback URL is `<APP_URL>/auth/callback/github` |
+| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | Optional. GitHub OAuth; the callback URL is `<APP_URL>/auth/callback/github`. The login screen has no GitHub button, so leaving these unset is fine: the app starts and works with Google sign-in only |
 | `APP_URL` | The app's URL. `http://localhost:3000` for local development |
 | `ENABLE_TEST_ENDPOINTS` | When `true`, enables the test login (`/auth/test-login`), locally only. **Do not set it in production** |
 | `MAILGUN_API_KEY` / `MAILGUN_DOMAIN` | Sending invitation emails. If unset, sending is skipped |

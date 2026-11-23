@@ -6,13 +6,13 @@
 
 ノードを木構造（DAG: 1つのノードが複数の親を持てる）で整理する Web アウトラインエディタです。Cloudflare Pages / Workers / D1 / R2 / Workers AI / Vectorize の上で動きます。
 
-**お試し:** https://zeetaweb.jp （無料のお試し版。Google / GitHub アカウントでログイン）
+**試す:** https://zeetaweb.jp （無料。Google アカウントでログイン）
 
 ![zeetaweb の画面：同じノードがツリーの複数の親の下に現れる（数字のバッジは親の数）。右はノードの編集画面](assets/screenshot.png)
 
 ## 主な機能
 
-- Google / GitHub アカウントでのログイン（OAuth）
+- Google アカウントでのログイン（OAuth）
 - ツリーとノードの作成・編集・並び替え。1つのノードを複数の親に置ける（構造リンク／参照リンク）
 - ノード本文の Markdown 表示、画像の添付（R2）、編集履歴と過去版への復元
 - キーワード検索と、Workers AI + Vectorize によるベクトル検索（本番環境のみ）
@@ -24,14 +24,14 @@
 
 - **Cloudflare 専用です。** データベース（D1）、画像の保存先（R2）、検索（Workers AI / Vectorize）、ビルドとデプロイ（Pages / Wrangler）をすべて Cloudflare の機能で実装しています。ほかの環境（一般的なサーバー、AWS、Vercel など）では、作り直さない限り動きません。
 - **無保証です。** MIT ライセンスのとおり、本ソフトウェアの利用によって生じたデータの破損・消失、サービスの停止などについて、作者は一切の責任を負いません。
-- **作者が運用しているホスト版はお試し用です。** 継続的な利用やデータの保全は保証しません。使い続けたい場合は、このリポジトリを fork して自分の Cloudflare アカウントで動かしてください。
+- **作者が運用しているホスト版は無保証です。** 継続的な利用やデータの保全は保証しません。使い続けたい場合は、このリポジトリを fork して自分の Cloudflare アカウントで動かしてください。
 - **issue・pull request は受け付けていません。** 届いても対応せずに閉じることがあります。サポートも行いません。
 
 ## 必要なもの
 
 - Node.js 22 以降
 - Cloudflare アカウント（D1 / R2 / Pages。ベクトル検索を使うなら Workers AI / Vectorize）
-- Google と GitHub の OAuth アプリ
+- Google の OAuth アプリ（GitHub の OAuth アプリは任意。無ければ Google だけでログインする）
 - 招待メールを送るなら Mailgun（未設定なら送信をスキップするだけで、他の機能は動きます）
 
 ## セットアップ
@@ -77,7 +77,7 @@ npx wrangler vectorize create your-app-dev --dimensions 1024 --metric cosine
 | --- | --- |
 | `JWT_SECRET` | セッション用 JWT の署名鍵。32 文字以上のランダム値（例: `openssl rand -base64 48`） |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google OAuth。リダイレクト URI は `<APP_URL>/auth/callback/google` |
-| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | GitHub OAuth。コールバック URL は `<APP_URL>/auth/callback/github` |
+| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | 任意。GitHub OAuth 用で、コールバック URL は `<APP_URL>/auth/callback/github`。ログイン画面に GitHub のボタンは無いので、未設定でよい（起動もでき、Google だけでログインして使える） |
 | `APP_URL` | アプリの URL。ローカルでは `http://localhost:3000` |
 | `ENABLE_TEST_ENDPOINTS` | `true` のとき、ローカルに限りテスト用ログイン（`/auth/test-login`）を有効にする。**本番では設定しない** |
 | `MAILGUN_API_KEY` / `MAILGUN_DOMAIN` | 招待メールの送信。未設定なら送信をスキップする |

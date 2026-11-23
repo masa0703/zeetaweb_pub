@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <title data-i18n="landing.title">zeeta — an outliner where a note can have more than one parent</title>
+  <meta name="description" content="An outliner where a note can live under more than one parent. Organize the same notes from several angles without copying them.">
+  <meta property="og:title" content="zeeta — an outliner where a note can have more than one parent">
+  <meta property="og:description" content="Organize the same notes from several angles without copying them. Free, open source, runs on Cloudflare.">
+  <!--LANDING_META-->
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon.png">
+  <link rel="preload" as="image" href="/static/landing/screenshot.jpg" fetchpriority="high">
+  <script>(function(){try{var t=localStorage.getItem('zeeta-theme')||'system';if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('theme-dark')}catch(e){}})()</script>
+  <script src="/static/theme.js" defer></script>
+  <link rel="stylesheet" href="/static/landing/landing.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav wrap" aria-label="Main navigation">
+      <a class="brand" href="/" aria-label="zeeta">
+        <img src="/static/favicon.png" width="24" height="24" alt="">
+        <span>zeeta</span>
+      </a>
+      <div class="nav-actions">
+        <button type="button" class="lang-switch" data-lang-switch data-i18n="landing.footer.switchLanguage">日本語</button>
+        <a class="nav-signin" href="/auth/login/google" data-i18n="landing.nav.signIn">Sign in</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero wrap" aria-labelledby="hero-heading">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="landing.hero.eyebrow">A DAG outliner</p>
+        <h1 id="hero-heading" data-i18n="landing.hero.heading">An outliner where a note can live under more than one parent.</h1>
+        <p class="hero-sub" data-i18n="landing.hero.sub">Organize the same notes from several angles — without making copies.</p>
+        <div class="hero-actions">
+          <a id="landing-try-btn" class="btn btn-primary" href="/auth/login/google">
+            <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.35 11.1H12v2.98h5.35c-.23 1.4-1.66 4.1-5.35 4.1-3.22 0-5.85-2.67-5.85-5.95S8.78 6.28 12 6.28c1.83 0 3.06.78 3.76 1.45l2.57-2.47C16.68 3.72 14.55 2.8 12 2.8 6.92 2.8 2.8 6.92 2.8 12s4.12 9.2 9.2 9.2c5.31 0 8.83-3.73 8.83-8.99 0-.6-.07-1.06-.15-1.51z"/></svg>
+            <span data-i18n="landing.hero.try">Try it</span>
+          </a>
+          <a id="landing-github-btn" class="btn btn-ghost" href="https://github.com/masa0703/zeetaweb_pub" rel="noopener">
+            <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5a10.5 10.5 0 0 0-3.32 20.46c.53.1.72-.23.72-.5v-1.8c-2.92.63-3.54-1.25-3.54-1.25-.48-1.22-1.17-1.54-1.17-1.54-.95-.65.08-.64.08-.64 1.05.08 1.6 1.08 1.6 1.08.94 1.6 2.46 1.14 3.06.87.1-.68.37-1.14.66-1.4-2.33-.27-4.78-1.17-4.78-5.18 0-1.15.41-2.08 1.08-2.82-.1-.27-.47-1.34.1-2.79 0 0 .88-.28 2.89 1.08a10 10 0 0 1 5.26 0c2-1.36 2.88-1.08 2.88-1.08.58 1.45.21 2.52.1 2.79.68.74 1.08 1.67 1.08 2.82 0 4.02-2.45 4.9-4.79 5.17.38.33.71.97.71 1.96v2.9c0 .28.19.61.73.5A10.5 10.5 0 0 0 12 1.5z"/></svg>
+            <span data-i18n="landing.hero.source">Source on GitHub</span>
+          </a>
+        </div>
+        <p class="hero-note" data-i18n="landing.hero.note">Free · Sign in with Google</p>
+      </div>
+      <figure class="hero-shot">
+        <div class="shot-frame">
+          <img src="/static/landing/screenshot.jpg" width="1400" height="787" fetchpriority="high"
+            alt="The zeeta editor. The node “Submit claims by photographing” appears both under a meeting and under Requirements; a badge shows it has 2 parents."
+            data-i18n-attr="alt:landing.hero.imageAlt">
+        </div>
+        <figcaption data-i18n="landing.hero.caption">The same node under “Meetings” and “Requirements”. The badge counts its parents.</figcaption>
+      </figure>
+    </section>
+
+    <section class="band problem" aria-labelledby="problem-heading">
+      <div class="wrap">
+        <h2 id="problem-heading" data-i18n="landing.problem.heading">Most tools make you pick one place.</h2>
+        <ul class="problem-list">
+          <li>
+            <h3 data-i18n="landing.problem.treeTitle">A tree wants one folder</h3>
+            <p data-i18n="landing.problem.treeBody">A note that belongs in two places ends up in one of them — or gets copied, and the copies drift apart.</p>
+          </li>
+          <li>
+            <h3 data-i18n="landing.problem.tagTitle">Tags lose the structure</h3>
+            <p data-i18n="landing.problem.tagBody">A note can carry many tags, but a tag is a flat bucket. The order and nesting you built are gone.</p>
+          </li>
+          <li>
+            <h3 data-i18n="landing.problem.linkTitle">Links lose the hierarchy</h3>
+            <p data-i18n="landing.problem.linkBody">Links connect anything to anything, but there is nothing to browse top-down. You get a web, not an outline.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="wrap how" aria-labelledby="how-heading">
+      <h2 id="how-heading" data-i18n="landing.how.heading">zeeta keeps the outline and drops the one-parent rule.</h2>
+      <ol class="how-list">
+        <li>
+          <span class="how-num" aria-hidden="true">1</span>
+          <h3 data-i18n="landing.how.multiTitle">More than one parent</h3>
+          <p data-i18n="landing.how.multiBody">Any node can sit under several parents — a DAG rather than a strict tree. It is still one node: edit it in one place and it changes everywhere.</p>
+        </li>
+        <li>
+          <span class="how-num" aria-hidden="true">2</span>
+          <h3 data-i18n="landing.how.reverseTitle">A reverse tree</h3>
+          <p data-i18n="landing.how.reverseBody">Flip the view to see a node's parents, and their parents. “Where did this come from?” takes one click.</p>
+        </li>
+        <li>
+          <span class="how-num" aria-hidden="true">3</span>
+          <h3 data-i18n="landing.how.regroupTitle">Regroup without losing the original</h3>
+          <p data-i18n="landing.how.regroupBody">Collect nodes under a new viewpoint. The hierarchy they came from stays as it was.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="band example" aria-labelledby="example-heading">
+      <div class="wrap example-grid">
+        <div class="example-copy">
+          <h2 id="example-heading" data-i18n="landing.example.heading">Example: where did this requirement come from?</h2>
+          <ol class="example-steps">
+            <li data-i18n="landing.example.step1">Take meeting notes as usual. Each requirement goes under the meeting where it came up.</li>
+            <li data-i18n="landing.example.step2">Later, add a “Requirements” node and attach the same requirement nodes to it as a second parent.</li>
+            <li data-i18n="landing.example.step3">Months later someone asks why Req 04 exists. Open its reverse tree: it came from the 10/05 kickoff.</li>
+          </ol>
+        </div>
+        <div class="example-trees">
+          <figure class="tree-card">
+            <figcaption><span class="tree-tab is-active" data-i18n="landing.example.normalTree">Normal tree</span></figcaption>
+            <ul class="tree" role="tree" aria-label="Normal tree" data-i18n-attr="aria-label:landing.example.normalTree">
+              <li role="treeitem"><span class="row"><span data-i18n="landing.example.meetings">Meetings</span></span>
+                <ul>
+                  <li role="treeitem"><span class="row"><span data-i18n="landing.example.kickoff">10/05 Kickoff</span></span>
+                    <ul>
+                      <li role="treeitem"><span class="row"><span data-i18n="landing.example.req03">Req 03 — Sign in with Google</span></span></li>
+                      <li role="treeitem"><span class="row is-focus"><span data-i18n="landing.example.req04">Req 04 — Export as CSV</span><span class="badge" aria-label="2 parents" data-i18n-attr="aria-label:landing.example.twoParents">2</span></span></li>
+                    </ul>
+                  </li>
+                  <li role="treeitem"><span class="row"><span data-i18n="landing.example.review">10/12 Review</span></span></li>
+                </ul>
+              </li>
+              <li role="treeitem"><span class="row"><span data-i18n="landing.example.requirements">Requirements</span></span>
+                <ul>
+                  <li role="treeitem"><span class="row"><span data-i18n="landing.example.req03">Req 03 — Sign in with Google</span></span></li>
+                  <li role="treeitem"><span class="row is-focus"><span data-i18n="landing.example.req04">Req 04 — Export as CSV</span><span class="badge" aria-label="2 parents" data-i18n-attr="aria-label:landing.example.twoParents">2</span></span></li>
+                </ul>
+              </li>
+            </ul>
+          </figure>
+          <figure class="tree-card tree-card-reverse">
+            <figcaption><span class="tree-tab is-active is-reverse" data-i18n="landing.example.reverseTree">Reverse tree of Req 04</span></figcaption>
+            <ul class="tree" role="tree" aria-label="Reverse tree of Req 04" data-i18n-attr="aria-label:landing.example.reverseTree">
+              <li role="treeitem"><span class="row is-focus"><span data-i18n="landing.example.req04">Req 04 — Export as CSV</span></span>
+                <ul>
+                  <li role="treeitem"><span class="row is-answer"><span data-i18n="landing.example.kickoff">10/05 Kickoff</span></span>
+                    <ul>
+                      <li role="treeitem"><span class="row"><span data-i18n="landing.example.meetings">Meetings</span></span></li>
+                    </ul>
+                  </li>
+                  <li role="treeitem"><span class="row"><span data-i18n="landing.example.requirements">Requirements</span></span></li>
+                </ul>
+              </li>
+            </ul>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap more" aria-labelledby="more-heading">
+      <h2 id="more-heading" data-i18n="landing.more.heading">What else it does</h2>
+      <dl class="more-list">
+        <div><dt data-i18n="landing.more.shareTitle">Sharing</dt><dd data-i18n="landing.more.shareBody">Invite people to a tree as viewers or editors.</dd></div>
+        <div><dt data-i18n="landing.more.markdownTitle">Markdown</dt><dd data-i18n="landing.more.markdownBody">Node content is Markdown, with tables, code blocks and Mermaid diagrams.</dd></div>
+        <div><dt data-i18n="landing.more.imagesTitle">Images</dt><dd data-i18n="landing.more.imagesBody">Paste or drop images into a node.</dd></div>
+        <div><dt data-i18n="landing.more.historyTitle">History</dt><dd data-i18n="landing.more.historyBody">Every edit is kept. Compare versions and restore an old one.</dd></div>
+        <div><dt data-i18n="landing.more.searchTitle">Search</dt><dd data-i18n="landing.more.searchBody">Search titles and content across a tree.</dd></div>
+        <div><dt data-i18n="landing.more.i18nTitle">English / 日本語</dt><dd data-i18n="landing.more.i18nBody">The interface comes in English and Japanese.</dd></div>
+      </dl>
+      <p class="mcp-line">
+        <span class="mcp-tag">MCP</span>
+        <span data-i18n="landing.more.mcp">AI assistants can read and write your trees too — each tree works as a remote MCP server.</span>
+        <a href="/help?tab=mcp" data-i18n="landing.more.mcpLink">How it works</a>
+      </p>
+    </section>
+
+    <section class="band story" aria-labelledby="story-heading">
+      <div class="wrap story-grid">
+        <div>
+          <h2 id="story-heading" data-i18n="landing.story.heading">Where it came from</h2>
+        </div>
+        <ol class="timeline">
+          <li>
+            <span class="timeline-when" data-i18n="landing.story.desktopWhen">20+ years ago</span>
+            <p data-i18n="landing.story.desktopBody">zeeta started as a free desktop app. Teams used it to keep a whole project — minutes, requirements, screens, database tables, tests — in one shared tree.</p>
+          </li>
+          <li>
+            <span class="timeline-when" data-i18n="landing.story.webWhen">2025</span>
+            <p data-i18n="landing.story.webBody">Rebuilt from scratch as a web app, with multiple trees per person and sharing per tree.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="wrap oss" aria-labelledby="oss-heading">
+      <h2 id="oss-heading" data-i18n="landing.oss.heading">Open source</h2>
+      <ul class="oss-list">
+        <li><strong data-i18n="landing.oss.licenseTitle">MIT license.</strong> <span data-i18n="landing.oss.licenseBody">The code is on GitHub. No warranty.</span></li>
+        <li><strong data-i18n="landing.oss.cloudflareTitle">Cloudflare only.</strong> <span data-i18n="landing.oss.cloudflareBody">Pages, Workers, D1, R2 and Workers AI. It does not run elsewhere without a rewrite.</span></li>
+        <li><strong data-i18n="landing.oss.hostedTitle">The hosted version comes with no guarantees.</strong> <span data-i18n="landing.oss.hostedBody">It may not stay up, and your data is not guaranteed to be kept. To rely on it, fork the repo and run it on your own Cloudflare account.</span></li>
+      </ul>
+      <div class="oss-actions">
+        <a class="btn btn-primary" href="/auth/login/google" data-i18n="landing.hero.try">Try it</a>
+        <a class="btn btn-ghost" href="https://github.com/masa0703/zeetaweb_pub" rel="noopener" data-i18n="landing.hero.source">Source on GitHub</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="wrap footer-nav" aria-label="Footer">
+      <span class="footer-brand">zeeta</span>
+      <a href="/auth/login/google" data-i18n="landing.nav.signIn">Sign in</a>
+      <a href="https://github.com/masa0703/zeetaweb_pub" rel="noopener">GitHub</a>
+      <a href="/terms" data-i18n="landing.footer.terms">Terms</a>
+      <a href="/privacy" data-i18n="landing.footer.privacy">Privacy</a>
+      <button type="button" class="lang-switch" data-lang-switch data-i18n="landing.footer.switchLanguage">日本語</button>
+    </nav>
+  </footer>
+
+  <script>
+    // 言語切替は既存の仕組み（Cookie lang → 再読込）に乗せる。切替先は今の表示言語の反対
+    document.querySelectorAll('[data-lang-switch]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var current = (window.ZeetaI18n && window.ZeetaI18n.locale) || document.documentElement.lang
+        var next = current === 'ja' ? 'en' : 'ja'
+        if (window.ZeetaI18n) window.ZeetaI18n.setLocale(next)
+      })
+    })
+  </script>
+</body>
+</html>
