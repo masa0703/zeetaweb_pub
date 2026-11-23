@@ -417,6 +417,8 @@
     "saveShortcutTitle": "保存 ({modifier}+enter)",
     "copyTitleWithId": "タイトル(id:{id})をクリップボードにいれる",
     "copyShareUrl": "このノードへの共有URLをコピー",
+    "showInTree": "ツリー上に表示",
+    "showInTreeUnavailable": "この表示モードには対象ノードがありません",
     "searchContent": "内容を検索",
     "nodeDetail": "node detail",
     "authorLabel": "作成者:",

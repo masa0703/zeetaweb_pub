@@ -661,9 +661,18 @@ test.describe('MCP over OAuth (ツリー固有エンドポイント)', () => {
       }
     })
     expect(readImageRpc.result.isError).toBeFalsy()
+    // 画像は MCP の画像コンテンツで返る（AI クライアントが画像として見られる）
+    expect(readImageRpc.result.content[0]).toEqual({
+      type: 'image',
+      data: sampleImageBase64,
+      mimeType: 'image/png'
+    })
+    expect(readImageRpc.result.content[1].type).toBe('text')
     expect(readImageRpc.result.structuredContent.filename).toBe('copy-tree-sample.png')
     expect(readImageRpc.result.structuredContent.content_type).toBe('image/png')
-    expect(readImageRpc.result.structuredContent.data_base64).toBe(sampleImageBase64)
+    expect(readImageRpc.result.structuredContent.size_bytes).toBeGreaterThan(0)
+    // 画像が structuredContent と二重に入らない
+    expect(readImageRpc.result.structuredContent.data_base64).toBeUndefined()
 
     const linkRpc = await callMcp(page, issued, {
       jsonrpc: '2.0',

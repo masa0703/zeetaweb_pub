@@ -59,6 +59,8 @@ export type AuditAction =
   | 'mcp.node.edit_content'
   | 'mcp.node.restore_content'
   | 'mcp.node.image_create'
+  | 'mcp.node.image_upload_issue'
+  | 'mcp.node.image_upload'
   | 'mcp.link_node'
   | 'mcp.link_nodes'
   | 'mcp.unlink_node'

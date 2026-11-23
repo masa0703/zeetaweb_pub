@@ -24,7 +24,7 @@ import {
   unlinkNodes,
   updateLinkRelationType,
 } from './tools/relations'
-import { createNodeImage, readNodeImage } from './tools/images'
+import { createNodeImage, createNodeImageUpload, readNodeImage } from './tools/images'
 import { readNodeHistory, restoreNodeVersion } from './tools/history'
 
 /** ツール名 → ハンドラ。キー集合は MCP_TOOL_REGISTRY と完全一致する（下の整合チェックで保証）。 */
@@ -50,6 +50,7 @@ export const MCP_TOOL_HANDLERS: Record<string, McpToolHandler> = {
   edit_node_content: editNodeContent,
   read_node_image: readNodeImage,
   create_node_image: createNodeImage,
+  create_node_image_upload: createNodeImageUpload,
   trash_node: trashNode,
   get_root_node_id: getRootNodeId,
   create_node_tree: createNodeTree,

@@ -109,6 +109,7 @@ import {
   getAccessibleNodeIds,
 } from './utils/node-relations'
 import { storeNodeImage, validateNodeImage, type NodeImageRejection } from './services/node-images'
+import { MCP_IMAGE_UPLOAD_PATH, consumeImageUpload } from './services/mcp-image-uploads'
 import { parseSearchQuery } from './services/search'
 import {
   appendRelation,
@@ -121,6 +122,7 @@ import {
   type NewRelationRejection,
 } from './services/relations'
 import {
+  MAX_NODE_IMAGE_SIZE_BYTES,
   buildNodeImageFileUrl,
   stripNodeImageMarkdownReferences,
   buildStoredImageFileName,
@@ -534,6 +536,7 @@ async function handleMcpRpc(
   executionCtx?: ExecutionCtxLike,
   env?: Pick<Bindings, 'AI' | 'VECTORIZE' | 'NODE_IMAGES'>,
   era: McpProtocolEra = 'legacy',
+  requestOrigin = '',
 ): Promise<Record<string, unknown> | null> {
   const requestIdFallback = crypto.randomUUID()
   const { makeRpcResponse, makeRpcError } = createMcpResponseHelpers(requestIdFallback)
@@ -554,6 +557,22 @@ async function handleMcpRpc(
   const toToolResult = (data: unknown) => ({
     content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
     structuredContent: data,
+  })
+
+  /**
+   * 画像を MCP の画像コンテンツ（type: "image"）で返す。
+   *
+   * data_base64 を JSON 文字列に入れて返すと AI にはテキストとして届き、画像として見られない。
+   * 画像は content[0] に置き、content[1] にメタ情報のテキストを添える
+   * （画像を表示できないクライアントでも何の画像か分かるようにする）。
+   * structuredContent にはメタ情報だけを入れ、画像データは二重に載せない。
+   */
+  const toImageResult = (image: { data: string; mimeType: string }, meta: Record<string, unknown>) => ({
+    content: [
+      { type: 'image', data: image.data, mimeType: image.mimeType },
+      { type: 'text', text: JSON.stringify(meta, null, 2) },
+    ],
+    structuredContent: meta,
   })
 
   const toolError = (message: string) => ({ isError: true, content: [{ type: 'text', text: message }] })
@@ -714,11 +733,13 @@ async function handleMcpRpc(
         treeRow,
         accessibleSet,
         era,
+        requestOrigin,
         executionCtx,
         queueAuditLog,
         makeRpcResponse,
         makeRpcError,
         toToolResult,
+        toImageResult,
         toolError,
         toolErrorWithData,
       })
@@ -845,6 +866,9 @@ import htmlViewerHtml from '../public/html-viewer.html?raw'
 import imageViewerHtml from '../public/image-viewer.html?raw'
 import treeRailHtml from './views/tree-rail.html?raw'
 import treeModalsHtml from './views/tree-modals.html?raw'
+
+// ツリー表示タブ（通常／逆ツリー）用の木アイコン。逆ツリーは CSS で上下反転して使う
+const TREE_TAB_ICON_SVG = '<svg class="tree-view-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 19 18H5z"/><path d="M12 18v3.5"/><path d="M12 17V8"/><path d="M12 15.5 8.6 13M12 15.5l3.4-2.5M12 11.5 9.8 9.8M12 11.5l2.2-1.7"/></svg>'
 
 const requestLocale = (c: Context) => resolveLocaleFromRequest(getCookie(c, 'lang'), c.req.header('accept-language'))
 
@@ -1246,7 +1270,7 @@ async function respondMcpPost(c: any, principal: McpPrincipal, body: any, era: M
   if (Array.isArray(body)) {
     const results: Record<string, unknown>[] = []
     for (const message of body) {
-      const payload = await handleMcpRpc(c.env.DB, principal, message, safeExecutionCtx(c), c.env)
+      const payload = await handleMcpRpc(c.env.DB, principal, message, safeExecutionCtx(c), c.env, 'legacy', new URL(c.req.url).origin)
       if (payload) {
         results.push(payload)
       }
@@ -1256,7 +1280,7 @@ async function respondMcpPost(c: any, principal: McpPrincipal, body: any, era: M
     })
   }
 
-  const rawResponsePayload = await handleMcpRpc(c.env.DB, principal, body, safeExecutionCtx(c), c.env, era)
+  const rawResponsePayload = await handleMcpRpc(c.env.DB, principal, body, safeExecutionCtx(c), c.env, era, new URL(c.req.url).origin)
   const responsePayload = finalizeMcpRpcResponse(rawResponsePayload, era, String(body?.method || ''))
   if (!responsePayload) {
     return c.body(null, 202, {
@@ -2343,6 +2367,7 @@ app.delete('/api/test/clear', async (c) => {
     await c.env.DB.prepare('DELETE FROM invitations').run()
     await c.env.DB.prepare('DELETE FROM notifications').run()
     // MCP OAuth（trees/users より先に消す）
+    await c.env.DB.prepare('DELETE FROM mcp_image_uploads').run()
     await c.env.DB.prepare('DELETE FROM mcp_oauth_tokens').run()
     await c.env.DB.prepare('DELETE FROM mcp_oauth_authorization_codes').run()
     await c.env.DB.prepare('DELETE FROM mcp_oauth_authorization_requests').run()
@@ -3375,6 +3400,100 @@ app.post('/api/trees/:tree_id/nodes/:id/images', authMiddleware, async (c) => {
     })
   } catch (error) {
     console.error('Failed to upload node image:', error)
+    return c.json({ success: false, error: 'Internal server error' }, 500)
+  }
+})
+
+/**
+ * MCP create_node_image_upload で発行した合鍵による画像アップロード。
+ *
+ * 画像のバイトを AI に書き写させないための経路。合鍵は URL ではなく Authorization ヘッダーで受け取る
+ * （URL に入れるとリクエストログに残るため）。パスを /api/mcp/ 配下にしているのは、staging の
+ * Cloudflare Access が /api/mcp/* だけを Bypass にしており、AI の curl が通るようにするため。
+ */
+app.put(MCP_IMAGE_UPLOAD_PATH, async (c) => {
+  const invalidToken = () => c.json({ success: false, error: 'Invalid or expired upload token' }, 401)
+  const authHeader = c.req.header('authorization') || ''
+  const bearerMatch = authHeader.match(/^Bearer\s+(\S+)$/i)
+  if (!bearerMatch) {
+    return invalidToken()
+  }
+
+  // 本体を読む前に、申告された長さで弾く（合鍵は消費しない）。
+  // Content-Length が無い送信（chunked）は上限を確かめられずメモリに全部読むことになるので拒否する。
+  // curl --data-binary @file は必ず Content-Length を付ける
+  if (!c.req.header('content-length')) {
+    return c.json({ success: false, error: 'Content-Length is required' }, 411)
+  }
+  if (requestBodyExceedsLimit(c.req.header('content-length'), MAX_NODE_IMAGE_SIZE_BYTES)) {
+    return c.json({ success: false, error: REST_IMAGE_REJECTION_MESSAGES.too_large }, 413)
+  }
+
+  try {
+    const upload = await consumeImageUpload(c.env.DB, bearerMatch[1])
+    if (!upload) {
+      return invalidToken()
+    }
+
+    const canEdit = await canEditTree(c.env.DB, upload.tree_id, upload.user_id)
+    if (!canEdit) {
+      return c.json({ success: false, error: 'You do not have permission to edit this tree' }, 403)
+    }
+
+    const nodeRow = await c.env.DB.prepare('SELECT id FROM nodes WHERE id = ? AND tree_id = ?')
+      .bind(upload.node_id, upload.tree_id)
+      .first<{ id: number }>()
+    if (!nodeRow) {
+      return c.json({ success: false, error: 'Node not found' }, 404)
+    }
+
+    const bytes = new Uint8Array(await c.req.arrayBuffer())
+    if (bytes.byteLength !== upload.size_bytes) {
+      return c.json({
+        success: false,
+        error: `Uploaded size (${bytes.byteLength} bytes) does not match size_bytes (${upload.size_bytes} bytes)`,
+      }, 400)
+    }
+
+    const validation = validateNodeImage(bytes.byteLength, upload.content_type, upload.filename, bytes)
+    if (!validation.ok) {
+      return c.json({ success: false, error: REST_IMAGE_REJECTION_MESSAGES[validation.reason] }, 400)
+    }
+
+    const inserted = await storeNodeImage(c.env.DB, c.env.NODE_IMAGES, {
+      treeId: upload.tree_id,
+      nodeId: upload.node_id,
+      fileNameRaw: upload.filename,
+      mimeType: validation.mimeType,
+      fileExt: validation.fileExt,
+      bytes,
+      actorUserId: upload.user_id,
+    })
+    if (!inserted) {
+      return c.json({ success: false, error: 'Failed to save image metadata' }, 500)
+    }
+
+    const url = buildNodeImageFileUrl(upload.tree_id, upload.node_public_id, inserted.id)
+    logAuditFromContext(c, {
+      userId: upload.user_id,
+      action: 'mcp.node.image_upload',
+      targetType: 'node',
+      targetId: upload.node_id,
+      treeId: upload.tree_id,
+      source: 'mcp',
+    })
+    return c.json({
+      success: true,
+      data: {
+        image_id: inserted.id,
+        url,
+        markdown: `![${inserted.file_name}](${url})`,
+        file_name: inserted.file_name,
+        size_bytes: inserted.file_size,
+      },
+    })
+  } catch (error) {
+    console.error('Failed to upload node image via MCP upload token:', error)
     return c.json({ success: false, error: 'Internal server error' }, 500)
   }
 })
@@ -6434,6 +6553,21 @@ const getEditorHTML = () => `
             /* ボタンは inline-flex なので、これが無いと親が縮んでも幅を保って右へはみ出す */
             max-width: 100%;
           }
+          /* 親ノードのドロップダウンと子の数「(N)」（直下の子の数）を1行に並べる。
+             幅が足りないときは、ドロップダウンのラベルが縮み、子の数は縮めず折り返さない */
+          #editor-panel .parents-chip-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+          }
+          #editor-panel .parents-chip-row > .parents-chip-toggle {
+            flex: 0 1 auto;
+          }
+          #editor-panel .node-children-count {
+            flex: 0 0 auto;
+            white-space: nowrap;
+          }
           /* 下端スペーサー。space-y-4 のマージンを打ち消しておかないと、
              最大スクロール時にスペーサーが 0 にクランプされて末尾にデッドゾーンが出る */
           #editor-panel #editor-scroll-spacer {
@@ -6594,6 +6728,22 @@ const getEditorHTML = () => `
           /* リサイズハンドル: ホバー時にドラッグカーソルを表示 */
           #resize-handle {
             cursor: col-resize;
+            position: relative;
+            z-index: 2;
+            flex-shrink: 0;
+            touch-action: none;
+            user-select: none;
+          }
+          /* ダークテーマの汎用背景色より優先し、操作中を示す */
+          #resize-handle:hover,
+          #resize-handle.dragging {
+            background-color: #3b82f6;
+          }
+          /* 見た目の4pxは維持し、指でつかめる範囲だけ広げる */
+          #resize-handle::before {
+            content: '';
+            position: absolute;
+            inset: 0 -10px;
           }
           /* ByteMD コンテナサイズ */
           #node-content-editor {
@@ -6754,6 +6904,17 @@ const getEditorHTML = () => `
             color: #6b7280;
             border-radius: 8px;
             padding: 7px 12px;
+          }
+          .tree-view-tab-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 0.25rem;
+            vertical-align: -3px;
+            flex: none;
+          }
+          .tree-view-tab-icon-flip {
+            transform: scaleY(-1);
           }
           .tree-view-tab.active {
             color: #111827;
@@ -7168,10 +7329,10 @@ const getEditorHTML = () => `
                     <div class="tree-pane-toolbar-inner">
                         <div class="tree-view-tabs">
                             <button class="tree-view-tab active text-sm font-medium" data-view="normal" id="normal-view-tab">
-                                <i class="fas fa-stream mr-1"></i><span data-i18n="editor.normalView">通常</span> <i class="fas fa-caret-down ml-1 text-xs"></i>
+                                ${TREE_TAB_ICON_SVG}<span data-i18n="editor.normalView">通常</span> <i class="fas fa-caret-down ml-1 text-xs"></i>
                             </button>
                             <button class="tree-view-tab text-sm font-medium" data-view="reverse">
-                                <i class="fas fa-level-up-alt mr-1"></i><span data-i18n="editor.reverseTree">逆ツリー</span>
+                                ${TREE_TAB_ICON_SVG.replace('class="tree-view-tab-icon"', 'class="tree-view-tab-icon tree-view-tab-icon-flip"')}<span data-i18n="editor.reverseTree">逆ツリー</span>
                             </button>
                             <button class="tree-view-tab tree-view-tab-danger text-sm font-medium" data-view="trash" title="ゴミ箱" aria-label="ゴミ箱" data-i18n-attr="title:editor.trash;aria-label:editor.trash">
                                 <i class="fas fa-trash"></i>

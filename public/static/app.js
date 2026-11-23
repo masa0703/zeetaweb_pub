@@ -316,6 +316,23 @@ function rebuildRelationIndexes() {
       relationParentsByChild.set(childId, parents)
     }
   })
+  updateEditorChildrenCount()
+}
+
+// 右ペインの「(N)」（直下の子の数）。ツリー表示でそのノードの下に並ぶ件数と同じ
+function countDirectChildren(nodeId) {
+  return (relationChildrenByParent.get(nodeId) || []).length
+}
+
+function formatChildrenCount(nodeId) {
+  return `(${countDirectChildren(nodeId)})`
+}
+
+// 親子関係が変わったとき、表示中のノードの子の数を選び直さずに更新する
+function updateEditorChildrenCount() {
+  const el = document.getElementById('node-children-count')
+  if (!el || !currentEditorNodeId) return
+  el.textContent = formatChildrenCount(currentEditorNodeId)
 }
 
 function setRelations(nextRelations) {
@@ -6276,6 +6293,53 @@ async function openNodeAlongPreferredPath(nodeId, options = {}) {
   return selectNode(nodeId, nodePath, selectOptions)
 }
 
+// 右ペインはそのままに、表示ノードの経路だけ展開する。
+function revealDisplayedNodeInTree(nodeId, originalPath) {
+  const tree = treeViewMode === 'reverse' ? buildReverseTree()
+    : (treeViewMode === 'trash' ? buildTrashTree() : buildTree())
+  const validPath = (path) => {
+    if (!path || path.split('-').pop() !== String(nodeId)) return false
+    let children = tree
+    const visited = new Set()
+    for (const id of path.split('-')) {
+      if (visited.has(id)) return false
+      visited.add(id)
+      const node = children.find(item => String(item.id) === id)
+      if (!node) return false
+      children = node.children || []
+    }
+    return true
+  }
+  const visited = new Set()
+  const findPath = (children, prefix = []) => {
+    for (const node of children) {
+      if (visited.has(node.id)) continue
+      visited.add(node.id)
+      const path = [...prefix, String(node.id)]
+      if (String(node.id) === String(nodeId)) return path.join('-')
+      const found = findPath(node.children || [], path)
+      if (found) return found
+    }
+    return null
+  }
+  const candidates = [selectedNodePath, originalPath]
+  if (treeViewMode === 'normal') candidates.push(buildPreferredTreePath(nodeId))
+  const path = candidates.find(validPath) || findPath(tree)
+  if (!path) {
+    showToast(t('editor.showInTreeUnavailable'), 'info')
+    return
+  }
+  const ids = path.split('-')
+  for (let i = 1; i < ids.length; i += 1) {
+    expandedNodePaths.add(ids.slice(0, i).join('-'))
+  }
+  if (treeViewMode !== 'reverse') selectedNodeId = nodeId
+  selectedNodePath = path
+  // 逆ツリーの通常の選択復元はエディタを読み直すため、この操作では抑制する。
+  renderTree({ restoreEditor: false })
+  selectedNodeElement?.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' })
+}
+
 // ===============================
 // 通常タブメニュー（root操作 + rootソート）
 // ===============================
@@ -6690,7 +6754,7 @@ function materializeExpandedPathsFromNodeIds(tree) {
   expandedNodes.clear()
 }
 
-function renderTree() {
+function renderTree({ restoreEditor = true } = {}) {
   const treeContainer = document.getElementById('tree-container')
   const tree = treeViewMode === 'reverse'
     ? buildReverseTree()
@@ -6739,7 +6803,7 @@ function renderTree() {
   attachTreeEventListeners()
 
   // 選択状態の復元
-  restoreSelection()
+  restoreSelection({ restoreEditor })
 
 }
 
@@ -7093,7 +7157,7 @@ function isTreeItemVisible(el) {
 }
 
 // 選択状態を復元する関数
-function restoreSelection() {
+function restoreSelection({ restoreEditor = true } = {}) {
   if (!selectedNodePath && !selectedNodeId) return
 
   // 逆ツリーモードでは、ルートノード（selectedNodeId）を絶対に変更せず維持し、
@@ -7111,7 +7175,7 @@ function restoreSelection() {
         selectedNodeId = rootNodeId // 念のため再設定
         rootItem.classList.add('active')
 
-        loadEditorForNode(rootNodeId)
+        if (restoreEditor) loadEditorForNode(rootNodeId)
         return
       }
     }
@@ -7126,7 +7190,7 @@ function restoreSelection() {
 
         // エディタに表示（パスの最後のノードIDを使用）
         const nodeIdFromPath = selectedNodePath.split('-').pop()
-        loadEditorForNode(nodeIdFromPath)
+        if (restoreEditor) loadEditorForNode(nodeIdFromPath)
         return
       }
     }
@@ -7140,7 +7204,7 @@ function restoreSelection() {
         selectedNodeId = rootNodeId // ルートノードのIDを必ず維持
         rootItem.classList.add('active')
 
-        loadEditorForNode(rootNodeId)
+        if (restoreEditor) loadEditorForNode(rootNodeId)
       }
     }
     return
@@ -7797,6 +7861,7 @@ function renderEditor(node = null, parents = []) {
 
   const parentsHtml = parentsWithMeta.length > 0 ? `
     <div class="parents-chip-wrap" style="position: relative; min-width: 0; margin-top: 8px;">
+      <div class="parents-chip-row">
       <button type="button"
               class="parents-chip-toggle bg-white border border-gray-300 text-gray-600"
               onclick="toggleParentsAccordion('${node.id}')"
@@ -7816,6 +7881,8 @@ function renderEditor(node = null, parents = []) {
         <span class="text-gray-500" style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace;">${parentsWithMeta.length}</span>
         <i id="parents-accordion-icon-${node.id}" class="fas fa-chevron-down text-xs transition-transform text-gray-400"></i>
       </button>
+      <span id="node-children-count" class="node-children-count text-xs text-gray-500 font-mono">${formatChildrenCount(node.id)}</span>
+      </div>
       <div id="parents-accordion-content-${node.id}" class="space-y-1" style="display: none; margin-top: 8px;">
         ${parentsWithMeta.map(p => `
           <div class="flex items-center justify-between text-sm bg-white px-2 py-1 rounded">
@@ -7892,10 +7959,13 @@ function renderEditor(node = null, parents = []) {
 
         <div>
           <div class="flex items-center justify-between mb-2 gap-3">
-            <div class="flex items-center gap-2 flex-1 min-w-0">
+            <div class="flex items-center flex-1 min-w-0">
               <label class="block text-xs font-medium text-gray-500 tracking-widest uppercase">
                 TITLE
               </label>
+              <button id="show-in-tree-btn" type="button"
+                      class="w-7 h-7 flex-shrink-0 text-sm text-gray-600 rounded hover:bg-gray-50 flex items-center justify-center"
+                      title="${t('editor.showInTree')}" aria-label="${t('editor.showInTree')}">←</button>
             </div>
             <div class="flex items-center gap-2 ml-auto">
               <button
@@ -8021,6 +8091,10 @@ function renderEditor(node = null, parents = []) {
   `
 
   // イベントリスナーを設定
+  const displayedNodePath = selectedNodePath
+  document.getElementById('show-in-tree-btn').addEventListener('click', () => {
+    revealDisplayedNodeInTree(node.id, displayedNodePath)
+  })
   document.getElementById('save-node-btn').addEventListener('click', async () => {
     const saved = await saveCurrentNode()
     if (saved && selectedNodeId) {
@@ -8875,6 +8949,9 @@ function setupPaneResize() {
   let startWidth = 0
   let latestClientX = 0
   let resizeRafId = null
+  let activePointerId = null
+  let previousCursor = ''
+  let previousUserSelect = ''
 
   const applyPaneWidth = () => {
     resizeRafId = null
@@ -8903,40 +8980,56 @@ function setupPaneResize() {
     })
   }
 
-  resizeHandle.addEventListener('mousedown', (e) => {
+  resizeHandle.addEventListener('pointerdown', (e) => {
+    if (activePointerId !== null || !e.isPrimary || e.button !== 0) return
+    resizeHandle.setPointerCapture(e.pointerId)
+    activePointerId = e.pointerId
+    resizeHandle.classList.add('dragging')
     isResizing = true
     paneResizeInProgress = true
     startX = e.clientX
     latestClientX = e.clientX
     startWidth = treePane.offsetWidth
 
+    previousCursor = document.body.style.cursor
+    previousUserSelect = document.body.style.userSelect
     document.body.style.cursor = 'col-resize'
     document.body.style.userSelect = 'none'
 
     e.preventDefault()
   })
 
-  document.addEventListener('mousemove', (e) => {
-    if (!isResizing) return
+  resizeHandle.addEventListener('pointermove', (e) => {
+    if (e.pointerId !== activePointerId) return
     latestClientX = e.clientX
     if (resizeRafId !== null) return
     resizeRafId = window.requestAnimationFrame(applyPaneWidth)
   })
 
-  document.addEventListener('mouseup', () => {
+  const endResize = (e) => {
+    if (e.pointerId !== activePointerId) return
     if (isResizing) {
-      isResizing = false
-      paneResizeInProgress = false
+      if (e.type === 'pointerup') latestClientX = e.clientX
       if (resizeRafId !== null) {
         window.cancelAnimationFrame(resizeRafId)
         resizeRafId = null
       }
       applyPaneWidth()
-      document.body.style.cursor = ''
-      document.body.style.userSelect = ''
+      isResizing = false
+      paneResizeInProgress = false
+      activePointerId = null
+      resizeHandle.classList.remove('dragging')
+      if (resizeHandle.hasPointerCapture(e.pointerId)) {
+        resizeHandle.releasePointerCapture(e.pointerId)
+      }
+      document.body.style.cursor = previousCursor
+      document.body.style.userSelect = previousUserSelect
       flushEditorLayoutAfterPaneResize()
     }
-  })
+  }
+  resizeHandle.addEventListener('pointerup', endResize)
+  resizeHandle.addEventListener('pointercancel', endResize)
+  resizeHandle.addEventListener('lostpointercapture', endResize)
 }
 
 // ===============================

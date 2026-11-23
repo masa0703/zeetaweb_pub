@@ -348,7 +348,7 @@ export const MCP_TOOL_REGISTRY: McpToolDefinition[] = [
   {
     name: 'read_node_image',
     accessLevel: 'read',
-    description: 'Read one node image as base64.\n- node_id and image_id are required\n- Returns filename, content_type, and data_base64\n- node_id must be a 6-character base58 public node ID',
+    description: 'Read one node image.\n- node_id and image_id are required\n- Returns the image as an MCP image content block (type "image", data, mimeType) plus a text block with filename, content_type, and size_bytes\n- node_id must be a 6-character base58 public node ID',
     inputSchema: {
       type: 'object',
       properties: {
@@ -361,7 +361,7 @@ export const MCP_TOOL_REGISTRY: McpToolDefinition[] = [
   {
     name: 'create_node_image',
     accessLevel: 'write',
-    description: 'Create one node image from base64 data.\n- node_id, filename, content_type, and data_base64 are required\n- Returns image_id and URL for Markdown replacement\n- node_id must be a 6-character base58 public node ID',
+    description: 'Create one node image from base64 data.\n- node_id, filename, content_type, and data_base64 are required\n- Returns image_id and URL for Markdown replacement\n- For a local image file, prefer create_node_image_upload when you can run shell commands: writing long base64 by hand is error-prone\n- node_id must be a 6-character base58 public node ID',
     inputSchema: {
       type: 'object',
       properties: {
@@ -371,6 +371,21 @@ export const MCP_TOOL_REGISTRY: McpToolDefinition[] = [
         data_base64: { type: 'string' },
       },
       required: ['node_id', 'filename', 'content_type', 'data_base64'],
+    },
+  },
+  {
+    name: 'create_node_image_upload',
+    accessLevel: 'write',
+    description: 'Issue a one-time upload for a node image, so the image bytes go from a local file to the server without passing through the model.\n- Use this instead of create_node_image when you can run shell commands (e.g. Bash) and the image is a local file; it avoids writing base64 by hand and supports images up to 5MB\n- node_id, filename, content_type, and size_bytes (exact file size in bytes) are required\n- Returns upload_url, upload_token, expires_at (10 minutes), and curl_command\n- Run curl_command after replacing <FILE_PATH> with the local file path. The response JSON has data.image_id, data.url, data.markdown, data.file_name, and data.size_bytes\n- The token works only once, even when the upload fails; issue a new one to retry\n- node_id must be a 6-character base58 public node ID',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        node_id: { type: 'string', description: '6-character base58 public node ID' },
+        filename: { type: 'string' },
+        content_type: { type: 'string', description: 'image/png, image/jpeg, image/gif, or image/webp' },
+        size_bytes: { type: 'integer', description: 'Exact size of the file in bytes' },
+      },
+      required: ['node_id', 'filename', 'content_type', 'size_bytes'],
     },
   },
   {

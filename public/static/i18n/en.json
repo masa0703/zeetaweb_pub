@@ -417,6 +417,8 @@
     "saveShortcutTitle": "Save ({modifier}+enter)",
     "copyTitleWithId": "Copy title (id:{id}) to clipboard",
     "copyShareUrl": "Copy the share URL for this node",
+    "showInTree": "Show in tree",
+    "showInTreeUnavailable": "This node is not in the current tree view",
     "searchContent": "Search content",
     "nodeDetail": "node detail",
     "authorLabel": "Author:",

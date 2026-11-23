@@ -42,11 +42,17 @@ export type McpToolContext = {
   treeRow: McpTreeRow
   accessibleSet: Set<number>
   era: McpProtocolEra
+  /** MCP リクエストのオリジン（例: https://zeetaweb.jp）。アップロード先 URL の組み立てに使う */
+  requestOrigin: string
   executionCtx: ExecutionCtxLike | undefined
   queueAuditLog: (params: AuditLogParams) => void
   makeRpcResponse: (payload: Record<string, unknown>) => Record<string, unknown>
   makeRpcError: (id: unknown, code: number, message: string, data?: unknown) => Record<string, unknown>
   toToolResult: (data: unknown) => { content: Array<{ type: string; text: string }>; structuredContent: unknown }
+  toImageResult: (
+    image: { data: string; mimeType: string },
+    meta: Record<string, unknown>,
+  ) => { content: Array<Record<string, string>>; structuredContent: unknown }
   toolError: (message: string) => { isError: boolean; content: Array<{ type: string; text: string }> }
   toolErrorWithData: (data: Record<string, unknown>) => { isError: boolean; content: Array<{ type: string; text: string }>; structuredContent: unknown }
 }
