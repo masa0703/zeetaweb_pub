@@ -85,6 +85,19 @@ test.describe('Landing page (signed out)', () => {
   })
 })
 
+test.describe('Landing page hero screenshot', () => {
+  test('TC-LANDING-012: the hero screenshot is not tilted at PC or phone width', async ({ page, context }) => {
+    await context.clearCookies()
+    for (const width of [1440, 375]) {
+      await page.setViewportSize({ width, height: 900 })
+      await page.goto('/')
+      const transforms = await page.evaluate(() => ['.hero-shot', '.shot-frame', '.shot-frame img']
+        .map(selector => getComputedStyle(document.querySelector(selector)).transform))
+      expect(transforms, `width ${width}`).toEqual(['none', 'none', 'none'])
+    }
+  })
+})
+
 test.describe('Landing page indexing', () => {
   test('TC-LANDING-009: only the signed-out landing page is indexable, with canonical and OGP', async ({ page, context }) => {
     await context.clearCookies()

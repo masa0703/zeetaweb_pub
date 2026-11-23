@@ -246,8 +246,8 @@ html.theme-dark .btn-primary:hover { color: #0f172a; }
 .shot-frame img { border-radius: calc(var(--radius-l) - 6px); }
 
 @media (min-width: 1024px) {
-  /* 画面右へはみ出させて奥行きを出す（横スクロールは body で抑止） */
-  .shot-frame { width: calc(100% + 80px); transform: rotate(-0.6deg); }
+  /* 画面右へはみ出させる（傾けない。横スクロールは body で抑止） */
+  .shot-frame { width: calc(100% + 80px); }
 }
 
 body { overflow-x: hidden; }
@@ -587,7 +587,6 @@ body { overflow-x: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; }
-  .shot-frame { transform: none !important; }
 }
 
 /* 見出しの折り返し: 英語は行の長さをそろえ、日本語は文節で折る（「ー。」だけが次行に落ちるのを防ぐ） */
