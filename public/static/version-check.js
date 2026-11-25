@@ -39,6 +39,7 @@
   const DIALOG_SELECTOR = '[data-version-reload-dialog]'
   const BADGE_SLOT_ID = 'update-badge-slot'
   const BADGE_ID = 'update-badge'
+  const CHANGELOG_URL = '/help?tab=changelog'
 
   const config = window.__VERSION_CHECK_CONFIG__ || {}
   const throttleMs = typeof config.throttleMs === 'number' ? config.throttleMs : CHECK_THROTTLE_MS
@@ -51,8 +52,8 @@
   let updateAvailable = false
 
   const MESSAGES = {
-    ja: { text: '新しいバージョンがリリースされています。リロードしますか？', reload: 'リロードする', later: '後で', badge: 'new ver.', badgeLabel: '新しいバージョンがあります' },
-    en: { text: 'A new version is available. Reload now?', reload: 'Reload now', later: 'Later', badge: 'new ver.', badgeLabel: 'A new version is available' }
+    ja: { text: '新しいバージョンがリリースされています。リロードしますか？', reload: 'リロードする', later: '後で', badge: 'new ver.', badgeLabel: '新しいバージョンがあります', changelog: '変更履歴を見る' },
+    en: { text: 'A new version is available. Reload now?', reload: 'Reload now', later: 'Later', badge: 'new ver.', badgeLabel: 'A new version is available', changelog: 'See what\'s new' }
   }
   const message = () => MESSAGES[document.documentElement.lang] || MESSAGES.en
 
@@ -98,7 +99,15 @@
 
     const text = document.createElement('p')
     text.textContent = t.text
-    text.style.cssText = 'margin:0 0 16px'
+    text.style.cssText = 'margin:0 0 8px'
+
+    // 変更履歴は新しいタブで開く。ダイアログと、リロード前の画面（未保存の下書きを含む）を残すため
+    const changelogLink = document.createElement('a')
+    changelogLink.href = CHANGELOG_URL
+    changelogLink.target = '_blank'
+    changelogLink.rel = 'noopener'
+    changelogLink.textContent = t.changelog
+    changelogLink.style.cssText = 'display:inline-block;margin:0 0 16px;color:#1d4ed8;text-decoration:underline'
 
     const buttonRow = document.createElement('div')
     buttonRow.style.cssText = 'display:flex;gap:8px;justify-content:flex-end'
@@ -129,7 +138,7 @@
     laterButton.addEventListener('click', close)
 
     buttonRow.append(laterButton, reloadButton)
-    card.append(text, buttonRow)
+    card.append(text, changelogLink, buttonRow)
     overlay.append(card)
     document.body.append(overlay)
     document.addEventListener('keydown', onKeydown)

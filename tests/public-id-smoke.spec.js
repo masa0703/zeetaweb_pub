@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test'
+import { createPublicIdTree } from './helpers/public-id-tree.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
 // ノード公開ID(base58 6文字)導入のフロントエンド スモークテスト。
@@ -16,13 +17,7 @@ async function loginAndOpenTree(page) {
   // test-login 後はマイツリーの表示を待つ
   await page.goto('/auth/test-login?user_id=1')
   await waitForAppReady(page)
-  // アクセス可能なツリーIDをAPIから取得（環境非依存）
-  const treeId = await page.evaluate(async () => {
-    const r = await fetch('/api/trees')
-    const j = await r.json()
-    const arr = j.data || j
-    return (arr[0] || {}).id
-  })
+  const { id: treeId } = await createPublicIdTree(page)
   expect(treeId).toBeTruthy()
   await page.goto(`/index.html?tree=${treeId}`)
   await page.waitForSelector('.tree-item[data-node-id]', { timeout: 15000 })

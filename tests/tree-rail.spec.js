@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady, testLogin, openTreeEditor, openTreeDrawer, drawerRow, chooseTreeMenu, waitForTreeTitle } from './helpers/app.js'
 
 // マイページ廃止: ツリーの一覧・切替・管理を編集画面の左バーへ集約した仕様の検証。
@@ -265,7 +265,9 @@ test.describe('左バー（ツリー切替・管理）', () => {
     // ユーザーアイコン・表示名・メールアドレスはヘッダーに出さない（2026-10-30 ユーザー判断）
     await expect(header.locator('.header-user, #user-avatar, #user-name, #user-email')).toHaveCount(0)
     await header.locator('#logout-btn').click()
-    await page.waitForURL(/\/login(?:\.html)?/)
+    await expect(page).toHaveURL(new URL('/', page.url()).href)
+    await expect(page.locator('#landing-try-btn')).toBeVisible()
+    expect((await page.request.get('/auth/me')).status()).toBe(401)
   })
 
   test('TC-RAIL-013: 一覧には出るがツリー詳細を開けないときも、エラーを出して別のツリーへ切り替える', async ({ page }) => {

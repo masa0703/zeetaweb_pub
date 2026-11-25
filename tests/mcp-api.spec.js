@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 import {
   BASE_URL,
@@ -2062,9 +2062,9 @@ test.describe('MCP over OAuth (ツリー固有エンドポイント)', () => {
     expect(staleRestore.result.structuredContent.server_data.content).toBe('V1\nV2')
 
     for (let i = 0; i < 101; i += 1) {
-      const current = await call(`purge-read-${i}`, 'read_node', { node_id: String(node.id) })
-      await call(`purge-${i}`, 'append_node_content', { node_id: String(node.id), content: `p${i}` })
-      expect(current.result.structuredContent.version).toBeGreaterThan(0)
+      const appended = await call(`purge-${i}`, 'append_node_content', { node_id: String(node.id), content: `p${i}` })
+      expect(appended.result.isError).toBeFalsy()
+      expect(appended.result.structuredContent.version).toBeGreaterThan(0)
     }
     const purgedHistory = await call('purged-history', 'read_node_history', { node_id: String(node.id) })
     expect(purgedHistory.result.structuredContent.items.length).toBe(20)

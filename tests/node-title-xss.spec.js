@@ -1,7 +1,8 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady, testLogin } from './helpers/app.js'
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 const PAYLOAD = 'x" autofocus onfocus="window.__xss=document.domain" y="'
 const PNG = Buffer.from('89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d49444154789c6360000000020001e221bc330000000049454e44ae426082', 'hex')
 

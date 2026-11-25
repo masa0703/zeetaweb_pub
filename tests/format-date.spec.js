@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
 /**
@@ -9,7 +10,7 @@ import { waitForAppReady } from './helpers/app.js'
 test.describe('formatDate タイムゾーン変換', () => {
   test('SQLite形式のUTC時刻をローカル時刻に変換', async ({ page }) => {
     // app.jsを読み込んでformatDate関数をテスト
-    await page.goto('http://localhost:3000/index.html?tree=1')
+    await page.goto(`${TEST_BASE_URL}/index.html?tree=1`)
 
     // formatDate関数をブラウザ内で実行
     const result = await page.evaluate(() => {
@@ -51,7 +52,7 @@ test.describe('formatDate タイムゾーン変換', () => {
   })
 
   test('ISO形式（Tあり、Zなし）のUTC時刻をローカル時刻に変換', async ({ page }) => {
-    await page.goto('http://localhost:3000/index.html?tree=1')
+    await page.goto(`${TEST_BASE_URL}/index.html?tree=1`)
 
     const result = await page.evaluate(() => {
       const utcDateString = '2026-02-07T01:48:00'
@@ -82,7 +83,7 @@ test.describe('formatDate タイムゾーン変換', () => {
   })
 
   test('既にZが付いたISO形式は正しく変換', async ({ page }) => {
-    await page.goto('http://localhost:3000/index.html?tree=1')
+    await page.goto(`${TEST_BASE_URL}/index.html?tree=1`)
 
     const result = await page.evaluate(() => {
       const utcDateString = '2026-02-07T01:48:00Z'
@@ -114,7 +115,7 @@ test.describe('formatDate タイムゾーン変換', () => {
 
   test('実際のノード保存後の更新日がローカル時刻で表示される', async ({ page }) => {
     // テストユーザーでログイン
-    await page.goto('http://localhost:3000/auth/test-login?user_id=1')
+    await page.goto(`${TEST_BASE_URL}/auth/test-login?user_id=1`)
     await waitForAppReady(page)
 
     // ツリーがなければ作成
@@ -140,7 +141,7 @@ test.describe('formatDate タイムゾーン変換', () => {
     }
 
     // エディタに移動
-    await page.goto(`http://localhost:3000/index.html?tree=${treeId}`)
+    await page.goto(`${TEST_BASE_URL}/index.html?tree=${treeId}`)
     await page.waitForLoadState('networkidle')
 
     // 実際に表示されるノードを作成する。APIで作成したノードは、

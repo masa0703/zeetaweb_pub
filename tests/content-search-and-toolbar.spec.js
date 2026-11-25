@@ -1,8 +1,9 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 import { issueMcpAuth, callMcpWithBearer } from './helpers/mcp-oauth.js'
 
-const BASE_URL = process.env.ZEETA_TEST_BASE_URL || 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 
 async function testLogin(page, userId = 1) {
   await page.goto(`${BASE_URL}/auth/test-login?user_id=${userId}`, { waitUntil: 'domcontentloaded' })

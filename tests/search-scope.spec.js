@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
 // 「配下のノードを検索」(parent_node_id 指定の検索) が、配下外・他ツリーのノードを
@@ -10,7 +11,7 @@ import { waitForAppReady } from './helpers/app.js'
 // 空を返すこと）。ベクトル検索自体が配下外を返さないことは、本番相当の環境（preview
 // の zeeta-dev index など）で手動確認する必要がある。
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 
 async function testLogin(page, userId) {
   await page.goto(`${BASE_URL}/auth/test-login?user_id=${userId}`, { waitUntil: 'domcontentloaded' })

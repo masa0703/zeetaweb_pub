@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test'
+import { createPublicIdTree } from './helpers/public-id-tree.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
 // APIガードテスト: レスポンスにノードの整数IDが露出せず、公開IDのみであること。
@@ -9,6 +10,7 @@ const PUBLIC_ID_RE = /^[1-9A-HJ-NP-Za-km-z]{6}$/
 async function login(page) {
   await page.goto('/auth/test-login?user_id=1')
   await waitForAppReady(page)
+  await createPublicIdTree(page)
 }
 
 test('nodes/relations 応答は公開IDのみ、整数IDアクセスは拒否', async ({ page }) => {

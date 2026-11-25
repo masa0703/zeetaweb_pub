@@ -1,5 +1,6 @@
+import { TEST_BASE_URL } from './helpers/test-environment.js'
 // @ts-check
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
 /**
@@ -13,7 +14,7 @@ import { waitForAppReady } from './helpers/app.js'
  *     本文キャプションが上端に張り付く。戻すと元の高さに戻る）
  */
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 
 // ===========================
 // ヘルパー関数

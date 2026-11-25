@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import os from 'node:os'
@@ -23,8 +23,7 @@ import {
 
 const UPLOAD_URL = `${BASE_URL}/api/mcp/uploads`
 
-const DB_PATH =
-  '.wrangler/state/v3/d1/miniflare-D1DatabaseObject/1d75e8d9dbbf9cabcd01dd2d401aa0f9dcd6cab003b0dda8e6c31948c6e680b7.sqlite'
+import { TEST_DB_PATH as DB_PATH } from './helpers/test-environment.js'
 
 /** ローカルD1(sqlite)を直接叩く。期限切れの検証で使う（tests/mcp-oauth.spec.js と同じ方式） */
 function dbQuery(sql) {

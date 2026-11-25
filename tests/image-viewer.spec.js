@@ -1,8 +1,9 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 import zlib from 'node:zlib'
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 const PNG_WIDTH = 400
 const PNG_HEIGHT = 300
 const BIG_PNG_WIDTH = 8000

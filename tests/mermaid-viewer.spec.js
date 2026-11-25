@@ -1,7 +1,8 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 
 async function login(page) {
   await page.context().clearCookies()
@@ -62,9 +63,13 @@ test.describe('Mermaid preview viewer', () => {
 
     let popupCount = 0
     page.on('popup', () => { popupCount += 1 })
+    // A fresh user starts in preview mode. Explicitly enter write mode before
+    // asserting that clicking the raw Mermaid source does not open a viewer.
+    await page.locator('.bytemd-toolbar-icon:has(path[d="M42 6v36"])').first().click()
     await page.locator('.bytemd-editor .CodeMirror').click()
     await page.waitForTimeout(250)
     expect(popupCount).toBe(0)
+    await page.locator('.bytemd-toolbar-icon:has(path[d="M6 6v36"])').first().click()
 
     const popupPromise = page.waitForEvent('popup')
     await diagrams.nth(1).click()

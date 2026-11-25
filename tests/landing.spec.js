@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
 // 未ログインで / を開いたときの紹介ページ（TC-LANDING-*）。
@@ -59,7 +60,7 @@ test.describe('Landing page (signed out)', () => {
   })
 
   test('TC-LANDING-004: an invalid session cookie still gets the landing page', async ({ page, context }) => {
-    await context.addCookies([{ name: 'session', value: 'not-a-valid-jwt', url: 'http://localhost:3000' }])
+    await context.addCookies([{ name: 'session', value: 'not-a-valid-jwt', url: TEST_BASE_URL }])
     await page.goto('/')
     await expect(page.locator('#landing-try-btn')).toBeVisible()
   })

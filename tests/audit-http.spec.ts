@@ -7,9 +7,9 @@
 import assert from 'node:assert/strict'
 import { execSync } from 'node:child_process'
 
-const BASE = 'http://localhost:3000'
-const DB_PATH =
-  '.wrangler/state/v3/d1/miniflare-D1DatabaseObject/1d75e8d9dbbf9cabcd01dd2d401aa0f9dcd6cab003b0dda8e6c31948c6e680b7.sqlite'
+import { TEST_BASE_URL as BASE, TEST_DB_PATH as DB_PATH } from './helpers/test-environment.js'
+
+if (!DB_PATH) throw new Error('Run npm run test:node to create an isolated audit test server')
 
 async function fetchJson(path: string, opts?: RequestInit) {
   const res = await fetch(`${BASE}${path}`, opts)

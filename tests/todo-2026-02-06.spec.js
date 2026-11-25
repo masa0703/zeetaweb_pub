@@ -1,5 +1,6 @@
+import { TEST_BASE_URL } from './helpers/test-environment.js'
 // @ts-check
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
 /**
@@ -13,7 +14,7 @@ import { waitForAppReady } from './helpers/app.js'
  * 5. タイトル入力欄のフォントサイズ
  */
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 
 // ===========================
 // ヘルパー関数

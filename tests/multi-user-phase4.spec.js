@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady, createTreeViaUi, openTreeByName, drawerRow, openTreeDrawer } from './helpers/app.js'
 
 /**
@@ -122,12 +123,12 @@ test.describe('Tree Management', () => {
   })
 
   test('TC-TREE-004: Clear a tree description with null', async ({ page }) => {
-    const created = await page.request.post('http://localhost:3000/api/trees', {
+    const created = await page.request.post(`${TEST_BASE_URL}/api/trees`, {
       data: { name: '説明クリア', description: '消される説明' }
     })
     const tree = (await created.json()).data
 
-    const updated = await page.request.put(`http://localhost:3000/api/trees/${tree.id}`, {
+    const updated = await page.request.put(`${TEST_BASE_URL}/api/trees/${tree.id}`, {
       data: { description: null }
     })
 

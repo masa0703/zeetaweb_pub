@@ -10,7 +10,8 @@
 import { expect } from '@playwright/test'
 import crypto from 'node:crypto'
 
-export const BASE_URL = 'http://localhost:3000'
+export { TEST_BASE_URL as BASE_URL } from './test-environment.js'
+import { TEST_BASE_URL as BASE_URL } from './test-environment.js'
 
 export const SCOPE_READ = 'mcp:read'
 export const SCOPE_WRITE = 'mcp:write'

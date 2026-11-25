@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady, createTreeViaUi, openTreeByName, openTreeDrawer } from './helpers/app.js'
 
 /**
@@ -434,11 +434,11 @@ test.describe('通知既読テスト', () => {
 
 // ============================================
 // 4. 通知UI表示テスト
-// Note: UI tests are skipped due to timing issues with notification polling.
-// These should be verified manually or with visual regression testing.
+// Recipient users own a tree so that the header (and bell) is displayed.
+// Synchronize with the initial notification response instead of polling sleeps.
 // ============================================
 
-test.describe.skip('通知UI表示テスト (手動テスト推奨)', () => {
+test.describe('通知UI表示テスト', () => {
   test.beforeEach(async ({ page }) => {
     await clearTestData(page)
   })
@@ -446,6 +446,7 @@ test.describe.skip('通知UI表示テスト (手動テスト推奨)', () => {
   test('TC-UI-001: 未読カウントバッジの表示', async ({ page }) => {
     // Setup: First, create User 2 account
     await testLogin(page, 2)
+    await createTestTree(page, '通知受信ユーザーのツリー')
 
     // Create notifications for User 2
     await testLogin(page, 1)
@@ -477,12 +478,12 @@ test.describe.skip('通知UI表示テスト (手動テスト推奨)', () => {
     expect(notifications.length).toBe(2)
 
     // Reload page to ensure notifications.js is loaded
+    const notificationsLoaded = page.waitForResponse(response => response.url().endsWith('/api/notifications') && response.status() === 200)
     await page.reload()
-    await page.waitForLoadState('networkidle')
+    await notificationsLoaded
 
     // Wait for notifications to load by checking the badge
     const badge = page.locator('#notification-badge')
-    await page.waitForTimeout(2000) // Give time for polling to load notifications
     await expect(badge).toBeVisible({ timeout: 10000 })
     await expect(badge).toHaveText('2')
   })
@@ -490,6 +491,7 @@ test.describe.skip('通知UI表示テスト (手動テスト推奨)', () => {
   test('TC-UI-002: 通知ドロップダウンの表示', async ({ page }) => {
     // Setup: First, create User 2 account
     await testLogin(page, 2)
+    await createTestTree(page, '通知受信ユーザーのツリー')
 
     // Create notification for User 2
     await testLogin(page, 1)
@@ -514,12 +516,12 @@ test.describe.skip('通知UI表示テスト (手動テスト推奨)', () => {
     expect(notifications.length).toBe(1)
 
     // Reload page to ensure notifications.js is loaded
+    const notificationsLoaded = page.waitForResponse(response => response.url().endsWith('/api/notifications') && response.status() === 200)
     await page.reload()
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(2000)
+    await notificationsLoaded
 
     // Click notification bell
-    await page.click('.notification-bell')
+    await page.click('#notification-bell-btn')
 
     // Verify dropdown is visible
     const dropdown = page.locator('#notification-dropdown')
@@ -535,6 +537,7 @@ test.describe.skip('通知UI表示テスト (手動テスト推奨)', () => {
   test('TC-UI-003: 通知クリックで既読 + 遷移', async ({ page }) => {
     // Setup: First, create User 2 account
     await testLogin(page, 2)
+    await createTestTree(page, '通知受信ユーザーのツリー')
 
     // Create notification for User 2
     await testLogin(page, 1)
@@ -561,9 +564,9 @@ test.describe.skip('通知UI表示テスト (手動テスト推奨)', () => {
     expect(notifications.length).toBe(1)
 
     // Reload page to ensure notifications.js is loaded
+    const notificationsLoaded = page.waitForResponse(response => response.url().endsWith('/api/notifications') && response.status() === 200)
     await page.reload()
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(2000)
+    await notificationsLoaded
 
     // Check initial unread count
     const badge = page.locator('#notification-badge')
@@ -571,7 +574,7 @@ test.describe.skip('通知UI表示テスト (手動テスト推奨)', () => {
     await expect(badge).toHaveText('1')
 
     // Click notification bell
-    await page.click('.notification-bell')
+    await page.click('#notification-bell-btn')
 
     // Click notification item
     const notificationItem = page.locator('.notification-item').first()
@@ -586,7 +589,6 @@ test.describe.skip('通知UI表示テスト (手動テスト推奨)', () => {
     // Go back to the editor and verify unread count decreased
     await page.goto('/index.html')
     await waitForAppReady(page)
-    await page.waitForTimeout(2000)
 
     // Badge should be hidden (0 unread)
     const newBadge = page.locator('#notification-badge')

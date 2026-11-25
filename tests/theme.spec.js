@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady, openSettingsMenu, openTreeDrawer } from './helpers/app.js'
 import { createPkcePair, DEFAULT_REDIRECT_URI, mcpResourceUrl, registerClient } from './helpers/mcp-oauth.js'
 

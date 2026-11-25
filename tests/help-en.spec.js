@@ -1,6 +1,7 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 
-const url = 'http://localhost:3000/help.en?tab=editor'
+const url = `${TEST_BASE_URL}/help.en?tab=editor`
 
 test('TC-HELP-EN-001: 画面画像と操作説明の番号リンク', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 960 })
@@ -46,7 +47,7 @@ test('TC-HELP-EN-002: スマホ幅で画像内スクロールとタブ切り替�
 })
 
 test('TC-HELP-EN-003: 旧マイページタブへのリンク（?tab=my-page）は「ツリーの管理」タブを開く', async ({ page }) => {
-  await page.goto('http://localhost:3000/help.en?tab=my-page')
+  await page.goto(`${TEST_BASE_URL}/help.en?tab=my-page`)
   await expect(page.locator('#panel-trees')).toBeVisible()
   await expect(page.locator('#tab-trees')).toHaveClass(/active/)
 })

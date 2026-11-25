@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady, openTreeDrawer, drawerRow, chooseTreeMenu, testLogin, openTreeEditor } from './helpers/app.js'
 
 test.describe('Left bar tree list XSS hardening', () => {

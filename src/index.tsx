@@ -868,6 +868,8 @@ import htmlViewerHtml from '../public/html-viewer.html?raw'
 import imageViewerHtml from '../public/image-viewer.html?raw'
 import treeRailHtml from './views/tree-rail.html?raw'
 import treeModalsHtml from './views/tree-modals.html?raw'
+import changelogEntries from './data/changelog.json'
+import { injectChangelog } from './utils/changelog'
 
 // ツリー表示タブ（通常／逆ツリー）用の木アイコン。逆ツリーは CSS で上下反転して使う
 const TREE_TAB_ICON_SVG = '<svg class="tree-view-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 19 18H5z"/><path d="M12 18v3.5"/><path d="M12 17V8"/><path d="M12 15.5 8.6 13M12 15.5l3.4-2.5M12 11.5 9.8 9.8M12 11.5l2.2-1.7"/></svg>'
@@ -911,17 +913,21 @@ app.get('/accept-invitation.html', (c) => c.html(localizedHtml(c, acceptInvitati
 app.get('/accept-invitation', (c) => c.html(localizedHtml(c, acceptInvitationHtml)))
 app.get('/profile.html', (c) => c.html(localizedHtml(c, profileHtml)))
 app.get('/profile', (c) => c.html(localizedHtml(c, profileHtml)))
+// ヘルプの「変更履歴」タブは src/data/changelog.json から起動時に1回だけ組み立てる
+const helpJaWithChangelog = injectChangelog(helpHtml, changelogEntries, 'ja')
+const helpEnWithChangelog = injectChangelog(helpEnHtml, changelogEntries, 'en')
+
 const localizedHelpHtml = (c: Context) => {
   const locale = requestLocale(c)
-  return localizedHtml(c, locale === 'en' ? helpEnHtml : helpHtml, locale)
+  return localizedHtml(c, locale === 'en' ? helpEnWithChangelog : helpJaWithChangelog, locale)
 }
 
 app.get('/help.html', (c) => c.html(localizedHelpHtml(c)))
 app.get('/help', (c) => c.html(localizedHelpHtml(c)))
 app.get('/terms', (c) => c.redirect('/help?tab=terms', 302))
 app.get('/privacy', (c) => c.redirect('/help?tab=terms#privacy', 302))
-app.get('/help.en', (c) => c.html(localizedHtml(c, helpEnHtml, 'en')))
-app.get('/help.ja', (c) => c.html(localizedHtml(c, helpHtml, 'ja')))
+app.get('/help.en', (c) => c.html(localizedHtml(c, helpEnWithChangelog, 'en')))
+app.get('/help.ja', (c) => c.html(localizedHtml(c, helpJaWithChangelog, 'ja')))
 app.get('/mermaid-viewer.html', (c) => c.html(localizedHtml(c, mermaidViewerHtml)))
 app.get('/mermaid-viewer', (c) => c.html(localizedHtml(c, mermaidViewerHtml)))
 
@@ -4552,7 +4558,7 @@ app.post('/api/trees/:tree_id/nodes/:id/duplicate', authMiddleware, async (c) =>
         sourceNodeId,
         duplicatedNodeId,
         sourceNodePublicId,
-        createdNode.id,
+        duplicatedPublicId,
         sourceImages.results || [],
         user.user_id,
       )

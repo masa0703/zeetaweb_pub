@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady, testLogin, openTreeEditor } from './helpers/app.js'
 
 // ツリーごとに最後に選択したノードを覚え、URL にノード指定が無く開いたときに復元する。

@@ -1,7 +1,8 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 const FAKE_STAMP = '0101-0000'
 const DIALOG = '[data-version-reload-dialog]'
 const BADGE = '#update-badge'
@@ -118,6 +119,33 @@ test('「後で」を選ぶとダイアログは閉じるがバッジは残り�
 
   await page.locator(BADGE).click()
   await expect(dialog).toBeVisible()
+})
+
+test('TC-CHANGELOG-005: ダイアログに変更履歴へのリンクがあり、押してもダイアログは閉じずリロードもしない', async ({ page, context }) => {
+  await page.addInitScript(() => {
+    window.__VERSION_CHECK_CONFIG__ = { throttleMs: 0 }
+    const n = parseInt(sessionStorage.getItem('__loadCount') || '0', 10) + 1
+    sessionStorage.setItem('__loadCount', String(n))
+  })
+  await mockMismatch(page)
+
+  await login(page)
+  await triggerVisibilityChange(page)
+  await page.locator(BADGE).click()
+
+  const dialog = page.locator(DIALOG)
+  const link = dialog.getByRole('link', { name: '変更履歴を見る' })
+  await expect(link).toBeVisible()
+  await expect(link).toHaveAttribute('href', '/help?tab=changelog')
+  await expect(link).toHaveAttribute('target', '_blank')
+
+  const [popup] = await Promise.all([context.waitForEvent('page'), link.click()])
+  await popup.waitForLoadState()
+  await expect(popup.locator('#panel-changelog')).toBeVisible()
+  await popup.close()
+
+  await expect(dialog).toBeVisible()
+  expect(await page.evaluate(() => sessionStorage.getItem('__loadCount'))).toBe('1')
 })
 
 test('スロットル中の再アクティブでは再チェックしない', async ({ page }) => {

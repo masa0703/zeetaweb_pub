@@ -26,6 +26,7 @@
 
     .tab-bar {
       display: flex;
+      flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 1.25rem;
       border-bottom: 1px solid #d1d5db;
@@ -305,6 +306,16 @@
       background: rgba(251, 191, 36, 0.18);
       color: #fcd34d;
     }
+    .changelog-list { list-style: none; margin: 0; padding: 0; }
+    .changelog-entry { display: grid; grid-template-columns: 7.5rem 1fr; gap: 4px 16px; padding: 12px 0; border-bottom: 1px solid #e5e7eb; }
+    .changelog-entry:last-child { border-bottom: none; }
+    .changelog-date { font-weight: 700; color: #1d4ed8; font-variant-numeric: tabular-nums; }
+    .changelog-items { margin: 0; padding-left: 1.1rem; list-style: disc; line-height: 1.65; }
+    .changelog-items code { font-size: 0.85em; padding: 1px 5px; border-radius: 4px; background: #eef2ff; }
+    @media (max-width: 640px) { .changelog-entry { grid-template-columns: 1fr; } }
+    html.theme-dark .changelog-entry { border-bottom-color: #374151; }
+    html.theme-dark .changelog-date { color: #93c5fd; }
+    html.theme-dark .changelog-items code { background: rgba(99, 102, 241, 0.2); }
   </style>
 </head>
 
@@ -329,6 +340,7 @@
       <button id="tab-editor" class="tab-btn" data-tab="editor">Node Editing</button>
       <button id="tab-mcp" class="tab-btn" data-tab="mcp">MCP / API Integration</button>
       <button id="tab-terms" class="tab-btn" data-tab="terms">Terms & Privacy</button>
+      <button id="tab-changelog" class="tab-btn" data-tab="changelog">Changelog</button>
     </nav>
 
     <!-- ========== Managing Trees ========== -->
@@ -963,11 +975,18 @@ claude mcp add --transport http zeeta https://&lt;your-domain&gt;/api/mcp/trees/
         </ul>
       </div>
     </section>
+    <section id="panel-changelog" class="help-panel" data-tab="changelog">
+      <div class="guide-section">
+        <h2 class="text-xl font-bold mb-2">Changelog</h2>
+        <p class="text-sm text-gray-600 mb-2">Notable changes for users, newest first.</p>
+        <!-- CHANGELOG_ENTRIES -->
+      </div>
+    </section>
   </main>
 
   <script>
     (function () {
-      const validTabs = new Set(['trees', 'editor', 'mcp', 'terms'])
+      const validTabs = new Set(['trees', 'editor', 'mcp', 'terms', 'changelog'])
       // マイページ廃止前のリンク（?tab=my-page）は「ツリーの管理」タブで受ける
       const tabAliases = { 'my-page': 'trees' }
       const tabButtons = Array.from(document.querySelectorAll('.tab-btn'))

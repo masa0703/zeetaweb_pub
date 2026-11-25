@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
 /**
@@ -6,7 +7,7 @@ import { waitForAppReady } from './helpers/app.js'
  * 見た目（フォントサイズ・色）はノードIDの表示（#node-id-copy）と同じ。
  */
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 
 async function testLogin(page) {
   await page.goto(`${BASE_URL}/auth/test-login?user_id=1`)

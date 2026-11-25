@@ -33,16 +33,15 @@ export default defineConfig({
     fullyParallel: false,
     /* Fail the build on CI if you accidentally left test.only in the source code. */
     forbidOnly: !!process.env.CI,
-    /* Retry on CI only */
-    retries: process.env.CI ? 2 : 0,
-    /* Opt out of parallel tests on CI. */
-    workers: 1,
+    /* Failures must remain visible, including on CI. */
+    retries: 0,
+    // Omit workers to use Playwright's standard parallelism. Each worker owns a server.
+    globalSetup: './tests/helpers/global-setup.js',
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-    reporter: [['html', { outputFolder: './tests/playwright-report' }]],
+    reporter: [['line'], ['html', { outputFolder: './tests/playwright-report', open: 'never' }]],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
-        /* Base URL to use in actions like `await page.goto('/')`. */
-        baseURL: 'http://localhost:3000',
+        // The shared E2E fixture supplies each worker's private baseURL.
         locale: 'ja-JP',
 
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
@@ -60,11 +59,4 @@ export default defineConfig({
         },
     ],
 
-    /* Run your local dev server before starting the tests */
-    // src 編集後の stale dist を検証しないよう、webServer 起動時に必ず build を挟む
-    webServer: {
-        command: 'npm run build && npm run dev:sandbox',
-        url: 'http://localhost:3000',
-        reuseExistingServer: !process.env.CI,
-    },
 });

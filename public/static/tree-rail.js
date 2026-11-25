@@ -617,6 +617,7 @@
             <div class="tree-menu-sep"></div>
             <button id="profile-link" class="tree-menu-item" type="button"><i class="fas fa-user-cog"></i>${escapeText(t('mypage.profileSettingsTitle'))}</button>
             <a id="terms-privacy-link" class="tree-menu-item" href="/help?tab=terms" target="_blank" rel="noopener"><i class="fas fa-file-contract"></i>${escapeText(t('mypage.termsPrivacy'))}</a>
+            <a id="changelog-link" class="tree-menu-item" href="/help?tab=changelog" target="_blank" rel="noopener"><i class="fas fa-clock-rotate-left"></i>${escapeText(t('mypage.changelog'))}</a>
             <div class="tree-menu-sep"></div>
             <div class="settings-version">${escapeText(t('mypage.buildLabel'))} <span id="version-badge">${escapeText(window.__BUILD_STAMP__ || '')}</span></div>
           </div>

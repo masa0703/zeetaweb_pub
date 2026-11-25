@@ -1,8 +1,9 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
 test('local test login can exercise new-user signup and reuse the same account', async ({ page }) => {
-  const origin = process.env.SIGNUP_TEST_ORIGIN || 'http://localhost:3000'
+  const origin = TEST_BASE_URL
   const userId = Date.now()
   const url = `${origin}/auth/test-login?signup=true&user_id=${userId}`
   await page.goto(url)

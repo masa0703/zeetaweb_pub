@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { testLogin, openTreeEditor } from './helpers/app.js'
 
 test('Markdown preview defaults on and respects an explicit choice', async ({ page }) => {

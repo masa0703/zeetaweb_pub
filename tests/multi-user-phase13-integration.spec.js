@@ -13,7 +13,7 @@
  * 合計: 16 tests
  */
 
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
 // ===========================
@@ -854,17 +854,14 @@ test.describe('Phase 13: 統合テスト - パフォーマンス', () => {
     }
 
     // 複雑な親子関係を作成（各ノードに複数の親）
-    const relationPromises = []
     for (let i = 1; i < nodes.length; i++) {
       // 各ノードに 2-3 個の親を設定
       for (let j = Math.max(0, i - 3); j < i; j++) {
-        relationPromises.push(
-          createRelation(page, tree.id, nodes[j].id, nodes[i].id)
-        )
+        // This case measures reads. Build its fixture sequentially rather than
+        // saturating local D1 with 54 concurrent relation mutations.
+        await createRelation(page, tree.id, nodes[j].id, nodes[i].id)
       }
     }
-
-    await Promise.all(relationPromises)
 
     // 関係一覧を取得してパフォーマンス計測
     const startTime = Date.now()

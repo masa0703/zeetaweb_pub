@@ -1,14 +1,15 @@
-import { test, expect } from '@playwright/test'
+import { TEST_DB_PATH, TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { execFileSync } from 'node:child_process'
 import { issueMcpAuth, callMcp } from './helpers/mcp-oauth.js'
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 const QUOTA_USER = 9901
 
 // ローカル D1 を直接読み書きする（node_count を上限近くに設定するため）
 function localD1(sql) {
-  const out = execFileSync('npx', ['wrangler', 'd1', 'execute', 'zeeta2-production', '--local', '--json', '--command', sql], { encoding: 'utf8' })
-  return JSON.parse(out)[0].results
+  const out = execFileSync('sqlite3', ['-json', '-cmd', '.timeout 5000', TEST_DB_PATH, sql], { encoding: 'utf8' })
+  return JSON.parse(out.trim() || '[]')
 }
 
 async function login(page) {

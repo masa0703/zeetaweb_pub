@@ -1,0 +1,241 @@
+[
+  {
+    "date": "2026-11-25",
+    "ja": [
+      "ヘルプに「変更履歴」タブを追加しました。設定メニューと「new ver.」のダイアログからも開けます",
+      "画像付きのノードを複製したとき、複製先で画像が開けない不具合を修正しました"
+    ],
+    "en": [
+      "Added a Changelog tab to Help. You can also open it from the settings menu and the \"new ver.\" dialog.",
+      "Fixed images not opening in a duplicated node."
+    ]
+  },
+  {
+    "date": "2026-11-23",
+    "ja": [
+      "ログインしていないときのトップページに紹介ページを追加しました。ログアウト後もこのページに戻ります"
+    ],
+    "en": [
+      "Added an introduction page shown at the top page when you are not logged in. Logging out now returns you to it."
+    ]
+  },
+  {
+    "date": "2026-11-21",
+    "ja": [
+      "TITLE の左の「←」ボタンで、表示中のノードをツリー上で表示できるようにしました",
+      "右ペインの親ノード欄の右に、子ノードの数を表示するようにしました",
+      "左右のペインの区切りバーを、タッチ操作でもドラッグできるようにしました",
+      "MCP: 画像をアップロードする `create_node_image_upload` を追加しました"
+    ],
+    "en": [
+      "Added a \"←\" button next to TITLE that shows the current node in the tree.",
+      "The right pane now shows the number of child nodes next to the parent-node selector.",
+      "You can now drag the divider between the left and right panes by touch.",
+      "MCP: added `create_node_image_upload` for uploading images."
+    ]
+  },
+  {
+    "date": "2026-11-20",
+    "ja": [
+      "「通常」「逆ツリー」タブのアイコンを木の絵に変更しました",
+      "MCP: `read_node_image` が画像そのものを返すようにしました"
+    ],
+    "en": [
+      "The Normal and Reverse tree tabs now use a tree icon.",
+      "MCP: `read_node_image` now returns the image itself."
+    ]
+  },
+  {
+    "date": "2026-11-19",
+    "ja": [
+      "ツリーごとに最後に選んだノードを覚え、ツリーの切り替え・再読み込み・ログインのときに開き直すようにしました"
+    ],
+    "en": [
+      "Each tree now remembers the node you last selected and reopens it when you switch trees, reload, or log in."
+    ]
+  },
+  {
+    "date": "2026-11-12",
+    "ja": [
+      "ヘッダーの「markdown preview」の表記を「preview」に変更しました"
+    ],
+    "en": [
+      "Renamed the \"markdown preview\" toggle in the header to \"preview\"."
+    ]
+  },
+  {
+    "date": "2026-11-10",
+    "ja": [
+      "プロフィール設定を画面内のウィンドウで開くようにしました。ツリーの選択や開閉の状態が保たれます"
+    ],
+    "en": [
+      "Profile settings now open in a dialog, so your tree selection and expanded state are kept."
+    ]
+  },
+  {
+    "date": "2026-11-08",
+    "ja": [
+      "利用規約とプライバシーポリシーを追加しました",
+      "1人が持てるツリーを20件、1ツリーのノードを2万件までにしました",
+      "セキュリティを強化しました"
+    ],
+    "en": [
+      "Added the Terms of Use and Privacy Policy.",
+      "Each user can now own up to 20 trees, with up to 20,000 nodes per tree.",
+      "Security improvements."
+    ]
+  },
+  {
+    "date": "2026-11-07",
+    "ja": [
+      "検索で `id:xxxxxx` と入力すると、そのIDのノードだけを表示するようにしました"
+    ],
+    "en": [
+      "Searching for `id:xxxxxx` now shows only the node with that ID."
+    ]
+  },
+  {
+    "date": "2026-11-06",
+    "ja": [
+      "URL・ノードリンク・「new ver.」のリロードでノードを開いたとき、ツリー上で見える位置に開くようにしました",
+      "逆ツリーから通常表示に戻ったとき、選んでいた位置に戻るようにしました"
+    ],
+    "en": [
+      "Nodes opened from a URL, a node link, or a \"new ver.\" reload now open at a visible position in the tree.",
+      "Switching from the reverse tree back to the normal view returns to the node you had selected."
+    ]
+  },
+  {
+    "date": "2026-11-05",
+    "ja": [
+      "新しく登録した人に「Hello」サンプルツリーを用意し、プレビューを最初からオンにしました",
+      "MCP の `read_node` などがときどき失敗する不具合を修正しました"
+    ],
+    "en": [
+      "New users now get a \"Hello\" sample tree, with preview turned on by default.",
+      "Fixed MCP tools such as `read_node` failing intermittently."
+    ]
+  },
+  {
+    "date": "2026-11-04",
+    "ja": [
+      "戻る／進むボタンのアイコンを変更しました",
+      "ノード詳細のIDをクリックするとコピーできるようにしました"
+    ],
+    "en": [
+      "Updated the back and forward button icons.",
+      "Click the node ID in the node details to copy it."
+    ]
+  },
+  {
+    "date": "2026-11-01",
+    "ja": [
+      "関係タイプ INSTANCE を廃止し、STRUCTURAL と REFERENCE の2種類にしました",
+      "ツリーの開閉アイコンを「>」に変更し、縦線の位置を揃えました",
+      "スマホで本文を上にスクロールすると全画面で編集できるようにしました"
+    ],
+    "en": [
+      "Removed the INSTANCE relation type. Only STRUCTURAL and REFERENCE remain.",
+      "The tree expand icon is now \">\", and the guide lines are aligned.",
+      "On phones, scrolling up in the content switches to full-screen editing."
+    ]
+  },
+  {
+    "date": "2026-10-31",
+    "ja": [
+      "マイページを廃止し、ツリーの一覧・切り替え・作成を編集画面の左バーにまとめました",
+      "ツリーに絵文字のアイコンと背景色を設定できるようにしました"
+    ],
+    "en": [
+      "Removed My Page. Listing, switching, and creating trees now happen in the left bar of the editor.",
+      "You can now give each tree an emoji icon and a background color."
+    ]
+  },
+  {
+    "date": "2026-10-30",
+    "ja": [
+      "STRUCTURAL の親を1つだけにしました。別の親を STRUCTURAL にすると、それまでの親は REFERENCE になります",
+      "画像を削除すると未保存の編集が消える不具合を修正しました"
+    ],
+    "en": [
+      "A node can now have only one STRUCTURAL parent. Making another parent STRUCTURAL turns the previous one into REFERENCE.",
+      "Fixed unsaved edits being lost when you delete an image."
+    ]
+  },
+  {
+    "date": "2026-10-28",
+    "ja": [
+      "日本語の属性名を使った mermaid の ER 図が表示されるようにしました"
+    ],
+    "en": [
+      "Mermaid ER diagrams with Japanese attribute names now render."
+    ]
+  },
+  {
+    "date": "2026-10-24",
+    "ja": [
+      "全角の英数字でも検索できるようにしました",
+      "ゴミ箱から100件を超えるノードを完全削除できない不具合を修正しました",
+      "MCP: `path` の各階層にノードIDを付けました"
+    ],
+    "en": [
+      "Search now matches full-width letters and numbers.",
+      "Fixed permanent deletion failing for more than 100 nodes in the trash.",
+      "MCP: each level of `path` now includes the node ID."
+    ]
+  },
+  {
+    "date": "2026-10-17",
+    "ja": [
+      "セキュリティを強化しました"
+    ],
+    "en": [
+      "Security improvements."
+    ]
+  },
+  {
+    "date": "2026-10-13",
+    "ja": [
+      "画像ビューアで大きな画像も全体を表示できるようにしました"
+    ],
+    "en": [
+      "The image viewer can now fit large images on screen."
+    ]
+  },
+  {
+    "date": "2026-10-09",
+    "ja": [
+      "ダークモードを追加しました。設定メニューで ライト／ダーク／システム設定 を選べます"
+    ],
+    "en": [
+      "Added dark mode. Choose Light, Dark, or System in the settings menu."
+    ]
+  },
+  {
+    "date": "2026-10-06",
+    "ja": [
+      "狭い画面で本文ヘッダーのボタンが切れる不具合を修正しました"
+    ],
+    "en": [
+      "Fixed buttons in the content header being cut off on narrow screens."
+    ]
+  },
+  {
+    "date": "2026-10-05",
+    "ja": [
+      "ゴミ箱で、通常のツリーに残っているノードの表示や移動先がおかしくなる不具合を修正しました"
+    ],
+    "en": [
+      "Fixed how the trash shows and opens nodes that are still in the normal tree."
+    ]
+  },
+  {
+    "date": "2026-10-01",
+    "ja": [
+      "URL だけを貼り付けたときは、Markdown のリンクに変換せずそのまま貼るようにしました"
+    ],
+    "en": [
+      "Pasting a bare URL now keeps it as is instead of converting it to a Markdown link."
+    ]
+  }
+]

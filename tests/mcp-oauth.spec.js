@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 import crypto from 'node:crypto'
 import { execSync } from 'node:child_process'
@@ -17,8 +17,7 @@ import {
   submitConsent,
 } from './helpers/mcp-oauth.js'
 
-const DB_PATH =
-  '.wrangler/state/v3/d1/miniflare-D1DatabaseObject/1d75e8d9dbbf9cabcd01dd2d401aa0f9dcd6cab003b0dda8e6c31948c6e680b7.sqlite'
+import { TEST_DB_PATH as DB_PATH } from './helpers/test-environment.js'
 
 /** ローカルD1(sqlite)を直接叩く。時刻を絡めた検証で使う（tests/audit-http.spec.ts と同じ方式） */
 function dbQuery(sql) {

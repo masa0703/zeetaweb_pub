@@ -1,7 +1,8 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 
 // ===========================
 // ヘルパー関数
@@ -511,20 +512,25 @@ test.describe('ショートカット・コンテキストメニュー', () => {
     expect(duplicatedNodeData.success).toBeTruthy()
     const duplicatedContent = String(duplicatedNodeData.data.content || '')
     const duplicatedImageUrl = duplicatedContent.match(/!\[[^\]]*\]\(([^)]+)\)/)?.[1]
-    // 現行duplicate APIは本文Markdownの置換先だけ内部整数node IDを生成する。
-    // 画像実体は公開IDで返る画像一覧APIから検証し、本文は現行の置換結果を確認する。
-    expect(duplicatedImageUrl).toMatch(
-      new RegExp(`/api/trees/${treeId}/nodes/\\d+/images/${duplicatedImagesData.data[0].id}/file$`)
-    )
+    const duplicatedImage = duplicatedImagesData.data[0]
+    expect(duplicatedImage.id).not.toBe(sourceImage.id)
+    expect(duplicatedImageUrl).toBe(`/api/trees/${treeId}/nodes/${duplicatedNode.id}/images/${duplicatedImage.id}/file`)
+    expect(duplicatedImageUrl).toBe(duplicatedImage.url)
     expect(duplicatedContent).not.toContain(`/nodes/${sourceNode.id}/images/`)
+
+    const copiedImageFileRes = await page.request.get(duplicatedImageUrl)
+    expect(copiedImageFileRes.ok()).toBeTruthy()
+    expect(copiedImageFileRes.headers()['content-type']).toBe('image/png')
+    expect(await copiedImageFileRes.body()).toEqual(tinyPng)
 
     const deleteSourceImageRes = await page.request.delete(
       `${BASE_URL}/api/trees/${treeId}/nodes/${sourceNode.id}/images/${sourceImage.id}`
     )
     expect(deleteSourceImageRes.ok()).toBeTruthy()
 
-    const duplicatedImageFileRes = await page.request.get(duplicatedImagesData.data[0].url)
+    const duplicatedImageFileRes = await page.request.get(duplicatedImageUrl)
     expect(duplicatedImageFileRes.ok()).toBeTruthy()
+    expect(await duplicatedImageFileRes.body()).toEqual(tinyPng)
 
     await page.locator('.tree-item:has-text("複製元のコピー")').first().click({ force: true })
     await page.waitForTimeout(600)

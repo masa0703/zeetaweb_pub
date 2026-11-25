@@ -1,7 +1,8 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady, openTreeEditor, openTreeDrawer, drawerRow, chooseTreeMenu } from './helpers/app.js'
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 
 async function clearTestData(page) {
   await page.request.delete(`${BASE_URL}/api/test/clear`)

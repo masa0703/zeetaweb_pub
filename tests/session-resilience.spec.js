@@ -1,7 +1,8 @@
-import { test, expect } from '@playwright/test'
+import { TEST_BASE_URL } from './helpers/test-environment.js'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady } from './helpers/app.js'
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = TEST_BASE_URL
 
 function decodeJwtPayload(token) {
   const encoded = token.split('.')[1]
@@ -20,7 +21,7 @@ async function testLogin(page, userId = 1, sessionTtlSeconds) {
   await waitForAppReady(page)
 }
 
-async function issueTestSession(page, userId, sessionTtlSeconds, options = {}) {
+async function issueTestSession(page, userId = 1, sessionTtlSeconds = 7 * 24 * 60 * 60, options = {}) {
   const params = new URLSearchParams({
     user_id: String(userId),
     session_ttl_seconds: String(sessionTtlSeconds)
@@ -121,10 +122,11 @@ test.describe('Session resilience', () => {
     await page.evaluate(() => window.ZeetaAuth.handleUnauthorized())
     await page.waitForURL(/\/login(?:\.html)?\?redirect=/)
 
-    await testLogin(page)
-    // 再ログインで旧セッションが失効するため、直前ページの残リクエストが401になり
-    // 「読み込みに失敗」アラートが下書き確認より先に出ることがある。once だと
-    // 本命の confirm が自動 dismiss される
+    const draftKey = `zeeta.node-draft.v1:1:${tree.id}:${node.id}`
+    await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key) || 'null')?.title, draftKey)).toBe('Unsaved title')
+    // Reauthenticate without opening /index first: it may immediately restore
+    // the last node and show a confirm before a handler has been registered.
+    await issueTestSession(page)
     acceptAllDialogs(page)
     await page.goto(editorUrl)
 
@@ -157,7 +159,9 @@ test.describe('Session resilience', () => {
     await page.evaluate(() => window.ZeetaAuth.handleUnauthorized())
     await page.waitForURL(/\/login(?:\.html)?\?redirect=/)
 
-    await testLogin(page)
+    const draftKey = `zeeta.node-draft.v1:1:${tree.id}:${node.id}`
+    await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key) || 'null')?.title, draftKey)).toBe('Draft title')
+    await issueTestSession(page)
     const currentResponse = await page.request.get(`${BASE_URL}/api/trees/${tree.id}/nodes/${node.id}`)
     const current = (await currentResponse.json()).data
     const updateResponse = await page.request.put(`${BASE_URL}/api/trees/${tree.id}/nodes/${node.id}`, {

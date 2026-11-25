@@ -1,5 +1,5 @@
 // @ts-check
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { testLogin, openTreeEditor } from './helpers/app.js'
 
 test.use({ viewport: { width: 1280, height: 800 }, hasTouch: true })

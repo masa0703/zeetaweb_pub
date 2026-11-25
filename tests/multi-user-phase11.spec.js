@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './helpers/fixtures.js'
 import { waitForAppReady, openTreeEditor, chooseTreeMenu } from './helpers/app.js'
 
 /**
